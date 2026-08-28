@@ -61,7 +61,6 @@ import {
   TableOutlined,
   PictureOutlined,
   MinusOutlined,
-  BulbOutlined,
   CaretRightOutlined,
   PaperClipOutlined,
   FileOutlined,
@@ -227,16 +226,6 @@ const defaultCommandGroups = computed<SlashCommandGroup[]>(() => [
           if (url) {
             editor.chain().focus().setImage({ src: url }).run()
           }
-        },
-      },
-      {
-        id: 'callout',
-        title: t('slashCommand.callout') || 'Callout',
-        description: t('slashCommand.calloutDesc') || 'Colored callout box with icon',
-        icon: BulbOutlined,
-        keywords: ['callout', 'box', 'highlight', 'info', 'warning', 'notice', 'callout'],
-        action: (editor: Editor) => {
-          editor.chain().focus().setCallout({ icon: '💡', color: 'blue' }).run()
         },
       },
       {

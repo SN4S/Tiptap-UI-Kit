@@ -1,6 +1,6 @@
 /**
- * Extensions - 扩展统一导出
- * @description 编辑器扩展的统一导出入口
+ * Extensions - Unified Extension Exports
+ * @description Unified export entry for editor extensions
  */
 
 export { getExtensionsByVersion, getBasicExtensions } from './coreExtensions'

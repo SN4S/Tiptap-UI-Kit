@@ -118,9 +118,9 @@ export function useAi(options: UseAiOptions): UseAiReturn {
     summarize: (text) => runChat(AI_PROMPTS.summarize.system, text),
     translate: (text, targetLang) => {
       const langName = AI_PROMPTS.translate.targetLanguages[targetLang as keyof typeof AI_PROMPTS.translate.targetLanguages] || targetLang
-      return runChat(`${AI_PROMPTS.translate.system}\n目标语言: ${langName}`, text)
+      return runChat(`${AI_PROMPTS.translate.system}\nTarget language: ${langName}`, text)
     },
-    customAi: (text, instruction) => runChat(`${AI_PROMPTS.customAi.system}\n用户指令: ${instruction}`, text),
+    customAi: (text, instruction) => runChat(`${AI_PROMPTS.customAi.system}\nUser instruction: ${instruction}`, text),
     
     // Streaming
     continueWritingStream: (text, cb) => runChatStream(AI_PROMPTS.continueWriting.system, text, cb),
@@ -128,9 +128,9 @@ export function useAi(options: UseAiOptions): UseAiReturn {
     summarizeStream: (text, cb) => runChatStream(AI_PROMPTS.summarize.system, text, cb),
     translateStream: (text, targetLang, cb) => {
       const langName = AI_PROMPTS.translate.targetLanguages[targetLang as keyof typeof AI_PROMPTS.translate.targetLanguages] || targetLang
-      return runChatStream(`${AI_PROMPTS.translate.system}\n目标语言: ${langName}`, text, cb)
+      return runChatStream(`${AI_PROMPTS.translate.system}\nTarget language: ${langName}`, text, cb)
     },
-    customAiStream: (text, instruction, cb) => runChatStream(`${AI_PROMPTS.customAi.system}\n用户指令: ${instruction}`, text, cb),
+    customAiStream: (text, instruction, cb) => runChatStream(`${AI_PROMPTS.customAi.system}\nUser instruction: ${instruction}`, text, cb),
     
     abort: () => {
       abortController?.abort()

@@ -1,38 +1,38 @@
 /**
- * FormatPainter Extension - 格式刷
- * @description 采样当前选区样式并应用到目标选区
+ * FormatPainter Extension - Format Painter
+ * @description Samples current selection style and applies to target selection
  */
 import { Extension } from '@tiptap/core'
 import type { Editor } from '@tiptap/core'
 import { Plugin } from '@tiptap/pm/state'
 
-// 为自定义命令添加类型声明，以扩展 RawCommands
+// Add type declarations for custom commands to extend RawCommands
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     formatPainter: {
       /** 
-       * 开启格式刷并采样当前选区样式
-       * @param mode - 模式：1 为单次模式（默认），2 为连续模式
+       * Enable format painter and sample current selection style
+       * @param mode - Mode: 1 for single-use (default), 2 for continuous mode
        */
       startFormatPainting: (mode?: 1 | 2) => ReturnType
-      /** 开启格式刷连续应用模式 */
+      /** Enable continuous format painter mode */
       startContinuousFormatPainting: () => ReturnType
-      /** 将采样到的样式应用到当前选区 */
+      /** Apply sampled style to current selection */
       applyFormat: () => ReturnType
-      /** 取消格式刷状态并清除缓存 */
+      /** Cancel format painter state and clear cache */
       cancelFormatPainting: () => ReturnType
-      /** 切换连续应用模式 */
+      /** Toggle continuous mode */
       toggleContinuousMode: () => ReturnType
     }
   }
 }
 
 export interface FormatPainterStorage {
-  /** 格式刷是否激活 */
+  /** Whether format painter is active */
   isActive: boolean
-  /** 是否为连续应用模式 */
+  /** Whether continuous application mode */
   isContinuous: boolean
-  /** 采样的格式 */
+  /** Sampled format */
   formats: {
     bold?: boolean
     italic?: boolean
@@ -49,22 +49,22 @@ export interface FormatPainterStorage {
   }
 }
 
-/** 本地存储的键名 */
+/** Local storage key name */
 const STORAGE_KEY = 'tiptap-format-painter-formats'
 
 export type FormatPainterFormats = FormatPainterStorage['formats']
 
 /**
- * 采样当前选区的格式样式
- * @param editor - Tiptap 编辑器实例
- * @returns 格式对象，如果采样失败则返回 null
- * @description 从编辑器中提取当前选区的所有格式信息，包括文本样式、颜色、对齐等
+ * Sample formatting style of current selection
+ * @param editor - Tiptap editor instance
+ * @returns Format object, or null if sampling failed
+ * @description Extract all formatting info from selection including text styles, colors, alignment, etc.
  */
 export function sampleFormats(editor: Editor): FormatPainterFormats | null {
   try {
     const formats: FormatPainterFormats = {}
 
-    // 基础文本样式
+    // Basic text styles
     formats.bold = editor.isActive('bold')
     formats.italic = editor.isActive('italic')
     formats.underline = editor.isActive('underline')
@@ -72,7 +72,7 @@ export function sampleFormats(editor: Editor): FormatPainterFormats | null {
     formats.subscript = editor.isActive('subscript')
     formats.superscript = editor.isActive('superscript')
 
-    // 从 textStyle 中获取颜色和字体样式
+    // Get color and font styles from textStyle
     const textStyleAttrs = editor.getAttributes('textStyle') as {
       color?: string
       fontFamily?: string
@@ -84,11 +84,11 @@ export function sampleFormats(editor: Editor): FormatPainterFormats | null {
     formats.fontSize = textStyleAttrs?.fontSize ?? null
     formats.lineHeight = textStyleAttrs?.lineHeight ?? null
 
-    // 从 highlight mark 中获取背景高亮颜色
+    // Get background highlight color from highlight mark
     const highlightAttrs = editor.getAttributes('highlight') as { color?: string }
     formats.highlight = highlightAttrs?.color ?? null
 
-    // 对齐（可能存在于段落或标题上）
+    // Alignment (may exist on paragraph or heading)
     const paragraphAttrs = editor.getAttributes('paragraph') as {
       textAlign?: 'left' | 'center' | 'right' | 'justify'
     }
@@ -104,8 +104,8 @@ export function sampleFormats(editor: Editor): FormatPainterFormats | null {
 }
 
 /**
- * 保存格式到浏览器本地存储
- * @param formats - 格式对象
+ * Save format to browser local storage
+ * @param formats - Format object
  */
 function saveFormatsToStorage(formats: FormatPainterFormats): void {
   try {
@@ -116,8 +116,8 @@ function saveFormatsToStorage(formats: FormatPainterFormats): void {
 }
 
 /**
- * 从浏览器本地存储加载格式
- * @returns 格式对象，如果不存在则返回 null
+ * Load format from browser local storage
+ * @returns Format object, or null if not found
  */
 function loadFormatsFromStorage(): FormatPainterFormats | null {
   try {
@@ -132,7 +132,7 @@ function loadFormatsFromStorage(): FormatPainterFormats | null {
 }
 
 /**
- * 清除浏览器本地存储中的格式
+ * Clear format in browser local storage
  */
 function clearFormatsFromStorage(): void {
   try {
@@ -143,10 +143,10 @@ function clearFormatsFromStorage(): void {
 }
 
 /**
- * 更新格式刷光标样式
- * @param editor - Tiptap 编辑器实例
- * @param add - 是否添加样式类，true 为添加，false 为移除
- * @description 添加或移除格式刷光标样式类
+ * Update format painter cursor style
+ * @param editor - Tiptap editor instance
+ * @param add - Whether to add style class (true: add, false: remove)
+ * @description Adds or removes format painter cursor style class
  */
 function updateCursorStyle(editor: Editor, add: boolean): void {
   try {
@@ -162,18 +162,18 @@ function updateCursorStyle(editor: Editor, add: boolean): void {
 }
 
 /**
- * 是否处于“多人协作”状态
+ * Whether in multi-user collaboration state
  * @description
- * - 仅检测到 collaboration 扩展并不代表一定是多人（也可能只是自己在线）
- * - 协作人数由业务层写入 `editor.storage.__collaborationUsersCount`
- * - 仅当人数 > 1 时才认为是多人协作（需要禁用格式刷）
+ * - Collaboration extension alone doesn't guarantee multiple online users
+ * - User count set in `editor.storage.__collaborationUsersCount`
+ * - Disabled when count > 1 (multi-user collaboration)
  */
 function isCollaborationMultiUser(editor: Editor): boolean {
   try {
     const hasCollaboration = editor.extensionManager.extensions.some((ext) => ext.name === 'collaboration')
     if (!hasCollaboration) return false
 
-    // 业务层注入：TiptapProEditor.vue 会同步此值
+    // Business layer injection: synced by TiptapProEditor.vue
     const anyEditor = editor as any
     const count = Number(anyEditor?.storage?.__collaborationUsersCount ?? 0)
     return count > 1
@@ -186,7 +186,7 @@ export const FormatPainter = Extension.create<{}, FormatPainterStorage>({
   name: 'formatPainter',
 
   addStorage() {
-    // 尝试从本地存储恢复格式
+    // Attempt restoring format from local storage
     const savedFormats = loadFormatsFromStorage()
     return {
       isActive: false,
@@ -198,19 +198,19 @@ export const FormatPainter = Extension.create<{}, FormatPainterStorage>({
   addCommands() {
     return {
       /**
-       * 采样当前选区的格式
-       * @param mode - 模式：1 为单次模式（默认），2 为连续模式
-       * @description 获取选中文本的所有格式信息并保存，根据 mode 决定是单次还是连续应用
+       * Sample formatting of current selection
+       * @param mode - Mode: 1 for single-use (default), 2 for continuous mode
+       * @description Extracts and saves all formatting info from selection based on mode
        */
       startFormatPainting:
         (mode?: 1 | 2) =>
         ({ editor }) => {
-          // 多人协作时禁用格式刷
+          // Disable format painter in multi-user collaboration
           if (isCollaborationMultiUser(editor)) {
             return false
           }
 
-          // 检查是否有选中内容
+          // Check if selection exists
           try {
             const sel = editor.state.selection
             if (!sel || sel.empty) {
@@ -220,38 +220,38 @@ export const FormatPainter = Extension.create<{}, FormatPainterStorage>({
             return false
           }
 
-          // 采样格式信息
+          // Sample formatting info
           const formats = sampleFormats(editor)
           if (!formats) {
             return false
           }
 
-          // 保存格式到内存和本地存储
+          // Save format to memory and local storage
           this.storage.formats = formats
           this.storage.isActive = true
-          // 如果传入 2 则为连续模式，否则（1 或 undefined）为单次模式
+          // If 2 passed, use continuous mode, otherwise (1 or undefined) single mode
           this.storage.isContinuous = mode === 2
           saveFormatsToStorage(formats)
 
-          // 更新光标样式
+          // Update cursor style
           updateCursorStyle(editor, true)
 
           return true
         },
 
       /**
-       * 采样当前选区的格式（连续应用模式）
-       * @description 获取选中文本的所有格式信息并保存，可以连续应用多次
+       * Sample formatting of current selection (continuous mode)
+       * @description Extracts and saves selection formatting info for multiple continuous applications
        */
       startContinuousFormatPainting:
         () =>
         ({ editor }) => {
-          // 多人协作时禁用格式刷
+          // Disable format painter in multi-user collaboration
           if (isCollaborationMultiUser(editor)) {
             return false
           }
 
-          // 检查是否有选中内容
+          // Check if selection exists
           try {
             const sel = editor.state.selection
             if (!sel || sel.empty) {
@@ -261,34 +261,34 @@ export const FormatPainter = Extension.create<{}, FormatPainterStorage>({
             return false
           }
 
-          // 采样格式信息
+          // Sample formatting info
           const formats = sampleFormats(editor)
           if (!formats) {
             return false
           }
 
-          // 保存格式到内存和本地存储
+          // Save format to memory and local storage
           this.storage.formats = formats
           this.storage.isActive = true
           this.storage.isContinuous = true
           saveFormatsToStorage(formats)
 
-          // 更新光标样式
+          // Update cursor style
           updateCursorStyle(editor, true)
 
           return true
         },
 
       /**
-       * 将保存的格式应用到当前选区
-       * @description 将之前采样的格式应用到当前选中的文本
+       * Apply saved format to current selection
+       * @description Applies sampled format to currently selected text
        */
       applyFormat:
         () =>
         ({ editor }) => {
-          // 多人协作时禁用格式刷
+          // Disable format painter in multi-user collaboration
           if (isCollaborationMultiUser(editor)) {
-            // 如果格式刷已激活，则取消激活状态
+            // If format painter active, deactivate it
             if (this.storage.isActive) {
               this.storage.isActive = false
               this.storage.isContinuous = false
@@ -297,12 +297,12 @@ export const FormatPainter = Extension.create<{}, FormatPainterStorage>({
             return false
           }
 
-          // 检查格式刷是否已激活
+          // Check if format painter is active
           if (!this.storage.isActive) {
             return false
           }
 
-          // 检查是否有选中内容
+          // Check if selection exists
           try {
             const sel = editor.state.selection
             if (!sel || sel.empty) {
@@ -312,7 +312,7 @@ export const FormatPainter = Extension.create<{}, FormatPainterStorage>({
             return false
           }
 
-          // 检查是否有格式信息（优先从内存，其次从本地存储）
+          // Check for format info (prefer memory, fallback to local storage)
           let formats = this.storage.formats
           if (!formats || Object.keys(formats).length === 0) {
             const savedFormats = loadFormatsFromStorage()
@@ -329,54 +329,54 @@ export const FormatPainter = Extension.create<{}, FormatPainterStorage>({
           const { from, to } = editor.state.selection
 
           try {
-            // 应用文本级格式
+            // Apply text-level formatting
             const chain = editor.chain().focus()
 
-            // 处理粗体
+            // Handle bold
             if (formats.bold) chain.setMark('bold')
             else chain.unsetMark('bold')
 
-            // 处理斜体
+            // Handle italic
             if (formats.italic) chain.setMark('italic')
             else chain.unsetMark('italic')
 
-            // 处理下划线
+            // Handle underline
             if (formats.underline) chain.setMark('underline')
             else chain.unsetMark('underline')
 
-            // 处理删除线
+            // Handle strike
             if (formats.strike) chain.setMark('strike')
             else chain.unsetMark('strike')
 
-            // 处理上下标（互斥，先清除再设置）
+            // Handle subscript/superscript (mutually exclusive, clear first then set)
             chain.unsetMark('subscript').unsetMark('superscript')
             if (formats.subscript) chain.setMark('subscript')
             else if (formats.superscript) chain.setMark('superscript')
 
-            // 构建 textStyle 属性对象
+            // Build textStyle attributes object
             const textStyleAttrs: any = {}
             if (formats.color) textStyleAttrs.color = formats.color
             if (formats.fontFamily) textStyleAttrs.fontFamily = formats.fontFamily
             if (formats.fontSize) textStyleAttrs.fontSize = formats.fontSize
 
-            // 应用 textStyle（如果有属性）
+            // Apply textStyle if attributes present
             if (Object.keys(textStyleAttrs).length > 0) {
               chain.setMark('textStyle', textStyleAttrs)
             } else {
               chain.unsetMark('textStyle')
             }
 
-            // 处理背景高亮
+            // Handle background highlight
             if (formats.highlight) {
               ;(chain as any).setHighlight({ color: formats.highlight })
             } else {
               ;(chain as any).unsetHighlight?.()
             }
 
-            // 执行所有文本级格式
+            // Execute all text-level formatting
             chain.run()
 
-            // 处理段落级格式（对齐和行距）
+            // Handle paragraph-level formatting (alignment & line height)
             if (formats.textAlign) {
               editor.chain().focus().setTextSelection({ from, to }).setTextAlign(formats.textAlign).run()
             }
@@ -388,7 +388,7 @@ export const FormatPainter = Extension.create<{}, FormatPainterStorage>({
             return false
           }
 
-          // 如果不是连续模式，应用后关闭格式刷
+          // If not continuous mode, close format painter after application
           if (!this.storage.isContinuous) {
             this.storage.isActive = false
             updateCursorStyle(editor, false)
@@ -398,8 +398,8 @@ export const FormatPainter = Extension.create<{}, FormatPainterStorage>({
         },
 
       /**
-       * 取消格式刷状态并清除缓存
-       * @description 清除格式刷的激活状态、保存的格式信息以及浏览器缓存
+       * Cancel format painter state and clear cache
+       * @description Clear format painter active state, saved format info, and browser storage
        */
       cancelFormatPainting:
         () =>
@@ -413,8 +413,8 @@ export const FormatPainter = Extension.create<{}, FormatPainterStorage>({
         },
 
       /**
-       * 切换连续应用模式
-       * @description 切换格式刷的连续应用模式开关
+       * Toggle continuous application mode
+       * @description Toggle continuous application mode for format painter
        */
       toggleContinuousMode:
         () =>
@@ -430,34 +430,34 @@ export const FormatPainter = Extension.create<{}, FormatPainterStorage>({
     return [
       new Plugin({
         props: {
-          // 监听键盘事件，ESC 键退出格式刷
+          // Listen to keyboard events, ESC key exits format painter
           handleKeyDown(_view, event: KeyboardEvent) {
             const storage = ext.storage as FormatPainterStorage
             if (storage.isActive && event.key === 'Escape') {
               ext.editor?.commands.cancelFormatPainting()
-              return true // 阻止默认行为
+              return true // Prevent default behavior
             }
             return false
           },
 
-          // 监听鼠标抬起事件，在格式刷激活时自动应用格式
+          // Listen to mouseup event to automatically apply format when active
           handleDOMEvents: {
             mouseup: () => {
               const storage = ext.storage as FormatPainterStorage
               if (storage.isActive && ext.editor) {
-                // 使用 requestAnimationFrame 代替 setTimeout，确保在下一帧执行
+                // Use requestAnimationFrame instead of setTimeout for next frame execution
                 requestAnimationFrame(() => {
-                  // 再次检查格式刷是否仍然激活（可能在延迟期间被取消）
+                  // Re-check if format painter is still active
                   if (!storage.isActive || !ext.editor) {
                     return
                   }
                   
                   try {
-                    // 获取当前最新的选区状态
+                    // Get latest selection state
                     const { state } = ext.editor
                     const { empty } = state.selection
                     
-                    // 如果有选区，自动应用格式
+                    // If selection exists, automatically apply format
                     if (!empty) {
                       ext.editor.commands.applyFormat()
                     }

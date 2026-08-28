@@ -1,18 +1,18 @@
-# Zoom - 缩放功能模块
+# Zoom - Zoom Feature Module
 
-缩放功能模块提供了文档缩放、页数统计和字数统计功能。
+The zoom feature module provides document zooming, page count, and word count statistics.
 
-## 功能特性
+## Features
 
-- ✅ **缩放控制**：支持放大、缩小和重置缩放比例
-- ✅ **页数统计**：实时显示文档总页数
-- ✅ **字数统计**：显示字符数和字数统计
-- ✅ **位置配置**：支持底部和工具栏下方两种位置
-- ✅ **范围限制**：可配置最小/最大缩放比例和步长
+- ✅ **Zoom Control**: Supports zooming in, zooming out, and resetting zoom scale
+- ✅ **Page Count**: Real-time display of total document pages
+- ✅ **Word Count**: Display character count and word count statistics
+- ✅ **Placement**: Supports bottom and below-toolbar placements
+- ✅ **Limit Range**: Configurable min/max zoom ratios and step
 
-## 使用方法
+## Usage
 
-### 基础用法
+### Basic Usage
 
 ```vue
 <template>
@@ -35,7 +35,7 @@ const totalPages = ref(1)
 </script>
 ```
 
-### 在编辑器中使用
+### Usage in Editor
 
 ```vue
 <template>
@@ -52,7 +52,7 @@ const totalPages = ref(1)
 </template>
 ```
 
-### 自定义缩放范围
+### Custom Zoom Range
 
 ```vue
 <template>
@@ -73,68 +73,68 @@ const totalPages = ref(1)
 
 #### Props
 
-| 属性 | 类型 | 默认值 | 说明 |
+| Property | Type | Default | Description |
 |------|------|--------|------|
-| zoomLevel | `number` | - | 当前缩放比例（双向绑定） |
-| totalPages | `number` | - | 文档总页数 |
-| editor | `Editor \| null \| undefined` | - | Tiptap 编辑器实例 |
-| showCharCount | `boolean` | `true` | 是否显示字数统计 |
-| min | `number` | `50` | 最小缩放比例 |
-| max | `number` | `200` | 最大缩放比例 |
-| step | `number` | `10` | 缩放步长 |
-| placement | `'bottom' \| 'belowToolbar'` | `'belowToolbar'` | 缩放栏位置 |
+| zoomLevel | `number` | - | Current zoom scale (two-way binding) |
+| totalPages | `number` | - | Total document pages |
+| editor | `Editor \| null \| undefined` | - | Tiptap editor instance |
+| showCharCount | `boolean` | `true` | Whether to show word count |
+| min | `number` | `50` | Minimum zoom ratio |
+| max | `number` | `200` | Maximum zoom ratio |
+| step | `number` | `10` | Zoom step |
+| placement | `'bottom' \| 'belowToolbar'` | `'belowToolbar'` | Zoom toolbar placement |
 
 #### Events
 
-| 事件名 | 参数 | 说明 |
+| Event Name | Parameters | Description |
 |--------|------|------|
-| update:zoomLevel | `(value: number)` | 缩放比例更新事件 |
-| change | `(value: number)` | 缩放比例变化事件 |
-| reset | `(value: number)` | 重置缩放事件 |
+| update:zoomLevel | `(value: number)` | Zoom scale update event |
+| change | `(value: number)` | Zoom scale change event |
+| reset | `(value: number)` | Reset zoom event |
 
-#### 功能
+#### Features
 
-- **放大按钮（+）**：点击放大文档，每次增加 `step` 值，最大不超过 `max`
-- **缩小按钮（-）**：点击缩小文档，每次减少 `step` 值，最小不低于 `min`
-- **重置按钮**：点击重置缩放比例为 100%
-- **缩放显示**：显示当前缩放比例（如：100%）
-- **页数信息**：显示文档总页数（如：共 5 页）
-- **字数统计**：显示字符数和字数（需要编辑器支持 `characterCount` 扩展）
+- **Zoom In Button (+)**: Click to zoom in by `step`, maximum up to `max`
+- **Zoom Out Button (-)**: Click to zoom out by `step`, minimum down to `min`
+- **Reset Button**: Click to reset zoom ratio to 100%
+- **Zoom Scale Display**: Display current zoom ratio (e.g. 100%)
+- **Page Count Info**: Display total document pages (e.g. Total 5 pages)
+- **Word Count**: Display character and word count (requires `characterCount` extension)
 
-## 样式配置
+## Style Configuration
 
-缩放栏的样式通过 `zoom-toolbar.css` 文件定义，支持：
+Zoom bar styles are defined in `zoom-toolbar.css`, supporting:
 
-- **默认样式**：工具栏下方位置，带边框和背景
-- **底部样式**：底部位置，粘性定位，带阴影和圆角
-- **暗色模式**：自动适配暗色主题
+- **Default Style**: Below toolbar placement with border and background
+- **Bottom Style**: Bottom placement, sticky positioning with shadow and rounded corners
+- **Dark Mode**: Automatically adapts to dark theme
 
-## 注意事项
+## Notes
 
-1. 缩放功能需要配合 CSS `transform: scale()` 使用，确保父容器支持缩放
-2. 字数统计功能需要编辑器配置 `CharacterCount` 扩展
-3. 页数统计需要手动计算或通过其他方式获取
-4. 样式文件已自动导入，无需手动引入
-5. 多语言支持已集成到 `locales` 模块中
+1. Zooming works with CSS `transform: scale()`, ensure parent container supports scaling
+2. Word count requires `CharacterCount` extension configured in editor
+3. Page count requires manual calculation or external provider
+4. Style files are imported automatically
+5. Multi-language support is integrated into `locales` module
 
-## 使用示例
+## Usage Example
 
-### 完整编辑器集成
+### Complete Editor Integration
 
 ```vue
 <template>
   <div class="tiptap-pro-editor word-mode" :class="{ 'zoombar-bottom': zoomBarPlacement === 'bottom' }">
-    <!-- 工具栏 -->
+    <!-- Toolbar -->
     <ProToolbar v-if="editor" :editor="editor" />
     
-    <!-- 文档内容 -->
+    <!-- Document Content -->
     <div class="word-document-container">
       <div class="document-pages" :style="{ transform: `scale(${zoomLevel / 100})` }">
         <EditorContent :editor="editor" />
       </div>
     </div>
     
-    <!-- 缩放控制 -->
+    <!-- Zoom Control -->
     <ZoomBar
       v-model:zoomLevel="zoomLevel"
       :totalPages="totalPages"
@@ -154,42 +154,42 @@ const editor = useEditor({
   extensions: [
     StarterKit,
     CharacterCount,
-    // ... 其他扩展
+    // ... other extensions
   ],
 })
 
 const zoomLevel = ref(100)
 const zoomBarPlacement = ref<'bottom' | 'belowToolbar'>('bottom')
 const totalPages = computed(() => {
-  // 计算总页数逻辑
+  // Calculate total pages logic
   return 1
 })
 </script>
 ```
 
-## 文件结构
+## File Structure
 
 ```
 zoom/
-├── ZoomBar.vue          # 缩放控制栏组件
-├── index.ts             # 统一导出
-└── README.md            # 说明文档
+├── ZoomBar.vue          # Zoom bar component
+├── index.ts             # Unified exports
+└── README.md            # Documentation
 ```
 
-## 样式文件
+## Style Files
 
-样式文件位于 `shared/styles/zoom-toolbar.css`，包含：
+Style files located in `shared/styles/zoom-toolbar.css`, including:
 
-- `.zoom-controls` - 缩放控制栏基础样式
-- `.zoom-level` - 缩放比例显示样式
-- `.page-info` - 页数信息样式
-- `.char-count` - 字数统计样式
-- `.zoom-controls--bottom` - 底部位置变体样式
+- `.zoom-controls` - Zoom bar base style
+- `.zoom-level` - Zoom ratio display style
+- `.page-info` - Page count info style
+- `.char-count` - Word count style
+- `.zoom-controls--bottom` - Bottom placement variant style
 
-## 技术实现
+## Technical Implementation
 
-- 使用 `v-model:zoomLevel` 实现双向绑定
-- 使用 `computed` 计算字符数和字数
-- 通过 CSS `transform: scale()` 实现缩放效果
-- 支持响应式布局和暗色模式
+- Uses `v-model:zoomLevel` for two-way binding
+- Uses `computed` for character and word counts
+- Implements zoom via CSS `transform: scale()`
+- Supports responsive layout and dark mode
 

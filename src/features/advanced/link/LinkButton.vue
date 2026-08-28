@@ -8,7 +8,7 @@
     />
   </ToolbarGroup>
 
-  <!-- 链接输入模态框 -->
+  <!-- Link input modal -->
   <a-modal
     v-model:open="linkModalOpen"
     :title="t('editor.insertLink')"
@@ -25,8 +25,8 @@
 
 <script setup lang="ts">
 /**
- * LinkButton - 链接按钮
- * @description 可复用的链接按钮组件，包含链接插入/编辑功能
+ * LinkButton - Link button
+ * @description Reusable link button component containing link insert/edit capabilities
  */
 import { ref } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -45,23 +45,23 @@ interface Props {
 const props = defineProps<Props>()
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 响应式状态 =====
+// ===== Reactive state =====
 const linkModalOpen = ref(false)
 const linkUrl = ref('')
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const runCommand = createCommandRunner(editor)
 const { isActive } = createStateCheckers(editor)
 
-// ===== 方法 =====
+// ===== Methods =====
 /**
- * 处理链接按钮点击
+ * Handle link button click
  */
 function handleClick() {
   const e = editor.value
   if (!e) return
 
-  // 如果已经是链接，获取当前链接地址
+  // If already a link, get current link URL
   if (e.isActive('link')) {
     linkUrl.value = e.getAttributes('link')?.href ?? ''
   } else {
@@ -72,7 +72,7 @@ function handleClick() {
 }
 
 /**
- * 验证 URL 是否有效
+ * Validate if URL is valid
  */
 function isValidUrl(url: string): boolean {
   try {
@@ -84,7 +84,7 @@ function isValidUrl(url: string): boolean {
 }
 
 /**
- * 构建链接属性
+ * Build link attributes
  */
 function buildLinkAttrs(href: string) {
   return {
@@ -95,14 +95,14 @@ function buildLinkAttrs(href: string) {
 }
 
 /**
- * 应用链接
+ * Apply link
  */
 function applyLink() {
   const rawUrl = linkUrl.value.trim()
   const e = editor.value
   if (!e) return
 
-  // 如果 URL 为空，移除链接
+  // If URL is empty, remove link
   if (!rawUrl) {
     runCommand((chain) => chain.unsetLink())()
     linkModalOpen.value = false
@@ -110,7 +110,7 @@ function applyLink() {
     return
   }
 
-  // 验证 URL
+  // Validate URL
   if (!isValidUrl(rawUrl)) {
     message.warning(t('editor.enterValidLink'))
     return

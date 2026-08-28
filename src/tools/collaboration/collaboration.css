@@ -1,9 +1,9 @@
 /**
- * 协同编辑光标和选区样式
+ * Collaboration cursor and selection styles
  * Collaboration cursor and selection styles
  */
 
-/* 协同编辑用户光标 */
+/* Collaboration user cursor */
 .collaboration-cursor__caret {
   position: relative;
   margin-right: -1px;
@@ -19,7 +19,7 @@
   }
 }
 
-/* 用户名标签 */
+/* Username label */
 .collaboration-cursor__label {
   position: absolute;
   top: -1.4em;
@@ -36,12 +36,12 @@
   border-radius: 3px 3px 3px 0;
 }
 
-/* 用户选区高亮 */
+/* User selection highlight */
 .ProseMirror .collaboration-cursor__selection {
-  /* 由 CollaborationCursor 扩展动态设置背景色 */
+  /* Background color dynamically set by CollaborationCursor extension */
 }
 
-/* 光标动画 */
+/* Cursor animation */
 .collaboration-cursor__caret {
   animation: blink 1.2s ease-in-out infinite;
 }
@@ -58,7 +58,7 @@
   }
 }
 
-/* 只读模式下隐藏所有协同光标 */
+/* Hide all collaboration cursors in read-only mode */
 .readonly-mode .collaboration-cursor__caret,
 .readonly-mode .collaboration-cursor__label,
 .readonly-mode .collaboration-cursor__selection {

@@ -1,6 +1,6 @@
 <template>
   <teleport to="body">
-    <!-- 拖拽手柄菜单 -->
+    <!-- Drag handle menu -->
     <div
       v-if="isMenuVisible"
       ref="menuRef"
@@ -10,9 +10,9 @@
       @mouseleave="scheduleHideMenu"
       @click.stop
     >
-      <!-- 顶部紧凑工具栏（图标按钮） -->
+      <!-- Top compact toolbar (icon buttons) -->
       <div class="inline-toolbar">
-        <!-- 标题级别 -->
+        <!-- Heading levels -->
         <div class="inline-group">
           <button
             v-for="heading in headings"
@@ -26,7 +26,7 @@
             H{{ heading.level }}
           </button>
         </div>
-        <!-- 文本格式 -->
+        <!-- Text formatting -->
         <div class="inline-group">
           <button
             v-for="format in textFormats"
@@ -39,7 +39,7 @@
             <component :is="format.icon" />
           </button>
         </div>
-        <!-- 列表 -->
+        <!-- Lists -->
         <div class="inline-group">
           <button
             v-for="item in listItems"
@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <!-- 可展开分组：缩进和对齐 -->
+      <!-- Expandable group: Indent & Alignment -->
       <div class="menu-section compact">
         <button class="menu-item" @click="toggleIndentAlignPanel">
           <AlignLeftOutlined class="menu-item-icon" />
@@ -84,7 +84,7 @@
         </div>
       </div>
 
-      <!-- 可展开分组：颜色 -->
+      <!-- Expandable group: Colors -->
       <div class="menu-section compact">
         <button class="menu-item" @click="toggleColorPanel('text')">
           <FontColorsOutlined class="menu-item-icon" />
@@ -109,7 +109,7 @@
         </div>
       </div>
 
-      <!-- 操作 -->
+      <!-- Actions -->
       <div class="menu-section">
         <div class="menu-section-title">{{ t('editor.actions') }}</div>
         <button
@@ -125,20 +125,20 @@
       </div>
     </div>
 
-    <!-- 遮罩层 -->
+    <!-- Overlay -->
     <div v-if="isMenuVisible" class="drag-handle-menu-backdrop" @click="hideMenu" />
   </teleport>
 </template>
 
 <script setup lang="ts">
 /**
- * DragHandleMenu - 拖拽手柄菜单组件
- * @description 提供六个点显示和菜单操作的 UI 组件
+ * DragHandleMenu - Drag handle menu component
+ * @description UI component providing 6-dot handle and menu operations
  * @features
- * - 点击六个点显示操作菜单
- * - 支持标题、文本格式、列表、对齐、颜色等操作
- * - 支持剪切、复制、删除等编辑操作
- * - 自动定位菜单，避免溢出屏幕
+ * - Click 6-dot icon to display action menu
+ * - Supports headings, text format, lists, alignment, colors
+ * - Supports cut, copy, delete edit actions
+ * - Auto-positions menu to prevent screen overflow
  */
 import { computed, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { t } from '@/locales'
@@ -151,12 +151,12 @@ import {
 } from './dragHandleMenuConfig'
 import type { HeadingMenuItem } from './dragHandleMenuConfig'
 
-// 工具函数导入
+// Import helper functions
 import { createStateCheckers, useReactiveEditor } from '@/utils/editorState'
 import { createCommandRunner, type EditorChain } from '@/utils/editorCommands'
 import { selectNodeContent as selectNodeContentUtil } from '@/utils/clipboard'
 
-// Ant Design 图标
+// Ant Design icons
 import {
   FontColorsOutlined,
   AlignLeftOutlined,
@@ -166,16 +166,16 @@ import {
   MenuFoldOutlined,
 } from '@ant-design/icons-vue'
 
-// 导入样式
+// Import styles
 import '@/styles/drag-handle-with-menu.css'
 
 // ============================================================================
-// 常量定义
+// Define constants
 // ============================================================================
 
-const HIDE_MENU_DELAY = 160 // 菜单隐藏延迟（毫秒）
-const POSITION_SAFE_MARGIN = 8 // 位置安全边距
-const POSITION_GAP = 12 // 菜单与手柄间距
+const HIDE_MENU_DELAY = 160 // Menu hide delay (ms)
+const POSITION_SAFE_MARGIN = 8 // Position safe margin
+const POSITION_GAP = 12 // Menu to handle gap
 
 // ============================================================================
 // Props
@@ -195,7 +195,7 @@ const props = withDefaults(
 
 
 // ============================================================================
-// 菜单状态管理
+// Menu state management
 // ============================================================================
 
 interface MenuState {
@@ -215,7 +215,7 @@ const menuState = ref<MenuState>({
 })
 
 /**
- * 处理拖拽手柄点击事件
+ * Handle drag handle click event
  */
 const handleDragHandleClick = (event: DragHandleClickEvent) => {
   menuState.value = {
@@ -228,7 +228,7 @@ const handleDragHandleClick = (event: DragHandleClickEvent) => {
 }
 
 /**
- * 隐藏菜单
+ * Hide menu
  */
 const hideMenu = () => {
   if (menuState.value.handleElement) {
@@ -242,7 +242,7 @@ const isMenuVisible = computed(() => menuState.value.visible)
 const menuPosition = computed(() => menuState.value.position)
 
 // ============================================================================
-// 其他状态
+// Other state
 // ============================================================================
 
 const menuRef = ref<HTMLElement | null>(null)
@@ -251,15 +251,15 @@ const indentAlignOpen = ref(false)
 let hideTimer: number | null = null
 
 // ============================================================================
-// 计算属性
+// Computed properties
 // ============================================================================
 
-// 事务响应式 editor：isActive/isHeadingActive 高亮跟随光标/内容变化重新求值
+// Transaction reactive editor: isActive/isHeadingActive re-evaluate on cursor/content changes
 const editor = useReactiveEditor(() => props.editor)
 
-// 创建状态检查器
+// Create state checkers
 const { isActive, isHeadingActive, isActiveAlign } = createStateCheckers(editor)
-// 命令执行器
+// Command runners
 const runCommand = createCommandRunner(editor)
 
 const menuStyle = computed(() => ({
@@ -270,19 +270,19 @@ const menuStyle = computed(() => ({
 }))
 
 // ============================================================================
-// 工具函数
+// Helper functions
 // ============================================================================
 
 /**
- * 限制数值在指定范围内
+ * Clamp number within specified range
  */
 function clamp(n: number, min: number, max: number): number {
   return Math.min(Math.max(n, min), max)
 }
 
 /**
- * 更新菜单位置
- * @description 根据手柄位置和屏幕尺寸自动调整菜单位置，避免溢出
+ * Update menu position
+ * @description Automatically adjusts menu position based on handle position and screen size to prevent overflow
  */
 function updateMenuPosition(): void {
   const handle = menuState.value.handleElement
@@ -295,14 +295,14 @@ function updateMenuPosition(): void {
   const viewportWidth = window.innerWidth
   const viewportHeight = window.innerHeight
 
-  // 水平方向：根据策略决定位置
+  // Horizontal direction: determine position based on strategy
   let x: number
   if (props.positionStrategy === 'right') {
     x = handleRect.right + POSITION_GAP
   } else if (props.positionStrategy === 'left') {
     x = handleRect.left - menuWidth - POSITION_GAP
   } else {
-    // auto：优先右侧，溢出再切到左侧
+    // auto: prefer right, fallback to left on overflow
     x = handleRect.right + POSITION_GAP
     if (x + menuWidth + POSITION_SAFE_MARGIN > viewportWidth) {
       x = handleRect.left - menuWidth - POSITION_GAP
@@ -310,7 +310,7 @@ function updateMenuPosition(): void {
   }
   x = clamp(x, POSITION_SAFE_MARGIN, viewportWidth - menuWidth - POSITION_SAFE_MARGIN)
 
-  // 垂直方向：优先在句柄下方展示，若底部溢出则放到上方
+  // Vertical direction: prefer below handle, fallback to above on bottom overflow
   let y = handleRect.bottom + POSITION_GAP
   if (y + menuHeight + POSITION_SAFE_MARGIN > viewportHeight) {
     y = handleRect.top - menuHeight - POSITION_GAP
@@ -321,11 +321,11 @@ function updateMenuPosition(): void {
 }
 
 /**
- * 计划隐藏菜单
- * @description 延迟隐藏菜单，当有展开的子面板时不自动关闭
+ * Schedule menu hide
+ * @description Delayed menu hide, does not auto-close when child panels are expanded
  */
 function scheduleHideMenu(): void {
-  // 当有展开的子面板时，不因鼠标移出而自动关闭，避免滚动时"闪退"
+  // Do not auto-close when child panels are expanded
   if (indentAlignOpen.value || colorPanelType.value) {
     return
   }
@@ -340,7 +340,7 @@ function scheduleHideMenu(): void {
 }
 
 /**
- * 取消隐藏菜单
+ * Cancel menu hide
  */
 function cancelHideMenu(): void {
   const el = menuRef.value
@@ -352,26 +352,26 @@ function cancelHideMenu(): void {
 }
 
 // ============================================================================
-// 生命周期与事件监听
+// Lifecycle and event listeners
 // ============================================================================
 
 /**
- * 重新定位菜单
- * @description 在滚动或窗口大小变化时重新计算菜单位置
+ * Reposition menu
+ * @description Recalculate menu position on scroll or window resize
  */
 function onReposition(): void {
   if (!menuState.value.visible) return
   updateMenuPosition()
 }
 
-// 菜单显示后进行测量与定位
+// Measure and position after menu is shown
 watch(isMenuVisible, async (visible) => {
   if (!visible) return
   await nextTick()
   updateMenuPosition()
 })
 
-// 监听菜单可见性变化，重置子面板状态
+// Watch menu visibility change to reset child panel state
 watch(isMenuVisible, (visible) => {
   if (!visible) {
     colorPanelType.value = null
@@ -380,7 +380,7 @@ watch(isMenuVisible, (visible) => {
 })
 
 /**
- * 编辑器更新时自动隐藏菜单
+ * Auto-hide menu when editor updates
  */
 function handleEditorUpdate(): void {
   if (menuState.value.visible) {
@@ -389,11 +389,11 @@ function handleEditorUpdate(): void {
 }
 
 onMounted(() => {
-  // 监听滚动和窗口大小变化，自动调整菜单位置
+  // Listen to scroll and resize to auto-adjust menu position
   window.addEventListener('scroll', onReposition, true)
   window.addEventListener('resize', onReposition, true)
 
-  // 监听编辑器变化，自动隐藏菜单
+  // Listen to editor changes to auto-hide menu
   if (editor.value) {
     editor.value.on('update', handleEditorUpdate)
     editor.value.on('selectionUpdate', handleEditorUpdate)
@@ -401,28 +401,28 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  // 清理事件监听器
+  // Clean up event listeners
   window.removeEventListener('scroll', onReposition, true)
   window.removeEventListener('resize', onReposition, true)
 
-  // 清理编辑器事件监听
+  // Clean up editor event listeners
   if (editor.value) {
     editor.value.off('update', handleEditorUpdate)
     editor.value.off('selectionUpdate', handleEditorUpdate)
   }
 
-  // 清理定时器
+  // Clean up timer
   if (hideTimer) {
     window.clearTimeout(hideTimer)
     hideTimer = null
   }
 
-  // 隐藏菜单
+  // Hide menu
   hideMenu()
 })
 
 // ============================================================================
-// 菜单配置（使用导入的工厂函数）
+// Menu config (using imported factory function)
 // ============================================================================
 
 const menuConfig = computed(() => {
@@ -440,11 +440,11 @@ const textFormats = computed(() => menuConfig.value?.textFormats ?? [])
 const listItems = computed(() => menuConfig.value?.listItems ?? [])
 
 // ============================================================================
-// 菜单操作函数
+// Menu action functions
 // ============================================================================
 
 /**
- * 选中节点内容
+ * Select node content
  */
 const selectNodeContent = (from: number, to: number): void => {
   const e = editor.value
@@ -453,34 +453,34 @@ const selectNodeContent = (from: number, to: number): void => {
 }
 
 // ============================================================================
-// 颜色操作
+// Color operations
 // ============================================================================
 
 /**
- * 切换颜色面板
+ * Toggle color panel
  */
 const toggleColorPanel = (type: 'text' | 'highlight'): void => {
   colorPanelType.value = colorPanelType.value === type ? null : type
 }
 
 /**
- * 设置颜色模式
+ * Set color mode
  */
 const setColorMode = (mode: 'text' | 'highlight'): void => {
   colorPanelType.value = mode
 }
 
 /**
- * 应用颜色
+ * Apply color
  */
 const applyColor = (color: string): void => {
   selectNodeContent(menuState.value.nodePos, menuState.value.nodeTo)
 
   if (colorPanelType.value === 'text') {
-    // @ts-ignore - setColor 由 Color 扩展动态添加
+    // @ts-ignore - setColor dynamically added by Color extension
     runCommand((chain: EditorChain) => chain.setColor(color))()
   } else if (colorPanelType.value === 'highlight') {
-    // @ts-ignore - setHighlight 由 Highlight 扩展动态添加
+    // @ts-ignore - setHighlight dynamically added by Highlight extension
     runCommand((chain: EditorChain) => chain.setHighlight({ color }))()
   }
 
@@ -489,18 +489,18 @@ const applyColor = (color: string): void => {
 }
 
 // ============================================================================
-// 缩进与对齐操作
+// Indent & alignment operations
 // ============================================================================
 
 /**
- * 切换缩进对齐面板
+ * Toggle indent & alignment panel
  */
 const toggleIndentAlignPanel = (): void => {
   indentAlignOpen.value = !indentAlignOpen.value
 }
 
 /**
- * 设置文本对齐
+ * Set text alignment
  */
 const setAlign = (align: 'left' | 'center' | 'right'): void => {
   selectNodeContent(menuState.value.nodePos, menuState.value.nodeTo)
@@ -508,14 +508,14 @@ const setAlign = (align: 'left' | 'center' | 'right'): void => {
 }
 
 /**
- * 增加列表缩进
+ * Increase list indent
  */
 const indentList = (): void => {
   runCommand((chain) => chain.sinkListItem('listItem'))()
 }
 
 /**
- * 减少列表缩进
+ * Decrease list indent
  */
 const outdentList = (): void => {
   runCommand((chain) => chain.liftListItem('listItem'))()
@@ -523,7 +523,7 @@ const outdentList = (): void => {
 
 
 // ============================================================================
-// 暴露方法
+// Expose methods
 // ============================================================================
 
 defineExpose({

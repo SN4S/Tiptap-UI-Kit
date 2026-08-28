@@ -1,26 +1,26 @@
-# Collaboration - 协作编辑工具模块
+# Collaboration - Collaboration Tool Module
 
-提供基于 Yjs + WebSocket 的实时协作编辑功能。
+Provides real-time collaboration features based on Yjs + WebSocket.
 
-## 功能特性
+## Features
 
-- ✅ **实时同步**: 基于 Yjs CRDT 的实时文档同步
-- ✅ **多用户协作**: 支持多用户同时编辑同一文档
-- ✅ **用户光标**: 显示其他用户的编辑光标和选区
-- ✅ **用户列表**: 实时追踪在线用户列表
-- ✅ **智能初始化**: 自动处理新文档和已有文档的初始化逻辑
-- ✅ **开关控制**: 提供开关组件，用户可控制开启/关闭（默认关闭）
+- ✅ **Real-time Sync**: Real-time document sync based on Yjs CRDT
+- ✅ **Multi-user Collaboration**: Supports multi-user editing simultaneously
+- ✅ **User Cursors**: Displays other users' editing cursors and selections
+- ✅ **User List**: Real-time tracking of online user list
+- ✅ **Smart Initialization**: Automatically handles initialization logic for new and existing documents
+- ✅ **Toggle Control**: Provides toggle component for users to enable/disable (disabled by default)
 
-## 使用方法
+## Usage
 
-### 使用开关组件（推荐）
+### Using Toggle Component (Recommended)
 
-最简单的方式是使用 `CollaborationToggle` 组件，它提供了完整的开启/关闭控制：
+The simplest way is using `CollaborationToggle` component for full enable/disable control:
 
 ```vue
 <template>
   <div>
-    <!-- 协作编辑开关 -->
+    <!-- Collaboration toggle -->
     <CollaborationToggle
       v-model="collaborationEnabled"
       :options="collaborationOptions"
@@ -30,7 +30,7 @@
       @disabled="handleDisabled"
     />
     
-    <!-- 编辑器 -->
+    <!-- Editor -->
     <TiptapProEditor document-id="doc-123" :features="{ collaboration: collaborationEnabled }" />
   </div>
 </template>
@@ -41,16 +41,16 @@ import { CollaborationToggle } from './tools/collaboration'
 import { useUserStore } from '@vben/stores'
 
 const userStore = useUserStore()
-const collaborationEnabled = ref(false) // 默认关闭
+const collaborationEnabled = ref(false) // Default disabled
 
 const collaborationOptions = {
   documentId: 'doc-123',
   readonly: false,
-  initialContent: '<p>初始内容</p>',
+  initialContent: '<p>Initial content</p>',
   editor: editorInstance,
   getUserInfo: () => ({
     id: userStore.userInfo?.userId || 'anonymous',
-    name: userStore.userInfo?.realName || '匿名用户',
+    name: userStore.userInfo?.realName || 'Anonymous User',
   }),
   onCollaboratorsChange: (count) => {
     collaboratorsCount.value = count
@@ -60,18 +60,18 @@ const collaborationOptions = {
 const collaboratorsCount = ref(0)
 
 function handleEnabled() {
-  console.log('协作编辑已开启')
+  console.log('Collaboration enabled')
 }
 
 function handleDisabled() {
-  console.log('协作编辑已关闭')
+  console.log('Collaboration disabled')
 }
 </script>
 ```
 
-### 使用 Composable
+### Using Composable
 
-如果需要更细粒度的控制，可以使用 `useCollaboration` composable：
+If fine-grained control is needed, use `useCollaboration` composable:
 
 ```vue
 <script setup lang="ts">
@@ -81,26 +81,26 @@ import { useUserStore } from '@vben/stores'
 const userStore = useUserStore()
 const { enabled, connected, enable, disable } = useCollaboration()
 
-// 开启协作编辑
+// Enable collaboration
 const handleEnable = async () => {
   await enable({
     documentId: 'doc-123',
     editor: editorInstance,
     getUserInfo: () => ({
       id: userStore.userInfo?.userId || 'anonymous',
-      name: userStore.userInfo?.realName || '匿名用户',
+      name: userStore.userInfo?.realName || 'Anonymous User',
     }),
   })
 }
 
-// 关闭协作编辑
+// Disable collaboration
 const handleDisable = () => {
   disable()
 }
 </script>
 ```
 
-### 基础用法
+### Basic Usage
 
 ```typescript
 import { initCollaboration, createCollaborationExtensions } from './tools/collaboration'
@@ -108,42 +108,42 @@ import { useUserStore } from '@vben/stores'
 
 const userStore = useUserStore()
 
-// 获取用户信息
+// Get user info
 const getUserInfo = () => {
   const userInfo = userStore.userInfo
   return {
-    name: userInfo?.realName || userInfo?.userName || '匿名用户',
+    name: userInfo?.realName || userInfo?.userName || 'Anonymous User',
     id: userInfo?.userId || Math.random().toString(36).substring(7),
   }
 }
 
-// 初始化协作编辑
+// Initialize collaboration
 const collaborationInstance = await initCollaboration({
   documentId: 'doc-123',
   readonly: false,
-  initialContent: '<p>初始内容</p>',
+  initialContent: '<p>Initial content</p>',
   editor: editorInstance,
   getUserInfo,
   onCollaboratorsChange: (count) => {
-    console.log('在线用户数:', count)
+    console.log('Online user count:', count)
   },
   onCollaboratorsListChange: (users) => {
-    console.log('在线用户列表:', users)
+    console.log('Online user list:', users)
   },
 })
 
-// 创建协作编辑扩展
+// Create collaboration editing extension
 if (collaborationInstance) {
   const extensions = await createCollaborationExtensions(
     collaborationInstance,
     getUserInfo
   )
-  // 将扩展添加到编辑器
+  // Add extensions to editor
   editor.use(...extensions)
 }
 ```
 
-### 在编辑器中使用
+### Usage in Editor
 
 ```vue
 <script setup lang="ts">
@@ -164,18 +164,18 @@ const userStore = useUserStore()
 const getUserInfo = () => {
   const userInfo = userStore.userInfo
   return {
-    name: userInfo?.realName || userInfo?.userName || '匿名用户',
+    name: userInfo?.realName || userInfo?.userName || 'Anonymous User',
     id: userInfo?.userId || Math.random().toString(36).substring(7),
   }
 }
 
 onMounted(async () => {
-  // 初始化编辑器
+  // Initialize editor
   editor.value = new Editor({
     extensions: [...],
   })
 
-  // 初始化协作编辑
+  // Initialize collaboration
   if (props.documentId) {
     collaborationInstance.value = await initCollaboration({
       documentId: props.documentId,
@@ -184,7 +184,7 @@ onMounted(async () => {
       getUserInfo,
     })
 
-    // 添加协作扩展
+    // Add collaboration extension
     if (collaborationInstance.value) {
       const extensions = await createCollaborationExtensions(
         collaborationInstance.value,
@@ -196,7 +196,7 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
-  // 清理协作编辑资源
+  // Clean up collaboration editing resources
   if (collaborationInstance.value) {
     collaborationInstance.value.destroy()
   }
@@ -207,28 +207,28 @@ onBeforeUnmount(() => {
 </script>
 ```
 
-## API 参考
+## API Reference
 
-### `CollaborationToggle` 组件
+### `CollaborationToggle` Component
 
-协作编辑开关组件，提供可视化的开启/关闭控制。
+Collaboration toggle component providing visual enable/disable controls.
 
 **Props:**
 
-- `modelValue` (boolean, 可选): 是否启用（v-model 绑定），默认 `false`
-- `options` (CollaborationInitOptions, 可选): 协作编辑初始化选项
-- `disabled` (boolean, 可选): 是否禁用，默认 `false`
-- `showLabel` (boolean, 可选): 是否显示标签，默认 `false`
-- `collaboratorsCount` (number, 可选): 在线用户数，默认 `0`
+- `modelValue` (boolean, optional): Whether enabled (v-model binding), default `false`
+- `options` (CollaborationInitOptions, optional): Collaboration initialization options
+- `disabled` (boolean, optional): Whether disabled, default `false`
+- `showLabel` (boolean, optional): Whether to show label, default `false`
+- `collaboratorsCount` (number, optional): Online user count, default `0`
 
 **Events:**
 
-- `update:modelValue`: 状态变化时触发
-- `change`: 状态变化时触发，参数为 `boolean`
-- `enabled`: 协作编辑开启时触发
-- `disabled`: 协作编辑关闭时触发
+- `update:modelValue`: Triggered on state change
+- `change`: Triggered on state change with boolean parameter
+- `enabled`: Triggered when collaboration enabled
+- `disabled`: Triggered when collaboration disabled
 
-**示例:**
+**Example:**
 
 ```vue
 <CollaborationToggle
@@ -241,20 +241,20 @@ onBeforeUnmount(() => {
 
 ### `useCollaboration()` Composable
 
-协作编辑状态管理 composable。
+Collaboration state management composable.
 
-**返回值:**
+**Return values:**
 
-- `enabled` (ComputedRef<boolean>): 是否启用
-- `connected` (ComputedRef<boolean>): 是否已连接
-- `initializing` (ComputedRef<boolean>): 是否正在初始化
-- `instance` (ComputedRef<CollaborationInstance | null>): 协作编辑实例
-- `enable(options)`: 开启协作编辑
-- `disable()`: 关闭协作编辑
-- `toggle(options?)`: 切换状态
-- `reset()`: 重置状态
+- `enabled` (ComputedRef<boolean>): Whether enabled
+- `connected` (ComputedRef<boolean>): Whether connected
+- `initializing` (ComputedRef<boolean>): Whether initializing
+- `instance` (ComputedRef<CollaborationInstance | null>): Collaboration instance
+- `enable(options)`: Enable collaboration
+- `disable()`: Disable collaboration
+- `toggle(options?)`: Toggle state
+- `reset()`: Reset state
 
-**示例:**
+**Example:**
 
 ```typescript
 const { enabled, enable, disable } = useCollaboration()
@@ -262,48 +262,48 @@ const { enabled, enable, disable } = useCollaboration()
 
 ### `initCollaboration(options)`
 
-初始化协作编辑功能。
+Initialize collaboration editing feature.
 
-**参数:**
+**Parameters:**
 
-- `options.documentId` (string, 必需): 文档ID，用于创建 WebSocket 房间
-- `options.readonly` (boolean, 可选): 是否为只读模式，默认为 `false`
-- `options.initialContent` (string | object, 可选): 初始内容，用于新文档或单人编辑场景
-- `options.editor` (Editor, 可选): 编辑器实例，用于设置初始内容
-- `options.getUserInfo` (() => UserInfo, 可选): 用户信息获取函数
-- `options.onCollaboratorsChange` ((count: number) => void, 可选): 在线用户数变化回调
-- `options.onCollaboratorsListChange` ((users: CollaboratorInfo[]) => void, 可选): 在线用户列表变化回调
+- `options.documentId` (string, required): Document ID for WebSocket room
+- `options.readonly` (boolean, optional): Whether read-only mode, default `false`
+- `options.initialContent` (string | object, optional): Initial content for new docs or single-user edit
+- `options.editor` (Editor, optional): Editor instance to set initial content
+- `options.getUserInfo` (() => UserInfo, optional): User info getter function
+- `options.onCollaboratorsChange` ((count: number) => void, optional): Online user count change callback
+- `options.onCollaboratorsListChange` ((users: CollaboratorInfo[]) => void, optional): Online user list change callback
 
-**返回:**
+**Returns:**
 
-- `CollaborationInstance | null`: 协作编辑实例，包含 `doc`、`provider` 和 `destroy` 方法
+- `CollaborationInstance | null`: Collaboration instance containing `doc`, `provider`, and `destroy` method
 
 ### `createCollaborationExtensions(instance, getUserInfo)`
 
-创建协作编辑扩展配置。
+Create collaboration editing extension configuration.
 
-**参数:**
+**Parameters:**
 
-- `instance` (CollaborationInstance | null): 协作编辑实例
-- `getUserInfo` (() => UserInfo, 可选): 用户信息获取函数
+- `instance` (CollaborationInstance | null): Collaboration instance
+- `getUserInfo` (() => UserInfo, optional): User info getter function
 
-**返回:**
+**Returns:**
 
-- `Promise<Extension[]>`: Tiptap 扩展配置数组
+- `Promise<Extension[]>`: Tiptap Extension Configuration array
 
 ### `getRandomColor()`
 
-生成随机颜色，用于协作用户光标和选区高亮。
+Generate random color for collaboration user cursors and selection highlights.
 
-**返回:**
+**Returns:**
 
-- `string`: 颜色值（十六进制）
+- `string`: Color value (hex)
 
-## 类型定义
+## Type Definitions
 
 ### `CollaboratorInfo`
 
-协作用户信息。
+Collaboration user info.
 
 ```typescript
 interface CollaboratorInfo {
@@ -315,7 +315,7 @@ interface CollaboratorInfo {
 
 ### `UserInfo`
 
-用户信息（用于设置 awareness）。
+User info (for setting awareness).
 
 ```typescript
 interface UserInfo {
@@ -326,42 +326,42 @@ interface UserInfo {
 
 ### `CollaborationInstance`
 
-协作编辑实例。
+Collaboration editing instance.
 
 ```typescript
 interface CollaborationInstance {
-  doc: any // Yjs 文档实例
-  provider: any // WebSocket Provider 实例
-  destroy: () => void // 销毁函数
+  doc: any // Yjs document instance
+  provider: any // WebSocket Provider instance
+  destroy: () => void // Destroy function
 }
 ```
 
-## 样式
+## Styles
 
-协作编辑模块包含以下样式：
+Collaboration editing module includes the following styles:
 
-- `.collaboration-cursor__caret`: 用户光标样式
-- `.collaboration-cursor__label`: 用户名标签样式
-- `.collaboration-cursor__selection`: 用户选区高亮样式
+- `.collaboration-cursor__caret`: User cursor style
+- `.collaboration-cursor__label`: User name label style
+- `.collaboration-cursor__selection`: User selection highlight style
 
-样式文件位于 `collaboration.css`，需要在项目中导入：
+Style file is located in `collaboration.css`, import in project:
 
 ```typescript
 import './tools/collaboration/collaboration.css'
 ```
 
-## 注意事项
+## Notes
 
-1. **WebSocket URL**: 需要确保 `#/api/document/websocket` 中的 `getWebSocketUrl` 函数可用
-2. **文档ID**: 每个文档需要唯一的 `documentId`，用于创建独立的 WebSocket 房间
-3. **初始内容**: 在多人协作场景下，如果文档已有内容，不会覆盖 Yjs 文档中的内容
-4. **用户去重**: 系统会自动按用户ID去重，避免同一用户多个标签页被重复计算
-5. **资源清理**: 组件销毁时务必调用 `destroy()` 方法清理 WebSocket 连接和 Yjs 文档
+1. **WebSocket URL**: Ensure `getWebSocketUrl` function in `#/api/document/websocket` is available
+2. **Document ID**: Each document needs a unique `documentId` for WebSocket room isolation
+3. **Initial Content**: Existing document content in Yjs won't be overwritten in multi-user collaboration
+4. **User Deduplication**: Automatically deduplicated by user ID across multiple browser tabs
+5. **Resource Cleanup**: Always call `destroy()` on component unmount to clean WebSocket connections and Yjs document
 
-## 依赖
+## Dependencies
 
-- `yjs`: Yjs CRDT 库
+- `yjs`: Yjs CRDT library
 - `y-websocket`: Yjs WebSocket Provider
-- `@tiptap/extension-collaboration`: Tiptap 协作编辑扩展
-- `@tiptap/extension-collaboration-cursor`: Tiptap 协作光标扩展
+- `@tiptap/extension-collaboration`: Tiptap collaboration extension
+- `@tiptap/extension-collaboration-cursor`: Tiptap collaboration cursor extension
 

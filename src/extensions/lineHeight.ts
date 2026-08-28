@@ -1,6 +1,6 @@
 /**
- * LineHeight Extension - 行间距扩展
- * @description 自定义行间距扩展
+ * LineHeight Extension - Line height extension
+ * @description Custom line height extension
  */
 
 import { Extension } from '@tiptap/core'

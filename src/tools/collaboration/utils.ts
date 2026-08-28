@@ -1,21 +1,21 @@
 /**
- * Collaboration Utils - 协作编辑工具函数
+ * Collaboration Utils - Collaboration Helper Functions
  */
 
 import type { CollaboratorInfo } from './types'
 
-/** 预设颜色列表 */
+/** Preset colors list */
 const COLORS = [
   '#3b82f6', '#ef4444', '#10b981', '#f59e0b',
   '#8b5cf6', '#ec4899', '#06b6d4', '#f97316',
 ]
 
-/** 生成随机颜色 */
+/** Generate random color */
 export function getRandomColor(): string {
   return COLORS[Math.floor(Math.random() * COLORS.length)] || '#3b82f6'
 }
 
-/** 日志工具（静默模式） */
+/** Logger utility (silent mode) */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const noop = (..._args: unknown[]) => {}
 
@@ -26,7 +26,7 @@ export const logger = {
   success: noop,
 }
 
-/** 定时器管理器 */
+/** Timer manager */
 export class TimerManager {
   private timeouts: NodeJS.Timeout[] = []
   private intervals: NodeJS.Timeout[] = []
@@ -79,7 +79,7 @@ interface EventListenerRecord {
   handler: (...args: any[]) => void
 }
 
-/** 事件监听器管理器 */
+/** Event listener manager */
 export class EventManager {
   private listeners: EventListenerRecord[] = []
 
@@ -117,7 +117,7 @@ interface AwarenessState {
   }
 }
 
-/** 获取去重用户列表 */
+/** Get deduplicated user list */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getUniqueUsers(awareness: any): CollaboratorInfo[] {
   const states = awareness.getStates() as Map<number, AwarenessState>
@@ -129,7 +129,7 @@ export function getUniqueUsers(awareness: any): CollaboratorInfo[] {
       if (!userMap.has(id)) {
         userMap.set(id, {
           id,
-          name: state.user.name || `用户${clientId}`,
+          name: state.user.name || `User-${clientId}`,
           color: state.user.color || '#3b82f6',
         })
       }
@@ -145,7 +145,7 @@ interface JSONContentNode {
   content?: JSONContentNode[]
 }
 
-/** 检查文档是否为空 */
+/** Check if document is empty */
 export function isDocumentEmpty(content: JSONContentNode | null | undefined): boolean {
   if (!content || content.type !== 'doc') return !content
   const nodes = content.content
@@ -155,7 +155,7 @@ export function isDocumentEmpty(content: JSONContentNode | null | undefined): bo
   return first?.type === 'paragraph' && (!first?.content || first.content.length === 0)
 }
 
-/** 防抖函数 */
+/** Debounce function */
 export function debounce<T extends (...args: any[]) => void>(
   fn: T,
   delay: number
@@ -180,13 +180,13 @@ export function debounce<T extends (...args: any[]) => void>(
   return { run, cancel }
 }
 
-/** 规范化 WebSocket URL */
+/** Normalize WebSocket URL */
 export function normalizeWebSocketUrl(url: string | null | undefined): string | null {
   if (!url?.trim()) return null
 
   const trimmed = url.trim()
   
-  // 已是 WebSocket URL
+  // Already a WebSocket URL
   if (trimmed.startsWith('ws://') || trimmed.startsWith('wss://')) {
     return trimmed
   }
@@ -199,13 +199,13 @@ export function normalizeWebSocketUrl(url: string | null | undefined): string | 
     return trimmed.replace(/^https:\/\//, 'wss://')
   }
 
-  // 相对路径
+  // Relative path
   if (trimmed.startsWith('/')) {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
     return `${protocol}//${window.location.host}${trimmed}`
   }
 
-  // 其他：添加协议
+  // Other: add protocol
   const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://'
   return `${protocol}${trimmed}`
 }

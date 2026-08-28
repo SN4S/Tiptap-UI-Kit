@@ -1,7 +1,7 @@
 /**
- * Word 导入工具
- * @description 使用 mammoth 将 .docx 文件转换为 HTML 并插入编辑器
- * @note mammoth 为按需动态加载，仅在实际执行导入时下载
+ * Word Import Utility
+ * @description Uses mammoth to convert .docx files to HTML and insert into editor
+ * @note mammoth is loaded dynamically on demand
  */
 import type { Editor } from '@tiptap/core'
 
@@ -11,12 +11,12 @@ export interface WordImportResult {
 }
 
 /**
- * 将 Word 文件转换为 HTML
- * @param file - .docx 文件
- * @returns 转换结果（HTML + 消息）
+ * Convert Word file to HTML
+ * @param file - .docx file
+ * @returns Conversion result (HTML + message)
  */
 export async function convertWordToHtml(file: File): Promise<WordImportResult> {
-  // 动态加载 mammoth（CJS 包，做 default/命名空间兼容处理）
+  // Dynamically load mammoth
   const mammothModule: any = await import('mammoth')
   const mammoth = mammothModule.default ?? mammothModule
 
@@ -42,9 +42,9 @@ export async function convertWordToHtml(file: File): Promise<WordImportResult> {
 }
 
 /**
- * 导入 Word 文件到编辑器
- * @param editor - Tiptap 编辑器实例
- * @param file - .docx 文件
+ * Import Word file to editor
+ * @param editor - Tiptap editor instance
+ * @param file - .docx file
  */
 export async function importWordFile(editor: Editor, file: File): Promise<WordImportResult> {
   const result = await convertWordToHtml(file)

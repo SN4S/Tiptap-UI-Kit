@@ -1,17 +1,17 @@
 /**
- * Font - 字体功能模块
- * @description 提供字体、字号、行高等字体相关功能
+ * Font - Font Feature Module
+ * @description Provides font, font size, and line height features
  */
 
-// 组件导出
+// Component exports
 export { default as FontFamilySelect } from './FontFamilySelect.vue'
 export { default as FontSizeSelect } from './FontSizeSelect.vue'
 
-// 扩展导出（从 shared/extensions 重新导出，避免重复）
+// Extension exports (re-exported from shared/extensions)
 export { FontSize } from '@/extensions/fontSize'
 export { LineHeight } from '@/extensions/lineHeight'
 
-// 常量导出（从 shared/configs/editorConstants 重新导出，避免重复）
+// Constants exports (re-exported from shared/configs/editorConstants)
 export {
   FONT_FAMILIES,
   FONT_SIZES,

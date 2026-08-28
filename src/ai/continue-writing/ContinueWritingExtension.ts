@@ -81,7 +81,7 @@ export const ContinueWritingExtension =
               state.doc.content.size,
               ' ',
             );
-            const sysPrompt = `以下係完整嘅文件內容:\n\n${fullText}`;
+            const sysPrompt = `Below is the full document content:\n\n${fullText}`;
 
             // Perform AI continue writing
             performContinueWriting(
@@ -257,7 +257,7 @@ function performContinueWriting(
       console.error('[Continue Writing] Error:', error);
       handleCleanup();
       notification.error({
-        message: '续写失败',
+        message: 'Continue writing failed',
         description: error.message || t('messages.networkError'),
         duration: 3,
       });

@@ -206,7 +206,7 @@ const readDocument: DocumentTool = {
 const getSelection: DocumentTool = {
   name: 'get_selection',
   description:
-    "Get the user's currently selected text, if any. Useful when the user refers to “the selected text” / “选中的文字”.",
+    'Get the user\'s currently selected text, if any. Useful when the user refers to "the selected text".',
   parameters: { type: 'object', properties: {}, additionalProperties: false },
   execute: (editor) => {
     const { from, to, empty } = editor.state.selection

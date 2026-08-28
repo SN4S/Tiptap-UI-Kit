@@ -14,8 +14,8 @@
 
 <script setup lang="ts">
 /**
- * FontSizeSelect - 字号选择器组件
- * @description 可复用的字号选择器组件，支持选择字号大小
+ * FontSizeSelect - Font size selector component
+ * @description Reusable font size selector component
  */
 import { ref, watch } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -30,16 +30,16 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-// 事务响应式 editor：当前字号跟随光标/内容变化重新求值
+// Transaction reactive editor: current font size re-evaluates on cursor/content changes
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const runCommand = createCommandRunner(editor)
 
-// ===== 响应式状态 =====
+// ===== Reactive state =====
 const currentFontSize = ref<string>(DEFAULT_VALUES.fontSize)
 
-// ===== 监听编辑器状态，更新当前字号 =====
+// ===== Listen to editor state, update current font size =====
 watch(
   () => editor.value?.getAttributes('textStyle')?.fontSize,
   (fontSize) => {
@@ -53,8 +53,8 @@ watch(
 )
 
 /**
- * 字号切换处理
- * @description 如果无选区则应用到整个段落，有选区则应用到选区
+ * Font size switch handler
+ * @description Applies to whole paragraph if no selection, or to selection if present
  */
 function onFontSizeChange(val: string) {
   const e = editor.value
@@ -64,7 +64,7 @@ function onFontSizeChange(val: string) {
 
   const { from, to, empty } = e.state.selection
   if (empty) {
-    // 无选区时：选中整个段落并应用字号
+    // No selection: select entire paragraph and apply font size
     const $from = e.state.selection.$from
     const start = $from.start($from.depth)
     const end = $from.end($from.depth)
@@ -74,7 +74,7 @@ function onFontSizeChange(val: string) {
       (chain) => chain.setTextSelection({ from, to }),
     ])
   } else {
-    // 有选区时：直接应用到选区
+    // With selection: apply directly to selection
     runCommand((chain) => chain.setMark('textStyle', { fontSize: val }))()
   }
 }

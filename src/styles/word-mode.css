@@ -1,17 +1,17 @@
-/* TiptapPro Word 模式样式 */
-/* 基于原 tiptap 样式，适配 tiptap-pro-editor 类名 */
+/* TiptapPro Word Mode Styles */
+/* Based on tiptap styles, adapted for tiptap-pro-editor class */
 
-/* ===== Word 文档模式编辑器容器 ===== */
+/* ===== Word Document Mode Editor Container ===== */
 .tiptap-pro-editor.word-mode {
-  /* 布局与尺寸 */
+  /* Layout & Dimensions */
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  min-height: 0; /* 允许 flex 子元素收缩 */
-  overflow: hidden; /* 容器不滚动，由内部 word-document-container 滚动 */
+  min-height: 0; /* Allow flex child to shrink */
+  overflow: hidden; /* Container does not scroll, scrolled by inner word-document-container */
 
-  /* 统一色彩与变量（引用主题预设变量，由 themes/presets/*.css 定义） */
+  /* Unified colors and variables (references theme preset variables defined in themes/presets/*.css) */
   --color-text: var(--tiptap-text, #000);
   --color-bg: var(--tiptap-bg, #fff);
   --color-bg-gray: var(--tiptap-bg-secondary, #f5f5f5);
@@ -20,7 +20,7 @@
   --color-link: var(--tiptap-link, #0563c1);
   --page-cut-line-color: var(--tiptap-border, #d9d9d9);
 
-  /* 统一菜单与表格主题色（供各样式文件复用） */
+  /* Unified menu and table theme color (reusable across style files) */
   --menu-bg: var(--tiptap-bg, #fff);
   --menu-border-color: var(--tiptap-border, rgb(0 0 0 / 6%));
   --menu-shadow: 0 4px 16px rgb(0 0 0 / 15%), 0 2px 8px rgb(0 0 0 / 10%);
@@ -40,14 +40,14 @@
   --font-size-base: var(--tiptap-font-size, 14px);
   --line-height-base: var(--tiptap-line-height, 1.5);
 
-  /* 页面高度占满视口，便于内部滚动 */
+  /* Page height fills viewport for internal scrolling */
   background: var(--tiptap-bg-secondary, #e8e8e8);
 
-  /* 主题/暗色切换时平滑过渡 */
+  /* Smooth transition on theme/dark mode toggle */
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* 深色模式下的编辑器容器 */
+/* Editor container under dark mode */
 .dark .tiptap-pro-editor.word-mode,
 [data-theme="dark"] .tiptap-pro-editor.word-mode {
   --color-text: #f0f0f0;
@@ -73,13 +73,13 @@
   background: #141414;
 }
 
-/* Word 文档区域容器 - 这是唯一可滚动的区域 */
+/* Word document area container - this is the only scrollable area */
 .word-document-container {
   position: relative;
   display: flex;
   flex: 1;
   flex-direction: column;
-  min-height: 0; /* 关键：允许 flex 子元素收缩 */
+  min-height: 0; /* Key: allow flex child to shrink */
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-gutter: stable;
@@ -87,7 +87,7 @@
   -webkit-overflow-scrolling: touch;
   padding: 20px 0;
 
-  /* 细滚动条，颜色跟随主题（暗色下 --tiptap-border-hover 为深灰） */
+  /* Thin scrollbar, color follows theme */
   scrollbar-width: thin;
   scrollbar-color: var(--tiptap-border-hover, #d0d0d0) transparent;
 }
@@ -105,14 +105,14 @@
   border-radius: 4px;
 }
 
-/* 文档页面区域 */
+/* Document page area */
 .document-pages {
   flex: 1;
   transform-origin: top center;
   transition: transform 0.2s ease;
 }
 
-/* 连续页面容器 */
+/* Continuous page container */
 .continuous-pages {
   --page-cut-height: 16px;
   position: relative;
@@ -122,7 +122,7 @@
   box-shadow: 0 2px 8px var(--color-shadow);
 }
 
-/* ===== Word 文档内容样式（多页模式）===== */
+/* ===== Word Document Content Styles (Multi-page Mode) ===== */
 .word-content-multi .ProseMirror {
   min-height: var(--page-content-height-px, 939px);
   padding: var(--padding-top-px, 96px) 92px var(--padding-bottom-px, 88px) 92px;
@@ -134,7 +134,7 @@
   background: var(--color-bg);
 }
 
-/* 格式刷激活态光标 */
+/* Format painter active cursor */
 .word-content-multi.cursor-format-painter,
 .word-content-multi .ProseMirror.cursor-format-painter {
   cursor:
@@ -143,7 +143,7 @@
     pointer;
 }
 
-/* Word 标题样式 */
+/* Word heading styles */
 .word-content-multi .ProseMirror h1,
 .word-content-multi .ProseMirror h2,
 .word-content-multi .ProseMirror h3 {
@@ -155,12 +155,12 @@
 .word-content-multi .ProseMirror h2 { margin: 18px 0 10px; font-size: 20px; }
 .word-content-multi .ProseMirror h3 { margin: 14px 0 8px;  font-size: 16px; }
 
-/* Word 段落样式 */
+/* Word paragraph styles */
 .word-content-multi .ProseMirror p {
   margin: 0 0 14px;
 }
 
-/* Word 列表样式 */
+/* Word list styles */
 .word-content-multi .ProseMirror ul,
 .word-content-multi .ProseMirror ol {
   padding-left: 14px;
@@ -171,7 +171,7 @@
 .word-content-multi .ProseMirror ul li { list-style-type: disc; }
 .word-content-multi .ProseMirror ol li { list-style-type: decimal; }
 
-/* Word 图片样式 */
+/* Word image styles */
 .word-content-multi .ProseMirror img { 
   display: block; 
   max-width: 100%; 
@@ -179,7 +179,7 @@
   margin: 10px 0; 
 }
 
-/* Word 表格样式 */
+/* Word table styles */
 .word-content-multi .ProseMirror table {
   border-collapse: collapse;
   margin: 14px 0;
@@ -211,7 +211,7 @@
     text-align: left;
   }
 
-  /* 选中单元格样式 */
+  /* Selected cell styles */
   .selectedCell:after {
     background: var(--gray-2);
     content: '';
@@ -224,7 +224,7 @@
     z-index: 2;
   }
 
-  /* 列调整大小手柄 */
+  /* Column resize handle */
   .column-resize-handle {
     background-color: var(--purple);
     bottom: -2px;
@@ -243,13 +243,13 @@
   box-sizing: border-box;
 }
 
-/* 表格调整大小光标 */
+/* Table resize cursor */
 .word-content-multi .ProseMirror.resize-cursor {
   cursor: ew-resize;
   cursor: col-resize;
 }
 
-/* Word 代码块样式 */
+/* Word code block styles */
 .word-content-multi .ProseMirror pre {
   padding: 12px;
   margin: 14px 0;
@@ -266,7 +266,7 @@
   background: none; 
 }
 
-/* Word 行内代码样式 - 参考邮件效果，浅灰背景+边框 */
+/* Word inline code styles - light gray background + border */
 .word-content-multi .ProseMirror code.inline-code,
 .word-content-multi .ProseMirror code:not(pre code) {
   display: inline;
@@ -292,7 +292,7 @@
   }
 }
 
-/* 确保行内代码在段落、列表、表格、标题中正确显示 */
+/* Ensure inline code displays correctly in paragraphs, lists, tables, headings */
 .word-content-multi .ProseMirror p code.inline-code,
 .word-content-multi .ProseMirror p code:not(pre code),
 .word-content-multi .ProseMirror li code.inline-code,
@@ -336,7 +336,7 @@
   }
 }
 
-/* 行内代码在链接中的样式 */
+/* Inline code styles inside links */
 .word-content-multi .ProseMirror a code.inline-code,
 .word-content-multi .ProseMirror a code:not(pre code) {
   color: var(--color-link, #0563c1) !important;
@@ -346,7 +346,7 @@
   }
 }
 
-/* 行内代码在强调文本中的样式 */
+/* Inline code styles inside emphasized text */
 .word-content-multi .ProseMirror strong code.inline-code,
 .word-content-multi .ProseMirror strong code:not(pre code),
 .word-content-multi .ProseMirror em code.inline-code,
@@ -354,16 +354,16 @@
   font-weight: 600 !important;
 }
 
-/* Word 链接样式 */
+/* Word link styles */
 .word-content-multi .ProseMirror a { 
   color: var(--color-link); 
   word-break: break-word; 
   text-decoration: underline;
-  cursor: pointer; /* 确保链接显示为可点击状态 */
-  pointer-events: auto; /* 确保链接可以接收点击事件 */
+  cursor: pointer; /* Ensure link displays as clickable */
+  pointer-events: auto; /* Ensure link receives click events */
 }
 
-/* ===== Gapcursor 样式（表格光标效果）===== */
+/* ===== Gapcursor Styles (Table Cursor Effect) ===== */
 .word-content-multi .ProseMirror-gapcursor {
   display: none;
   pointer-events: none;
@@ -395,7 +395,7 @@
   border-top-color: var(--color-text, #f0f0f0);
 }
 
-/* 编辑器占位 */
+/* Editor placeholder */
 .editor-fallback {
   display: flex;
   align-items: center;
@@ -411,43 +411,43 @@
   }
 }
 
-/* ===== 预览模式样式 ===== */
+/* ===== Preview Mode Styles ===== */
 .tiptap-pro-editor.word-mode.is-preview-mode {
-  /* 预览模式下禁止选中文本 */
+  /* Disable text selection in preview mode */
   user-select: none;
 }
 
 .tiptap-pro-editor.word-mode.is-preview-mode .word-document-container {
-  /* 容器保持可滚动 */
+  /* Container remains scrollable */
   overflow: auto;
   cursor: default;
 }
 
 .tiptap-pro-editor.word-mode.is-preview-mode .ProseMirror {
-  /* 预览模式下隐藏光标 */
+  /* Hide cursor in preview mode */
   caret-color: transparent;
-  /* 内容区域禁止点击交互，但不影响容器滚动 */
+  /* Content area disables click interactions without affecting container scroll */
   pointer-events: none;
 }
 
 .tiptap-pro-editor.word-mode.is-preview-mode .ProseMirror * {
-  /* 预览模式下禁止选中 */
+  /* Disable selection in preview mode */
   user-select: none !important;
   cursor: default !important;
 }
 
-/* 预览模式下链接保持视觉样式但不可点击 */
+/* Links keep visual style but are unclickable in preview mode */
 .tiptap-pro-editor.word-mode.is-preview-mode .ProseMirror a {
   pointer-events: none;
   cursor: default;
 }
 
-/* 预览模式下图片不显示调整手柄 */
+/* Images do not show resize handles in preview mode */
 .tiptap-pro-editor.word-mode.is-preview-mode .ProseMirror img {
   resize: none;
 }
 
-/* 预览模式下隐藏所有可调整大小的手柄 */
+/* Hide all resize handles in preview mode */
 .tiptap-pro-editor.word-mode.is-preview-mode .resize-handle,
 .tiptap-pro-editor.word-mode.is-preview-mode .image-resizer {
   display: none !important;

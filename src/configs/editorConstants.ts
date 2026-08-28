@@ -47,10 +47,10 @@ export const FONT_FAMILIES = [
   { label: 'Times New Roman', value: 'Times New Roman' },
   { label: 'Courier New', value: 'Courier New' },
   { label: 'Monospace', value: 'monospace' },
-  { label: '微软雅黑', value: 'Microsoft YaHei' },
-  { label: '宋体', value: 'SimSun' },
-  { label: '黑体', value: 'SimHei' },
-  { label: '新細明體', value: 'PMingLiU' },
+  { label: 'Microsoft YaHei', value: 'Microsoft YaHei' },
+  { label: 'SimSun', value: 'SimSun' },
+  { label: 'SimHei', value: 'SimHei' },
+  { label: 'PMingLiU', value: 'PMingLiU' },
 ] as const
 
 /**
@@ -82,7 +82,7 @@ export const LINE_HEIGHTS = [
  * Paragraph style options
  */
 export const HEADING_OPTIONS = [
-  { label: '正文', value: 'paragraph' },
+  { label: 'Paragraph', value: 'paragraph' },
   { label: 'H1', value: 'h1' },
   { label: 'H2', value: 'h2' },
   { label: 'H3', value: 'h3' },
@@ -121,19 +121,19 @@ export const CODE_LANGUAGES = [
  * Alignment options
  */
 export const TEXT_ALIGN_OPTIONS = [
-  { label: '左对齐', value: 'left' },
-  { label: '居中', value: 'center' },
-  { label: '右对齐', value: 'right' },
-  { label: '两端对齐', value: 'justify' },
+  { label: 'Align Left', value: 'left' },
+  { label: 'Align Center', value: 'center' },
+  { label: 'Align Right', value: 'right' },
+  { label: 'Justify', value: 'justify' },
 ] as const
 
 /**
  * Table border style options
  */
 export const TABLE_BORDER_STYLES = [
-  { label: '默认边框', value: 'default' },
-  { label: '无边框', value: 'none' },
-  { label: '外边框', value: 'outer' },
+  { label: 'Default Border', value: 'default' },
+  { label: 'No Border', value: 'none' },
+  { label: 'Outer Border', value: 'outer' },
 ] as const
 
 /**

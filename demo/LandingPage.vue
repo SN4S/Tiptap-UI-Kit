@@ -243,7 +243,7 @@
       <div class="footer__sponsor">
         <a href="sponsor.html" class="sponsor-btn">
           <span class="sponsor-btn__icon">☕</span>
-          <span>请作者喝杯咖啡 | Buy Me a Coffee</span>
+          <span>Buy Me a Coffee</span>
         </a>
       </div>
       <p class="footer__text">

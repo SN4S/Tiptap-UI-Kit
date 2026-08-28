@@ -1,6 +1,6 @@
 /**
- * useCollaboration - 协作编辑状态管理 Composable
- * @description 提供协作编辑的完整状态管理
+ * useCollaboration - Collaboration State Management Composable
+ * @description Provides complete collaboration state management
  */
 
 import { ref, computed, readonly, shallowRef } from 'vue'
@@ -8,31 +8,31 @@ import type { CollaboratorInfo, CollaborationInstance, CollaborationInitOptions,
 import { initCollaboration, createCollaborationExtensions } from './collaboration'
 import { logger } from './utils'
 
-/** Composable 配置 */
+/** Composable configuration */
 export interface UseCollaborationOptions {
   getUserInfo?: () => UserInfo
   onCollaboratorsChange?: (count: number) => void
   onCollaboratorsListChange?: (users: CollaboratorInfo[]) => void
 }
 
-/** 初始化选项（不含回调） */
+/** Initialization options (excluding callbacks) */
 type InitOptions = Omit<CollaborationInitOptions, 'onCollaboratorsChange' | 'onCollaboratorsListChange'>
 
 /**
- * 协作编辑状态管理
+ * Collaboration state management
  */
 export function useCollaboration(options: UseCollaborationOptions = {}) {
-  // 核心状态
+  // Core state
   const enabled = ref(false)
   const instance = shallowRef<CollaborationInstance | null>(null)
   const initializing = ref(false)
   const connected = computed(() => !!instance.value)
 
-  // 协作者状态
+  // Collaborator state
   const collaboratorsCount = ref(0)
   const collaboratorsList = ref<CollaboratorInfo[]>([])
 
-  // 内部回调
+  // Internal callbacks
   const onCountChange = (count: number) => {
     collaboratorsCount.value = count
     options.onCollaboratorsChange?.(count)
@@ -43,15 +43,15 @@ export function useCollaboration(options: UseCollaborationOptions = {}) {
     options.onCollaboratorsListChange?.(users)
   }
 
-  /** 开启协作 */
+  /** Enable collaboration */
   const enable = async (initOptions: InitOptions): Promise<CollaborationInstance | null> => {
     if (enabled.value && instance.value) {
-      logger.info('协作已启用，跳过')
+      logger.info('Collaboration already enabled, skipping')
       return instance.value
     }
 
     if (initializing.value) {
-      logger.info('正在初始化中')
+      logger.info('Initializing...')
       return null
     }
 
@@ -68,30 +68,30 @@ export function useCollaboration(options: UseCollaborationOptions = {}) {
 
       if (result) {
         instance.value = result
-        logger.success('协作已启用')
+        logger.success('Collaboration enabled')
       } else {
         enabled.value = false
-        logger.warn('协作初始化失败')
+        logger.warn('Collaboration initialization failed')
       }
 
       return result
     } catch (error) {
       enabled.value = false
-      logger.error('启用协作失败:', error)
+      logger.error('Failed to enable collaboration:', error)
       return null
     } finally {
       initializing.value = false
     }
   }
 
-  /** 关闭协作 */
+  /** Disable collaboration */
   const disable = () => {
     if (instance.value) {
       try {
         instance.value.destroy()
-        logger.success('协作已关闭')
+        logger.success('Collaboration disabled')
       } catch (error) {
-        logger.error('关闭协作失败:', error)
+        logger.error('Failed to disable collaboration:', error)
       }
       instance.value = null
     }
@@ -101,27 +101,27 @@ export function useCollaboration(options: UseCollaborationOptions = {}) {
     collaboratorsList.value = []
   }
 
-  /** 初始化并获取扩展 */
+  /** Initialize and get extensions */
   const initWithExtensions = async (initOptions: InitOptions): Promise<any[]> => {
     const result = await enable(initOptions)
     if (!result) return []
     return createCollaborationExtensions(result, initOptions.getUserInfo ?? options.getUserInfo)
   }
 
-  /** 更新编辑器引用 */
+  /** Update editor reference */
   const setEditor = (editor: any) => {
     instance.value?.setEditor?.(editor)
   }
 
   return {
-    // 只读状态
+    // Read-only state
     enabled: readonly(enabled),
     connected,
     initializing: readonly(initializing),
     instance: readonly(instance),
     collaboratorsCount: readonly(collaboratorsCount),
     collaboratorsList: readonly(collaboratorsList),
-    // 方法
+    // Methods
     enable,
     disable,
     initWithExtensions,

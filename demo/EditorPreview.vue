@@ -337,9 +337,9 @@ onBeforeUnmount(() => {
 .editor-preview__glow {
   position: absolute;
   inset: -20px;
-  /* 预模糊的多层径向渐变代替 conic-gradient + filter: blur()：
-     blur 滤镜叠加旋转动画会逐帧重栅格化、严重拖垮合成器；
-     渐变自带柔边，动画只走 transform，全程留在合成线程 */
+  /* Pre-blurred multi-layer radial gradient replacing conic-gradient */
+     /* Blur filter with rotation animation degrades compositor performance */
+     /* Gradient has soft edges, animating transform in compositor thread */
   background:
     radial-gradient(45% 45% at 25% 25%, rgba(102, 126, 234, 0.4), transparent 70%),
     radial-gradient(50% 50% at 75% 20%, rgba(240, 147, 251, 0.35), transparent 70%),
@@ -697,8 +697,8 @@ onBeforeUnmount(() => {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  /* 必须高于 .editor-preview__window 的 z-index: 1，
-     否则探出窗口边缘的功能徽章会被窗口盖住只露出半截 */
+  /* Must be higher than the .editor-preview__window z-index: 1, 
+     otherwise badges extending outside the window boundaries would be clipped */
   z-index: 2;
 }
 
@@ -711,8 +711,8 @@ onBeforeUnmount(() => {
   border-radius: 12px;
   font-size: 13px;
   font-weight: 600;
-  /* 不用 backdrop-filter（配合无限浮动动画时逐帧重采样背景，代价极高），
-     改用高不透明度实底色，见 .label--* 与暗色覆盖 */
+  /* Avoid using backdrop-filter (costly re-sampling on infinite animations),
+     use high-opacity solid background instead */
   opacity: 0;
   transform: translateY(10px) scale(0.9);
   transition: none;

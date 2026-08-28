@@ -28,7 +28,7 @@
       <div class="device-frame__iphone-home"></div>
     </div>
 
-    <!-- PC / 手机浏览器 - No Frame -->
+    <!-- PC / Mobile browser - No Frame -->
     <div v-else class="device-frame__pc">
       <slot></slot>
     </div>

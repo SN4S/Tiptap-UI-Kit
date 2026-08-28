@@ -27,7 +27,7 @@ export const TranslationExtension = Extension.create<TranslationOptions>({
 
   addOptions() {
     return {
-      defaultTargetLang: '英文',
+      defaultTargetLang: 'English',
     };
   },
 
@@ -57,7 +57,7 @@ export const TranslationExtension = Extension.create<TranslationOptions>({
             targetLang ||
             currentTranslateLang.value ||
             this.options.defaultTargetLang ||
-            '英文';
+            'English';
           performTranslation(editor, selectedText, lang, { from, to });
           return true;
         },
@@ -79,7 +79,7 @@ function performTranslation(
   // Get full document context for system prompt
   const state = editor.state;
   const fullText = state.doc.textBetween(0, state.doc.content.size, ' ');
-  const sysPrompt = `以下係完整嘅文件內容:\n\n${fullText}`;
+  const sysPrompt = `Below is the full document content:\n\n${fullText}`;
 
   const callback = {
     onStart: () => {

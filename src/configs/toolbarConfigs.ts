@@ -43,31 +43,31 @@ export function createTextFormatTools(editor: Editor): ToolbarButtonConfig[] {
     {
       name: 'bold',
       icon: BoldOutlined,
-      title: '粗体 (Ctrl+B)',
+      title: 'Bold (Ctrl+B)',
       action: runCommand((chain) => chain.toggleBold()),
     },
     {
       name: 'italic',
       icon: ItalicOutlined,
-      title: '斜体 (Ctrl+I)',
+      title: 'Italic (Ctrl+I)',
       action: runCommand((chain) => chain.toggleItalic()),
     },
     {
       name: 'underline',
       icon: UnderlineOutlined,
-      title: '下划线 (Ctrl+U)',
+      title: 'Underline (Ctrl+U)',
       action: runCommand((chain) => (chain as any).toggleUnderline?.() ?? chain),
     },
     {
       name: 'strike',
       icon: StrikethroughOutlined,
-      title: '删除线',
+      title: 'Strikethrough',
       action: runCommand((chain) => chain.toggleStrike()),
     },
     {
       name: 'code',
       icon: CodeOutlined,
-      title: '行内代码',
+      title: 'Inline Code',
       action: runCommand((chain) => chain.toggleCode()),
     },
   ]
@@ -82,7 +82,7 @@ export function createHeadingTools(editor: Editor): HeadingConfig[] {
   const levels = [1, 2, 3, 4, 5, 6] as const
   return levels.map((level) => ({
     level,
-    title: `标题 ${level}`,
+    title: `Heading ${level}`,
     action: runCommand((chain) => chain.toggleHeading({ level })),
   }))
 }
@@ -97,19 +97,19 @@ export function createListTools(editor: Editor): ListToolConfig[] {
     {
       name: 'bulletList',
       icon: UnorderedListOutlined,
-      title: '无序列表',
+      title: 'Bullet List',
       action: runCommand((chain) => chain.toggleBulletList()),
     },
     {
       name: 'orderedList',
       icon: OrderedListOutlined,
-      title: '有序列表',
+      title: 'Numbered List',
       action: runCommand((chain) => chain.toggleOrderedList()),
     },
     {
       name: 'taskList',
       icon: CheckSquareOutlined,
-      title: '任务列表',
+      title: 'Task List',
       action: runCommand((chain) => (chain as any).toggleTaskList?.() ?? chain),
     },
   ]

@@ -1,6 +1,6 @@
 <template>
   <div class="auto-demo" v-if="visible">
-    <!-- 控制按钮 -->
+    <!-- Control buttons -->
     <div class="auto-demo__controls">
       <button v-if="!isRunning && !isFinished" class="auto-demo__btn auto-demo__btn--play" @click="startDemo">
         <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
@@ -16,7 +16,7 @@
       </button>
     </div>
 
-    <!-- 动画光标 (page-agent 风格: 平滑移动 + 点击涟漪) -->
+    <!-- Animated cursor (page-agent style: smooth move + click ripple) -->
     <Teleport to="body">
       <div v-show="cursorVisible" class="demo-cursor" :style="cursorStyle">
         <svg class="demo-cursor__arrow" width="16" height="22" viewBox="0 0 16 22" fill="none">
@@ -31,9 +31,9 @@
 
 <script setup lang="ts">
 /**
- * EditorAutoDemo - 增强版编辑器自动化演示
- * @description 结合 page-agent 的动画光标 + Maestro 的声明式动作，
- *              模拟真实用户操作编辑器，展示所有特色功能（含 AI 写作演示）
+ * EditorAutoDemo - Enhanced editor auto demo
+ * @description Combines animated cursor + declarative actions
+ *              simulates real user editing, demonstrating all features (including AI writing)
  */
 import { ref, computed, nextTick, onBeforeUnmount } from 'vue'
 import type { Editor } from '@tiptap/core'
@@ -65,7 +65,7 @@ const isRunning = ref(false)
 const isFinished = ref(false)
 let abortController: AbortController | null = null
 
-// ===== 光标状态 =====
+// ===== Cursor state =====
 
 const cursorVisible = ref(false)
 const cursorX = ref(0)
@@ -77,7 +77,7 @@ const cursorStyle = computed(() => ({
   transform: `translate(${cursorX.value}px, ${cursorY.value}px)`,
 }))
 
-// ===== 基础工具 =====
+// ===== Basic tools =====
 
 function delay(ms: number, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -97,7 +97,7 @@ async function pause(ms: number, signal: AbortSignal) {
   await delay(ms, signal)
 }
 
-// ===== 光标动画引擎 =====
+// ===== Cursor animation engine =====
 
 function moveCursorTo(x: number, y: number, signal: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -152,9 +152,9 @@ async function triggerRipple(signal: AbortSignal) {
   rippleActive.value = false
 }
 
-// ===== DOM 查询 =====
+// ===== DOM queries =====
 
-/** 图标名 → anticon class */
+/** Icon name -> anticon class */
 const ICON_MAP: Record<string, string> = {
   bold: 'bold',
   italic: 'italic',
@@ -174,15 +174,15 @@ const ICON_MAP: Record<string, string> = {
 }
 
 /**
- * 查找工具栏按钮 (支持直接按钮 + 下拉按钮 + AI 按钮)
+ * Find toolbar button (supports direct button + dropdown button + AI button)
  */
 function findToolbarButton(id: string): HTMLElement | null {
-  // AI 按钮
+  // AI button
   if (id === 'ai') {
     return document.querySelector('.ai-toolbar-trigger') as HTMLElement | null
   }
 
-  // Heading 按钮: 按 data-level 或文本内容
+  // Heading button: by data-level or text content
   if (/^h[1-6]$/.test(id)) {
     const level = id.slice(1)
     const byData = document.querySelector(`[data-level="${level}"] .tt-toolbar-button`)
@@ -195,7 +195,7 @@ function findToolbarButton(id: string): HTMLElement | null {
     return null
   }
 
-  // Align 下拉按钮 (图标随状态变化)
+  // Align dropdown button (icon changes with state)
   if (id === 'align') {
     for (const cls of ['align-left', 'align-center', 'align-right', 'menu']) {
       const icon = document.querySelector(`.anticon-${cls}`)
@@ -205,7 +205,7 @@ function findToolbarButton(id: string): HTMLElement | null {
     return null
   }
 
-  // 图标按钮 (同时搜索直接按钮和下拉按钮)
+  // Icon button (searches direct buttons and dropdown buttons)
   if (ICON_MAP[id]) {
     const icon = document.querySelector(`.anticon-${ICON_MAP[id]}`)
     if (icon) {
@@ -222,10 +222,10 @@ function getCenter(el: HTMLElement): { x: number; y: number } {
   return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
 }
 
-// ===== 文本位置查找 (ProseMirror) =====
+// ===== Text position finding (ProseMirror) =====
 
 /**
- * 在文档中查找文本的最后一次出现位置
+ * Find last occurrence of text in document
  */
 function findLastTextPos(editor: Editor, searchText: string): { from: number; to: number } | null {
   let lastMatch: { from: number; to: number } | null = null
@@ -242,7 +242,7 @@ function findLastTextPos(editor: Editor, searchText: string): { from: number; to
   return lastMatch
 }
 
-// ===== 声明式动作 (Maestro 风格) =====
+// ===== Declarative actions =====
 
 async function tapOn(buttonId: string, signal: AbortSignal, action?: () => void) {
   signal.throwIfAborted()
@@ -295,7 +295,7 @@ async function typeText(editor: Editor, text: string, speed: number, signal: Abo
 }
 
 /**
- * 模拟 AI 流式输出 (变速打字 + 句尾停顿)
+ * Simulate AI streaming output (variable typing + sentence end pause)
  */
 async function simulateAiStream(editor: Editor, text: string, signal: AbortSignal) {
   for (let i = 0; i < text.length; i++) {
@@ -308,7 +308,7 @@ async function simulateAiStream(editor: Editor, text: string, signal: AbortSigna
     else if (char === ',') charDelay = 25
     else if (char === ' ') charDelay = 5
 
-    // 偶尔突发 (无延迟)
+    // Occasional burst (no delay)
     if (Math.random() < 0.3) charDelay = 0
 
     if (i % 12 === 0) {
@@ -325,7 +325,7 @@ async function simulateAiStream(editor: Editor, text: string, signal: AbortSigna
 }
 
 /**
- * 选择文本 (基于 ProseMirror 节点精准查找)
+ * Select text (precise finding based on ProseMirror node)
  */
 async function selectText(editor: Editor, searchText: string, signal: AbortSignal) {
   const match = findLastTextPos(editor, searchText)
@@ -342,7 +342,7 @@ async function selectText(editor: Editor, searchText: string, signal: AbortSigna
 }
 
 /**
- * 在上下文中选择子文本 (例如: 在 "mc2" 中选中 "2")
+ * Select subtext in context (e.g. select "2" inside "mc2")
  */
 async function selectSubtext(editor: Editor, context: string, target: string, signal: AbortSignal) {
   let lastMatch: { from: number; to: number } | null = null
@@ -385,7 +385,7 @@ function moveCursorToEnd(editor: Editor) {
   editor.commands.setTextSelection(editor.state.doc.content.size - 1)
 }
 
-// ===== 演示脚本: 全功能展示 (含 AI) =====
+// ===== Demo Script: Full feature demonstration (including AI) =====
 
 async function runDemoScript(editor: Editor, signal: AbortSignal) {
   const speed = props.typingSpeed
@@ -397,7 +397,7 @@ async function runDemoScript(editor: Editor, signal: AbortSignal) {
   cursorVisible.value = true
   await pause(400, signal)
 
-  // ===== 1. 标题 + 居中对齐 =====
+  // ===== 1. Heading + Center align =====
   await tapOn('heading', signal, () => editor.commands.setHeading({ level: 1 }))
   await moveToEditor(editor, signal)
   await typeText(editor, 'Tiptap UI Kit - Feature Showcase', speed, signal)
@@ -411,7 +411,7 @@ async function runDemoScript(editor: Editor, signal: AbortSignal) {
   editor.commands.setTextAlign('left')
   await pause(200, signal)
 
-  // ===== 2. 文本格式 (先输入，再选中格式化) =====
+  // ===== 2. Text formatting (type first, select to format) =====
   await tapOn('heading', signal, () => editor.commands.setHeading({ level: 2 }))
   await moveToEditor(editor, signal)
   await typeText(editor, 'Rich Text Formatting', speed, signal)
@@ -422,7 +422,7 @@ async function runDemoScript(editor: Editor, signal: AbortSignal) {
   await typeText(editor, 'This editor supports bold, italic, underline and strikethrough styles.', speed, signal)
   await pause(400, signal)
 
-  // 选中每个关键词并格式化
+  // Select each keyword and format
   await selectText(editor, 'bold', signal)
   await tapOn('bold', signal, () => editor.commands.toggleBold())
 
@@ -441,7 +441,7 @@ async function runDemoScript(editor: Editor, signal: AbortSignal) {
   moveCursorToEnd(editor)
   exitBlock(editor)
 
-  // ===== 3. 有序列表 =====
+  // ===== 3. Numbered list =====
   await tapOn('heading', signal, () => editor.commands.setHeading({ level: 2 }))
   await moveToEditor(editor, signal)
   await typeText(editor, 'Feature Highlights', speed, signal)
@@ -457,26 +457,26 @@ async function runDemoScript(editor: Editor, signal: AbortSignal) {
   await typeText(editor, 'AI-powered writing with streaming support', speed, signal)
   await pause(300, signal)
 
-  // 选中 "AI-powered" 并加粗
+  // Select "AI-powered" and make bold
   await selectText(editor, 'AI-powered', signal)
   await tapOn('bold', signal, () => editor.commands.toggleBold())
   await pause(200, signal)
   moveCursorToEnd(editor)
   exitBlock(editor)
 
-  // ===== 4. 上标 / 下标 (先输入，再选中格式化) =====
+  // ===== 4. Superscript / Subscript (type first, select to format) =====
   await tapOn('heading', signal, () => editor.commands.setHeading({ level: 2 }))
   await moveToEditor(editor, signal)
   await typeText(editor, 'Scientific Notation', speed, signal)
   await pause(300, signal)
   newLine(editor)
 
-  // 输入公式文本
+  // Type formula text
   await moveToEditor(editor, signal)
   await typeText(editor, "Einstein's equation: E = mc2", speed, signal)
   await pause(200, signal)
 
-  // 选中 "mc2" 中的 "2"，应用上标
+  // Select "2" in "mc2", apply superscript
   await selectSubtext(editor, 'mc2', '2', signal)
   await tapOn('superscript', signal, () => editor.chain().focus().toggleSuperscript().run())
 
@@ -485,7 +485,7 @@ async function runDemoScript(editor: Editor, signal: AbortSignal) {
   await typeText(editor, '    Water molecule: H2O', speed, signal)
   await pause(200, signal)
 
-  // 选中 "H2O" 中的 "2"，应用下标
+  // Select "2" in "H2O", apply subscript
   await selectSubtext(editor, 'H2O', '2', signal)
   await tapOn('subscript', signal, () => editor.chain().focus().toggleSubscript().run())
 
@@ -493,7 +493,7 @@ async function runDemoScript(editor: Editor, signal: AbortSignal) {
   await pause(400, signal)
   exitBlock(editor)
 
-  // ===== 5. 表格 =====
+  // ===== 5. Table =====
   await tapOn('heading', signal, () => editor.commands.setHeading({ level: 2 }))
   await moveToEditor(editor, signal)
   await typeText(editor, 'Data Table', speed, signal)
@@ -505,7 +505,7 @@ async function runDemoScript(editor: Editor, signal: AbortSignal) {
   })
   await pause(400, signal)
 
-  // 填充表头
+  // Fill table headers
   await moveToEditor(editor, signal)
   await typeText(editor, 'Feature', fast, signal)
   editor.commands.goToNextCell()
@@ -513,7 +513,7 @@ async function runDemoScript(editor: Editor, signal: AbortSignal) {
   editor.commands.goToNextCell()
   await typeText(editor, 'Description', fast, signal)
 
-  // 第 1 行
+  // Row 1
   editor.commands.goToNextCell()
   await moveToEditor(editor, signal)
   await typeText(editor, 'Rich Text', fast, signal)
@@ -522,7 +522,7 @@ async function runDemoScript(editor: Editor, signal: AbortSignal) {
   editor.commands.goToNextCell()
   await typeText(editor, '20+ formats', fast, signal)
 
-  // 第 2 行
+  // Row 2
   editor.commands.goToNextCell()
   await moveToEditor(editor, signal)
   await typeText(editor, 'AI Writing', fast, signal)
@@ -532,14 +532,14 @@ async function runDemoScript(editor: Editor, signal: AbortSignal) {
   await typeText(editor, 'Streaming output', fast, signal)
   await pause(500, signal)
 
-  // 退出表格
+  // Exit table
   try {
     moveCursorToEnd(editor)
     editor.commands.enter()
   } catch { /* ignore */ }
   await pause(200, signal)
 
-  // ===== 6. 代码块 =====
+  // ===== 6. Code block =====
   await tapOn('heading', signal, () => editor.commands.setHeading({ level: 2 }))
   await moveToEditor(editor, signal)
   await typeText(editor, 'Code Block', speed, signal)
@@ -564,7 +564,7 @@ const editor = new Editor({
   editor.commands.exitCode()
   editor.commands.enter()
 
-  // ===== 7. 引用块 =====
+  // ===== 7. Blockquote =====
   await tapOn('heading', signal, () => editor.commands.setHeading({ level: 2 }))
   await moveToEditor(editor, signal)
   await typeText(editor, 'Blockquote', speed, signal)
@@ -577,14 +577,14 @@ const editor = new Editor({
   await pause(400, signal)
   exitBlock(editor)
 
-  // ===== 8. AI 写作演示 =====
+  // ===== 8. AI writing demo =====
   await tapOn('heading', signal, () => editor.commands.setHeading({ level: 2 }))
   await moveToEditor(editor, signal)
   await typeText(editor, 'AI-Powered Writing', speed, signal)
   await pause(300, signal)
   newLine(editor)
 
-  // 用户输入部分文本
+  // User types partial text
   await moveToEditor(editor, signal)
   await typeText(editor, 'AI can enhance your writing workflow. Here is a live demo:', speed, signal)
   newLine(editor)
@@ -594,11 +594,11 @@ const editor = new Editor({
   await typeText(editor, 'The future of content editing is', speed, signal)
   await pause(400, signal)
 
-  // 移动到 AI 按钮并点击 (视觉效果)
+  // Move to AI button and click
   await tapOn('ai', signal)
-  await pause(1200, signal) // AI "思考中"
+  await pause(1200, signal) // AI thinking
 
-  // 模拟 AI 流式输出
+  // Simulate AI streaming output
   await moveToEditor(editor, signal)
   const aiResponse = ' intelligent and adaptive. With AI integration, writers can generate content on the fly, polish their prose for clarity and style, translate seamlessly between languages, and get instant summaries of lengthy documents — all without leaving the editor.'
   await simulateAiStream(editor, aiResponse, signal)
@@ -609,7 +609,7 @@ const editor = new Editor({
   await moveToEditor(editor, signal)
   await typeText(editor, 'AI features include: ', speed, signal)
 
-  // 用粗体列出 AI 功能
+  // List AI features in bold
   const aiFeatures = ['Continue Writing', 'Polish', 'Translate', 'Summarize', 'Custom Prompts']
   for (let i = 0; i < aiFeatures.length; i++) {
     const feature = aiFeatures[i]
@@ -620,7 +620,7 @@ const editor = new Editor({
   }
   await pause(300, signal)
 
-  // 选中每个功能名加粗
+  // Select each feature name and bold
   for (const feature of aiFeatures) {
     await selectText(editor, feature, signal)
     await tapOn('bold', signal, () => editor.commands.toggleBold())
@@ -630,7 +630,7 @@ const editor = new Editor({
   moveCursorToEnd(editor)
   exitBlock(editor)
 
-  // ===== 9. 无序列表 =====
+  // ===== 9. Bullet list =====
   await tapOn('heading', signal, () => editor.commands.setHeading({ level: 2 }))
   await moveToEditor(editor, signal)
   await typeText(editor, 'Tech Stack', speed, signal)
@@ -643,13 +643,13 @@ const editor = new Editor({
   editor.commands.enter()
   await typeText(editor, 'Light / Dark mode with 5 theme presets', speed, signal)
   editor.commands.enter()
-  await typeText(editor, 'i18n: English, 简体中文, 繁體中文', speed, signal)
+  await typeText(editor, 'i18n: English, Simplified Chinese, Traditional Chinese', speed, signal)
   editor.commands.enter()
   await typeText(editor, 'AI: Continue Writing, Polish, Translate, Summarize', speed, signal)
   await pause(300, signal)
   exitBlock(editor)
 
-  // ===== 10. 分隔线 + 结尾 =====
+  // ===== 10. Horizontal rule + Ending =====
   editor.commands.setHorizontalRule()
   await pause(300, signal)
 
@@ -657,7 +657,7 @@ const editor = new Editor({
   await typeText(editor, 'All features production-ready and fully customizable! ✅', speed, signal)
   await pause(300, signal)
 
-  // 选中 "production-ready" 加粗
+  // Select "production-ready" and bold
   await selectText(editor, 'production-ready', signal)
   await tapOn('bold', signal, () => editor.commands.toggleBold())
   await pause(600, signal)
@@ -665,7 +665,7 @@ const editor = new Editor({
   cursorVisible.value = false
 }
 
-// ===== 控制函数 =====
+// ===== Control functions =====
 
 async function startDemo() {
   const editor = props.getEditor()
@@ -769,7 +769,7 @@ defineExpose({ startDemo, stopDemo, replayDemo })
 </style>
 
 <style>
-/* 光标样式 (Teleport 到 body，不使用 scoped) */
+/* Cursor style (Teleport to body, non-scoped) */
 .demo-cursor {
   position: fixed;
   top: 0;

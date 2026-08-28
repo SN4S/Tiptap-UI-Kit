@@ -1,6 +1,6 @@
 /**
- * DragHandleMenu 配置
- * @description 菜单项配置和操作辅助函数
+ * DragHandleMenu Configuration
+ * @description Menu item configuration and action helper functions
  */
 
 import type { Editor } from '@tiptap/core'
@@ -18,11 +18,11 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons-vue'
 
-// 使用共享工具函数
+// Use shared helper functions
 import { selectNodeContent, cutBlock, copyBlock, deleteBlock } from '@/utils/clipboard'
 
 // ============================================================================
-// 类型定义
+// Type definitions
 // ============================================================================
 
 export interface HeadingMenuItem {
@@ -45,7 +45,7 @@ export interface MenuConfig {
 }
 
 // ============================================================================
-// 常量
+// Constants
 // ============================================================================
 
 export const COLORS = [
@@ -60,16 +60,16 @@ export const COLORS = [
 ]
 
 // ============================================================================
-// 菜单配置生成器
+// Menu configuration generator
 // ============================================================================
 
 // ============================================================================
-// 菜单配置生成器
+// Menu configuration generator
 // ============================================================================
 
 /**
- * 创建菜单配置
- * @description 生成拖拽手柄菜单的配置项
+ * Create menu configuration
+ * @description Generate configuration items for drag handle menu
  */
 export function createMenuConfig(
   editor: Editor,
@@ -81,20 +81,20 @@ export function createMenuConfig(
   const nodeFrom = nodePos
 
   /**
-   * 创建标题菜单项
+   * Create heading menu items
    */
   const createHeadingItem = (level: number): HeadingMenuItem => ({
     level,
     title: t(`editor.h${level}`),
     action: () => {
-      // @ts-ignore - toggleHeading 由 StarterKit 动态添加
+      // @ts-ignore - toggleHeading dynamically added by StarterKit
       editor.chain().focus().setTextSelection(nodeFrom).toggleHeading({ level }).run()
       onClose()
     },
   })
 
   /**
-   * 创建文本格式菜单项
+   * Create text format menu items
    */
   const createTextFormatItem = (
     name: string,
@@ -107,14 +107,14 @@ export function createMenuConfig(
     title: t(titleKey),
     action: () => {
       selectNodeContent(editor, nodeFrom, nodeTo)
-      // @ts-ignore - 命令由扩展动态添加
+      // @ts-ignore - Commands dynamically added by extension
       command(editor.chain().focus()).run()
       onClose()
     },
   })
 
   /**
-   * 创建列表菜单项
+   * Create list menu items
    */
   const createListItem = (
     name: string,
@@ -126,17 +126,17 @@ export function createMenuConfig(
     icon,
     title: t(titleKey),
     action: () => {
-      // @ts-ignore - 命令由扩展动态添加
+      // @ts-ignore - Commands dynamically added by extension
       command(editor.chain().focus().setTextSelection(nodeFrom)).run()
       onClose()
     },
   })
 
   return {
-    // 标题
+    // Heading
     headings: [1, 2, 3].map(createHeadingItem),
 
-    // 文本格式
+    // Text formatting
     textFormats: [
       createTextFormatItem('bold', BoldOutlined, 'editor.bold', (chain) => chain.toggleBold()),
       createTextFormatItem('italic', ItalicOutlined, 'editor.italic', (chain) => chain.toggleItalic()),
@@ -144,7 +144,7 @@ export function createMenuConfig(
       createTextFormatItem('strike', StrikethroughOutlined, 'editor.strike', (chain) => chain.toggleStrike()),
     ],
 
-    // 列表
+    // List
     listItems: [
       createListItem('bulletList', UnorderedListOutlined, 'editor.bulletList', (chain) => chain.toggleBulletList()),
       createListItem('orderedList', OrderedListOutlined, 'editor.orderedList', (chain) => chain.toggleOrderedList()),
@@ -154,8 +154,8 @@ export function createMenuConfig(
 }
 
 /**
- * 创建编辑操作菜单项
- * @description 生成剪切、复制、删除等编辑操作菜单项
+ * Create edit action menu items
+ * @description Generates cut, copy, delete edit action menu items
  */
 export function createEditActions(
   editor: Editor,

@@ -1,34 +1,34 @@
 /**
  * Math Extension Types
- * @description 数学公式编辑器类型定义
+ * @description Math formula editor type definitions
  */
 
 export interface MathNodeAttrs {
-  /** LaTeX 公式内容 */
+  /** LaTeX formula content */
   latex: string
-  /** 是否为块级公式 */
+  /** Whether it is a block formula */
   block: boolean
 }
 
 export interface MathExtensionOptions {
-  /** 是否启用行内公式 */
+  /** Whether to enable inline formula */
   inline?: boolean
-  /** 是否启用块级公式 */
+  /** Whether to enable block formula */
   block?: boolean
-  /** KaTeX 渲染选项 */
+  /** KaTeX rendering options */
   katexOptions?: KatexRenderOptions
 }
 
 export interface KatexRenderOptions {
-  /** 是否显示错误信息 */
+  /** Whether to display error messages */
   throwOnError?: boolean
-  /** 错误颜色 */
+  /** Error color */
   errorColor?: string
-  /** 是否使用严格模式 */
+  /** Whether to use strict mode */
   strict?: boolean | string
-  /** 是否信任输入 */
+  /** Whether to trust input */
   trust?: boolean
-  /** 宏定义 */
+  /** Macro definitions */
   macros?: Record<string, string>
 }
 

@@ -1,12 +1,12 @@
 /**
- * Collaboration - 协作编辑工具模块
- * @description 提供 Yjs + WebSocket 的协作编辑功能
+ * Collaboration - Collaboration Tool Module
+ * @description Provides real-time collaboration features using Yjs + WebSocket
  */
 
-// 类型导出
+// Type exports
 export * from './types'
 
-// 核心功能
+// Core features
 export {
   initCollaboration,
   createCollaborationExtensions,
@@ -14,7 +14,7 @@ export {
   getRandomColor,
 } from './collaboration'
 
-// 工具函数
+// Helper functions
 export {
   logger,
   TimerManager,
@@ -29,9 +29,9 @@ export {
 export { useCollaboration } from './useCollaboration'
 export type { UseCollaborationOptions, UseCollaborationReturn } from './useCollaboration'
 
-// 组件
+// Components
 export { default as CollaborationToggle } from './CollaborationToggle.vue'
 
-// 样式文件需要在使用时单独导入
+// Style files need to be imported separately when used
 // import './tools/collaboration/collaboration.css'
 

@@ -1,18 +1,18 @@
-# Header Nav - 头部导航工具栏
+# Header Nav - Header Navigation Toolbar
 
-可配置的公共工具栏组件，支持通过配置控制显示哪些工具。
+Configurable toolbar component supporting toggle of individual tools.
 
-## 功能特性
+## Features
 
-- ✅ 可配置的工具显示控制
-- ✅ 支持基础版、进阶版等预设配置
-- ✅ 支持自定义配置
-- ✅ 支持通过插槽扩展额外工具
-- ✅ 统一的样式和交互体验
+- ✅ Configurable tool visibility control
+- ✅ Preset configurations (basic, advanced, etc.)
+- ✅ Supports custom configuration
+- ✅ Supports slot extensions for extra tools
+- ✅ Unified styling and interaction experience
 
-## 使用方法
+## Usage
 
-### 基础用法（使用默认配置）
+### Basic Usage (Default Configuration)
 
 ```vue
 <template>
@@ -27,14 +27,14 @@ const editor = ref<Editor | null>(null)
 </script>
 ```
 
-### 使用预设配置
+### Usage with Presets
 
 ```vue
 <template>
-  <!-- 基础版配置 -->
+  <!-- Basic configuration -->
   <ToolbarNav :editor="editor" :config="BASIC_TOOLBAR_CONFIG" />
   
-  <!-- 进阶版配置 -->
+  <!-- Advanced configuration -->
   <ToolbarNav :editor="editor" :config="ADVANCED_TOOLBAR_CONFIG" />
 </template>
 
@@ -47,7 +47,7 @@ import {
 </script>
 ```
 
-### 自定义配置
+### Custom Configuration
 
 ```vue
 <template>
@@ -82,14 +82,14 @@ const customConfig: ToolbarToolsConfig = {
 </script>
 ```
 
-### 通过插槽扩展额外工具
+### Extending Extra Tools via Slots
 
 ```vue
 <template>
   <ToolbarNav :editor="editor" :config="config">
     <template #extra>
       <div class="tool-group">
-        <!-- 自定义工具 -->
+        <!-- Custom tools -->
         <CustomTool :editor="editor" />
       </div>
     </template>
@@ -97,60 +97,60 @@ const customConfig: ToolbarToolsConfig = {
 </template>
 ```
 
-## 配置选项
+## Configuration Options
 
 ### ToolbarToolsConfig
 
-| 属性 | 类型 | 默认值 | 说明 |
+| Property | Type | Default | Description |
 |------|------|--------|------|
-| textFormat | `boolean` | `true` | 是否显示文本格式工具（粗体、斜体、下划线、删除线） |
-| colorPicker | `boolean` | `true` | 是否显示颜色选择器（文本颜色、背景颜色） |
-| heading | `boolean` | `true` | 是否显示标题下拉菜单 |
-| list | `boolean` | `true` | 是否显示列表工具（有序、无序、任务列表） |
-| align | `boolean` | `true` | 是否显示对齐工具 |
-| image | `boolean` | `true` | 是否显示图片上传工具 |
-| codeBlock | `boolean` | `false` | 是否显示代码块工具 |
-| link | `boolean` | `false` | 是否显示链接工具 |
-| table | `boolean` | `false` | 是否显示表格工具 |
-| undoRedo | `boolean` | `false` | 是否显示撤销/重做工具 |
-| clearFormat | `boolean` | `false` | 是否显示清除格式工具 |
-| font | `boolean` | `false` | 是否显示字体工具 |
-| lineHeight | `boolean` | `false` | 是否显示行距工具 |
-| subscriptSuperscript | `boolean` | `false` | 是否显示下标/上标工具 |
+| textFormat | `boolean` | `true` | Whether to display text formatting tools (bold, italic, underline, strike) |
+| colorPicker | `boolean` | `true` | Whether to display color picker (text color, background color) |
+| heading | `boolean` | `true` | Whether to display heading dropdown |
+| list | `boolean` | `true` | Whether to display list tools (ordered, bullet, task list) |
+| align | `boolean` | `true` | Whether to display alignment tools |
+| image | `boolean` | `true` | Whether to display image upload tool |
+| codeBlock | `boolean` | `false` | Whether to display code block tool |
+| link | `boolean` | `false` | Whether to display link tool |
+| table | `boolean` | `false` | Whether to display table tool |
+| undoRedo | `boolean` | `false` | Whether to display undo/redo tools |
+| clearFormat | `boolean` | `false` | Whether to display format clear tool |
+| font | `boolean` | `false` | Whether to display font tools |
+| lineHeight | `boolean` | `false` | Whether to display line height tool |
+| subscriptSuperscript | `boolean` | `false` | Whether to display subscript/superscript tools |
 
-## 预设配置
+## Preset Configurations
 
 ### BASIC_TOOLBAR_CONFIG
 
-基础版工具栏配置，包含：
-- 文本格式工具
-- 颜色选择器
-- 标题下拉菜单
-- 列表工具
-- 对齐工具
-- 图片上传工具
+Basic toolbar configuration includes:
+- Text formatting tools
+- Color pickers
+- Heading dropdown
+- List tools
+- Alignment tools
+- Image upload tool
 
 ### ADVANCED_TOOLBAR_CONFIG
 
-进阶版工具栏配置，包含所有工具。
+Advanced toolbar configuration includes all tools.
 
 ### DEFAULT_TOOLBAR_CONFIG
 
-默认工具栏配置，与基础版相同。
+Default toolbar configuration, same as basic version.
 
-## 文件结构
+## File Structure
 
 ```
 header-nav/
-├── ToolbarNav.vue          # 公共工具栏组件
-├── toolbarConfig.ts        # 工具栏配置类型和预设
-├── index.ts                # 统一导出
-└── README.md               # 说明文档
+├── ToolbarNav.vue          # Public toolbar component
+├── toolbarConfig.ts        # Toolbar config types and presets
+├── index.ts                # Unified exports
+└── README.md               # Documentation
 ```
 
-## 迁移说明
+## Migration Notes
 
-`BasicToolbar.vue` 已完全迁移到 `ToolbarNav.vue`，原 `BasicToolbar.vue` 文件已删除：
+`BasicToolbar.vue` has been fully migrated to `ToolbarNav.vue`, original file removed:
 
 ```vue
 <template>
@@ -166,16 +166,16 @@ import { ToolbarNav, BASIC_TOOLBAR_CONFIG } from '../tools/header-nav'
 
 const toolbarConfig = computed(() => ({
   ...BASIC_TOOLBAR_CONFIG,
-  ...props.config, // 支持自定义配置
+  ...props.config, // Supports custom configuration
 }))
 </script>
 ```
 
-## 注意事项
+## Notes
 
-1. 所有工具栏逻辑已迁移到 `ToolbarNav.vue`，`BasicToolbar.vue` 文件已删除
-2. 如需使用基础版工具栏配置，请使用 `BASIC_TOOLBAR_CONFIG`
-2. 可以通过 `config` prop 自定义显示哪些工具
-3. 支持通过 `extra` 插槽扩展额外工具
-4. 颜色选择器会自动同步编辑器状态
+1. All toolbar logic migrated to `ToolbarNav.vue`, `BasicToolbar.vue` removed
+2. To use basic toolbar config, use `BASIC_TOOLBAR_CONFIG`
+2. Customize tool visibility via `config` prop
+3. Extend extra tools via `extra` slot
+4. Color picker syncs automatically with editor state
 

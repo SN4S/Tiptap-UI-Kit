@@ -1,6 +1,6 @@
 /**
- * PasteImage Extension - 粘贴图片扩展
- * @description 支持粘贴图片功能
+ * PasteImage Extension - Image paste extension
+ * @description Supports image pasting functionality
  */
 
 import { Extension } from '@tiptap/core'

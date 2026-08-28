@@ -1,39 +1,39 @@
-# Image Toolbar - 图片工具栏
+# Image Toolbar - Image Toolbar
 
-## 功能概述
+## Feature Overview
 
-图片工具栏是一个气泡菜单组件，当用户选中图片时自动显示，提供以下功能：
+The image toolbar is a bubble menu component displayed when an image is selected, providing:
 
-- ✅ 图片对齐（左对齐、居中、右对齐）
-- ✅ 图片预览（点击预览按钮查看大图）
-- ✅ 图片删除
+- ✅ Image alignment (left, center, right)
+- ✅ Image preview (click preview button to enlarge)
+- ✅ Image deletion
 
-## 文件结构
+## File Structure
 
 ```
 image-toolbar/
-├── ImageToolbar.vue    # 图片工具栏组件
-├── index.ts            # 导出文件
-└── README.md           # 说明文档
+├── ImageToolbar.vue    # Image toolbar component
+├── index.ts            # Export file
+└── README.md           # Documentation
 ```
 
-## 使用方法
+## Usage
 
-### 1. 导入组件
+### 1. Import Component
 
 ```typescript
 import { ImageToolbar } from '@/components/tiptapPro-tenant/tools/image-toolbar'
 ```
 
-### 2. 在编辑器中使用
+### 2. Usage in Editor
 
 ```vue
 <template>
   <div>
-    <!-- 编辑器 -->
+    <!-- Editor -->
     <EditorContent :editor="editor" />
     
-    <!-- 图片工具栏（选中图片时显示） -->
+    <!-- Image toolbar (displayed on image selection) -->
     <ImageToolbar :editor="editor" :readonly="false" />
   </div>
 </template>
@@ -44,8 +44,8 @@ import { ImageToolbar } from '@/components/tiptapPro-tenant/tools/image-toolbar'
 
 const editor = useEditor({
   extensions: [
-    // ... 其他扩展
-    // 注意：需要配合 ResizableImage 扩展使用
+    // ... other extensions
+    // Note: Requires ResizableImage extension
   ],
 })
 </script>
@@ -53,47 +53,47 @@ const editor = useEditor({
 
 ## Props
 
-| 属性 | 类型 | 默认值 | 说明 |
+| Property | Type | Default | Description |
 |------|------|--------|------|
-| `editor` | `Editor \| null \| undefined` | - | Tiptap 编辑器实例（必需） |
-| `readonly` | `boolean` | `false` | 是否只读模式 |
+| `editor` | `Editor \| null \| undefined` | - | Tiptap editor instance (required) |
+| `readonly` | `boolean` | `false` | Whether read-only mode |
 
-## 功能说明
+## Feature Description
 
-### 对齐功能
+### Alignment Feature
 
-工具栏提供三个对齐按钮：
-- **左对齐**：将图片对齐到左侧
-- **居中**：将图片居中对齐
-- **右对齐**：将图片对齐到右侧
+The toolbar provides three alignment buttons:
+- **Left Align**: Aligns image to the left
+- **Center**: Aligns image to center
+- **Right Align**: Aligns image to the right
 
-对齐功能会同时设置图片节点的对齐属性和父节点（段落或标题）的对齐方式。
+Alignment updates both the image node alignment attribute and parent node alignment.
 
-### 预览功能
+### Preview Feature
 
-点击预览按钮会打开一个模态框，显示当前选中图片的大图预览。
+Clicking preview button opens a modal displaying a large image preview.
 
-### 删除功能
+### Delete Feature
 
-点击删除按钮会删除当前选中的图片。
+Clicking delete button removes the selected image.
 
-## 样式说明
+## Style Instructions
 
-工具栏的样式定义在组件内部（scoped），包括：
-- 气泡菜单样式
-- 按钮样式（包括悬停、激活、危险状态）
-- 暗黑模式支持
+Toolbar styles are defined inside component (scoped), including:
+- Bubble menu style
+- Button styles (hover, active, danger)
+- Dark mode support
 
-## 注意事项
+## Notes
 
-1. **编辑器实例**：必须提供有效的 Tiptap 编辑器实例
-2. **图片扩展**：需要配合 `ResizableImage` 扩展使用（位于 `../basic/image`）
-3. **自动显示**：工具栏会在选中图片时自动显示，无需手动控制
-4. **只读模式**：在只读模式下，工具栏不会显示
+1. **Editor Instance**: Must provide valid Tiptap editor instance
+2. **Image Extension**: Requires `ResizableImage` extension
+3. **Auto Display**: Toolbar appears automatically when image is selected
+4. **Read-only Mode**: Toolbar is hidden in read-only mode
 
-## 相关模块
+## Related Modules
 
-- **图片上传**：`../basic/image/ImageUpload.vue`
-- **可调整大小的图片扩展**：`../basic/image/ResizableImage.ts`
-- **图片样式**：`../shared/styles/image-toolbar.css`
+- **Image Upload**: `../basic/image/ImageUpload.vue`
+- **Resizable Image Extension**: `../basic/image/ResizableImage.ts`
+- **Image Styles**: `../shared/styles/image-toolbar.css`
 

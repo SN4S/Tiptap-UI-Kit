@@ -7,21 +7,21 @@
     />
   </ToolbarGroup>
 
-  <!-- 图库模态框 -->
+  <!-- Gallery modal -->
   <a-modal
     v-model:open="galleryOpen"
     :title="t('editor.imageGallery')"
     :footer="null"
     width="720px"
   >
-    <!-- 空状态 -->
+    <!-- Empty state -->
     <div v-if="galleryImages.length === 0" class="gallery-empty">
       <FileImageOutlined class="gallery-empty__icon" />
       <p class="gallery-empty__text">{{ t('editor.galleryEmpty') }}</p>
       <p class="gallery-empty__hint">{{ t('editor.galleryEmptyHint') }}</p>
     </div>
 
-    <!-- 图片网格 -->
+    <!-- Image grid -->
     <div v-else class="gallery-grid">
       <div
         v-for="(img, index) in galleryImages"
@@ -36,7 +36,7 @@
       </div>
     </div>
 
-    <!-- 底部操作栏 -->
+    <!-- Footer action bar -->
     <div v-if="galleryImages.length > 0" class="gallery-footer">
       <span class="gallery-footer__count">
         {{ t('editor.galleryCount').replace('{total}', String(galleryImages.length)).replace('{selected}', String(selectedImages.size)) }}
@@ -54,8 +54,8 @@
 
 <script setup lang="ts">
 /**
- * GalleryButton - 图库按钮
- * @description 扫描当前文档中已有的图片，展示为图库，支持选中后重新插入
+ * GalleryButton - Gallery button
+ * @description Scans document images to display as a gallery for re-inserting
  */
 import { computed, ref } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -74,7 +74,7 @@ interface GalleryImage {
 // ===== Props =====
 interface Props {
   editor: Editor | null | undefined
-  /** 外部图片源（可选），如果提供则展示外部图片而非文档内图片 */
+  /** External image source (optional); if provided, displays external images instead of document images */
   images?: GalleryImage[]
 }
 
@@ -85,13 +85,13 @@ const props = withDefaults(defineProps<Props>(), {
 const editor = computed(() => props.editor ?? null)
 const runCommand = createCommandRunner(editor)
 
-// ===== 状态 =====
+// ===== State =====
 const galleryOpen = ref(false)
 const selectedImages = ref<Set<number>>(new Set())
 const galleryImages = ref<GalleryImage[]>([])
 
 /**
- * 从编辑器文档中提取所有图片
+ * Extract all images from editor document
  */
 function collectImagesFromDoc(): GalleryImage[] {
   const ed = editor.value
@@ -102,7 +102,7 @@ function collectImagesFromDoc(): GalleryImage[] {
 
   ed.state.doc.descendants((node) => {
     if (node.type.name === 'image' && node.attrs.src) {
-      // 去重：同一 src 只收录一次
+      // Deduplicate: record each src only once
       if (!seen.has(node.attrs.src)) {
         seen.add(node.attrs.src)
         images.push({
@@ -119,17 +119,17 @@ function collectImagesFromDoc(): GalleryImage[] {
 }
 
 /**
- * 打开图库
+ * Open gallery
  */
 function openGallery() {
   selectedImages.value = new Set()
-  // 使用外部图片源或从文档中提取
+  // Use external image sources or extract from document
   galleryImages.value = props.images ?? collectImagesFromDoc()
   galleryOpen.value = true
 }
 
 /**
- * 切换图片选中状态
+ * Toggle image selected state
  */
 function toggleSelect(index: number) {
   const newSet = new Set(selectedImages.value)
@@ -142,7 +142,7 @@ function toggleSelect(index: number) {
 }
 
 /**
- * 插入选中的图片
+ * Insert selected images
  */
 function insertSelected() {
   const sorted = [...selectedImages.value].sort((a, b) => a - b)
@@ -168,7 +168,7 @@ function insertSelected() {
 </script>
 
 <style scoped>
-/* ===== 空状态 ===== */
+/* ===== Empty state ===== */
 .gallery-empty {
   display: flex;
   flex-direction: column;
@@ -203,7 +203,7 @@ function insertSelected() {
   color: #8c8c8c;
 }
 
-/* ===== 图片网格 ===== */
+/* ===== Image grid ===== */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -264,7 +264,7 @@ function insertSelected() {
   background: #1a1a1a;
 }
 
-/* ===== 底部操作栏 ===== */
+/* ===== Footer action bar ===== */
 .gallery-footer {
   display: flex;
   align-items: center;

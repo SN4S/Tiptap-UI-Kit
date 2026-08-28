@@ -1,20 +1,20 @@
 /**
- * TableCellWithBackground - 支持背景色的表格单元格扩展
- * @description 基于 TableKit 的 TableCell，添加 backgroundColor 属性支持
- * 参考：https://tiptap.dev/docs/editor/extensions/table
+ * TableCellWithBackground - TableCell extension supporting background color
+ * @description Extends TableCell from TableKit, adding backgroundColor attribute support
+ * Reference: https://tiptap.dev/docs/editor/extensions/table
  */
 import { TableCell } from '@tiptap/extension-table'
 
 /**
- * 自定义 TableCell 扩展，支持 backgroundColor 属性
- * 用于表格悬浮框中的背景色设置功能
+ * Custom TableCell extension supporting backgroundColor attribute
+ * Used for setting background color in table floating toolbar
  */
 export const TableCellWithBackground = TableCell.extend({
   addAttributes() {
     return {
-      // 继承父类的所有属性
+      // Inherit all attributes from parent
       ...this.parent?.(),
-      // 添加 backgroundColor 属性
+      // Add backgroundColor attribute
       backgroundColor: {
         default: null,
         parseHTML: (element) => element.getAttribute('data-background-color') || element.style.backgroundColor || null,
@@ -28,7 +28,7 @@ export const TableCellWithBackground = TableCell.extend({
           }
         },
       },
-      // 添加 textAlign 属性（如果 TableToolbar 需要）
+      // Add textAlign attribute (if needed by TableToolbar)
       textAlign: {
         default: null,
         parseHTML: (element) => element.getAttribute('data-text-align') || element.style.textAlign || null,

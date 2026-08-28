@@ -1,252 +1,149 @@
+# 🎯 Goal Definition
 
-# 🎯 目标定义（先写在任务顶部）
-
-**目标：**
-
-> 做一个「可直接商用的 Tiptap 3 + Vue 3 编辑器主题样式」，
-> 包含基础 UI + Dark/Light + 文档 + Demo，可作为付费产品。
+**Goal:**
+> Build a "commercial-ready Tiptap 3 + Vue 3 editor theme",
+> including base UI + Dark/Light + documentation + Demo, suitable as a paid product.
 
 ---
 
-# 🧱 阶段 1：基础样式系统（核心）
+# 🧱 Phase 1: Base Style System (Core)
 
-**目标：编辑器本体好看、稳定、可复用**
+**Goal: Editor body looks great, is stable, and reusable**
 
-## ✅ Task 1.1 – 定义主题设计规范
+## ✅ Task 1.1 – Define Theme Design Specifications
+* [ ] Determine overall style (Minimal / SaaS / Notion-like / Linear-like)
+* [ ] Define font family / font size / line height
+* [ ] Define border radius, shadows, borders
+* [ ] Define spacing scale (8px / 4px grid)
 
-* [ ] 确定整体风格（Minimal / SaaS / Notion-like / Linear-like）
-* [ ] 定义字体方案（font-family / font-size / line-height）
-* [ ] 定义圆角、阴影、边框规范
-* [ ] 定义 spacing scale（8px / 4px 体系）
-
-**产出：**
-
-* 一个 design-notes.md 或注释说明
+**Deliverables:**
+* A design-notes.md or documentation comments
 
 ---
 
-## ✅ Task 1.2 – 设计 CSS Variables（非常重要）
+## ✅ Task 1.2 – Design CSS Variables
+* [ ] Define base color variables
+* [ ] Define state colors (hover / active / disabled)
+* [ ] Define editor-specific variables (selection / caret)
 
-* [ ] 定义基础颜色变量
-* [ ] 定义状态色（hover / active / disabled）
-* [ ] 定义编辑器专用变量（selection / caret）
-
-示例：
-
-```css
---editor-bg
---editor-text
---editor-border
---editor-selection
---editor-toolbar-bg
-```
-
-**产出：**
-
-* variables.css / variables.scss
+**Deliverables:**
+* Presets under `src/themes/`
 
 ---
 
-## ✅ Task 1.3 – Editor Content 样式
+## ✅ Task 1.3 – Editor Content Styles
+* [ ] Paragraphs, headings (H1-H6), blockquotes
+* [ ] Lists (unordered, ordered, task)
+* [ ] Tables, code blocks, horizontal rules
 
-* [ ] paragraph
-* [ ] heading (h1–h3)
-* [ ] bold / italic / underline
-* [ ] code / code block
-* [ ] blockquote
-* [ ] list（ul / ol）
-* [ ] link
-* [ ] horizontal rule
-
-**要求：**
-
-* 阅读舒适
-* 行高合理
-* 不依赖 Tailwind
+**Requirements:**
+* Comfortable reading experience
+* Reasonable line height
+* No Tailwind dependency
 
 ---
 
-## ✅ Task 1.4 – 编辑器交互状态
-
-* [ ] selection 样式
-* [ ] focus / blur
-* [ ] empty editor placeholder
-* [ ] disabled editor
+## ✅ Task 1.4 – Editor Interactive States
+* [ ] Selection styling
+* [ ] Caret animation & color
+* [ ] Placeholder styling
 
 ---
 
-# 🧰 阶段 2：Toolbar & Menu UI（卖点）
+# 🧰 Phase 2: Toolbar & Menu UI
 
-**目标：解决“最花时间的 UI 部分”**
+**Goal: Solve the most time-consuming UI parts**
 
-## ✅ Task 2.1 – Toolbar 基础样式
+## ✅ Task 2.1 – Toolbar Base Style
+* [ ] Icon + text alignment
+* [ ] Dividers
 
-* [ ] Toolbar container
-* [ ] Button default / hover / active
-* [ ] Icon + text 对齐
-* [ ] 分组（divider）
+## ✅ Task 2.2 – Toolbar State Support
+* [ ] Active state (e.g. bold enabled)
+* [ ] Disabled state
+* [ ] Tooltips
 
----
+## ✅ Task 2.3 – Bubble Menu Style
+* [ ] Container (border radius / shadow)
+* [ ] Animations (fade / scale)
+* [ ] Alignment with selection
+* [ ] Dark / Light adaptation
 
-## ✅ Task 2.2 – Toolbar 状态支持
-
-* [ ] active 状态（如 bold 已启用）
-* [ ] disabled 状态
-* [ ] tooltip（可选）
-
----
-
-## ✅ Task 2.3 – Bubble Menu 样式
-
-* [ ] 容器（圆角 / shadow）
-* [ ] 动画（fade / scale）
-* [ ] 与 selection 对齐
-* [ ] Dark / Light 适配
+## ✅ Task 2.4 – Slash Menu
+* [ ] List styles
+* [ ] Keyboard focus states
 
 ---
 
-## ✅ Task 2.4 – Slash Menu（可选但很加分）
+# 🌗 Phase 3: Dark / Light Theme
 
-* [ ] 列表样式
-* [ ] hover / active
-* [ ] 键盘 focus 状态
+**Goal: Seamless light/dark theme support**
 
----
+* [ ] Background contrast
+* [ ] Text legibility
+* [ ] Non-glaring selection
+* [ ] Crisp toolbar
 
-# 🌗 阶段 3：Dark / Light Theme
-
-**目标：这是国外用户最看重的功能之一**
-
-## ✅ Task 3.1 – Light Theme
-
-* [ ] 背景
-* [ ] 文本
-* [ ] Border
-* [ ] Toolbar
+## ✅ Task 3.3 – Theme Switch Mechanism
+* [ ] Switch via class / data-theme
+* [ ] Usage documentation
 
 ---
 
-## ✅ Task 3.2 – Dark Theme
+# 📦 Phase 4: Reusable & Commercial Quality
 
-* [ ] 背景对比度 OK
-* [ ] 文本可读性
-* [ ] Selection 不刺眼
-* [ ] Toolbar 不“糊”
+**Goal: Transform from codebase to commercial product**
 
----
+## ✅ Task 4.1 – Decouple Project Code
+* [ ] Independent of project-specific classes
+* [ ] No hardcoded layout
+* [ ] Embeddable in any page
 
-## ✅ Task 3.3 – 主题切换机制
+## ✅ Task 4.2 – Provide Override Methods
+* [ ] Variable overrides
+* [ ] Custom primary colors
 
-* [ ] 通过 class / data-theme 切换
-* [ ] 文档中说明如何用
-
----
-
-# 📦 阶段 4：可复用 & 商用品质
-
-**目标：从“项目代码”变成“商品”**
-
-## ✅ Task 4.1 – 去除项目耦合
-
-* [ ] 不依赖项目特定 class
-* [ ] 不写死 layout
-* [ ] 支持嵌入任意页面
+## ✅ Task 4.3 – Browser Compatibility
+* [ ] Chrome / Firefox / Safari support
 
 ---
 
-## ✅ Task 4.2 – 提供覆盖方式
+# 📘 Phase 5: Documentation & Examples
 
-* [ ] 用户可 override variables
-* [ ] 示例：如何改主色
+**Goal: Lower adoption barrier for developers**
 
----
+## ✅ Task 5.1 – Installation Docs
+* [ ] npm / pnpm installation
+* [ ] CSS imports
+* [ ] Vue component usage
 
-## ✅ Task 4.3 – 浏览器兼容
+## ✅ Task 5.2 – Usage Examples
+* [ ] Dark / Light toggle
 
-* [ ] Chrome
-* [ ] Firefox
-* [ ] Safari（至少测试基础）
-
----
-
-# 📘 阶段 5：文档 & 示例（必须）
-
-**目标：降低购买后的使用成本**
-
-## ✅ Task 5.1 – 安装文档
-
-* [ ] npm / pnpm 安装
-* [ ] CSS 引入方式
-* [ ] Vue 组件示例
+## ✅ Task 5.3 – Customization Docs
+* [ ] Customizing colors
+* [ ] Overriding styles
+* [ ] Frequently asked questions
 
 ---
 
-## ✅ Task 5.2 – 使用示例
+# 🌐 Phase 6: Demo Application
 
-* [ ] Basic editor
-* [ ] Toolbar + Bubble menu
-* [ ] Dark / Light 切换
+**Goal: Impressive 30-second live demonstration**
 
----
+## ✅ Task 6.1 – Demo Page
+* [ ] Editor instance
+* [ ] Dark / Light toggle
+* [ ] Rich sample content
 
-## ✅ Task 5.3 – Customization 文档
-
-* [ ] 修改颜色
-* [ ] 覆盖样式
-* [ ] 常见问题
-
----
-
-# 🌐 阶段 6：Demo 项目
-
-**目标：让陌生人 30 秒觉得“值钱”**
-
-## ✅ Task 6.1 – Demo 页面
-
-* [ ] 编辑器实例
-* [ ] Toolbar
-* [ ] Dark / Light 切换
-* [ ] 真实示例内容
+## ✅ Task 6.2 – Demo UX Polish
+* [ ] Attractive initial content
+* [ ] Placeholders
+* [ ] Clean console output
 
 ---
 
-## ✅ Task 6.2 – Demo 体验优化
+# 📄 Phase 7: Release Readiness
 
-* [ ] 初始内容好看
-* [ ] 有 placeholder
-* [ ] 不报错
-
----
-
-# 📄 阶段 7：发布准备
-
-**目标：可以上架卖**
-
-## ✅ Task 7.1 – License 文件
-
-* [ ] Personal
-* [ ] Commercial
-* [ ] 禁止转售
-
----
-
-## ✅ Task 7.2 – 打包
-
-* [ ] 源码
-* [ ] README
-* [ ] Demo 链接
-
----
-
-# ✅ 完成标准（非常重要）
-
-当你满足以下 6 条，就 **可以卖了**：
-
-* [ ] 编辑器不丑
-* [ ] Toolbar / Menu 好用
-* [ ] Dark / Light 可切
-* [ ] 文档别人能看懂
-* [ ] Demo 能直接看效果
-* [ ] 你敢标价 $29+
-
-
+## ✅ Task 7.1 – License File
+## ✅ Task 7.2 – Packaging

@@ -12,7 +12,7 @@ export const currentTranslateLang = ref<string>(saved || '');
 
 /**
  * Sets the language and persists it to localStorage
- * @param label The language label (e.g. "英文", "中文", etc.)
+ * @param label The language label (e.g. "English", "Chinese", etc.)
  */
 export function setTranslateLang(label: string) {
   try {

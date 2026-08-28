@@ -122,14 +122,14 @@ import type { FeatureFlags, ThemePreset } from '../src/core/editorConfig'
 import { setTheme, setDeviceView, setOrientation, type DeviceView, THEME_PRESETS } from '../src/themes'
 import { DeviceSwitcher, DeviceFrame, type Orientation } from '../src/tools/device-switcher'
 
-// 导入主题预设 CSS
+// Import theme preset CSS
 import '../src/themes/presets/word.css'
 import '../src/themes/presets/notion.css'
 import '../src/themes/presets/github.css'
 import '../src/themes/presets/typora.css'
 import '../src/styles/device-responsive.css'
 
-// Landing page state（用 hash 记住状态，刷新不回落地页）
+// Landing page state (remembers state via hash, refresh stays on current page)
 const showLanding = ref(!location.hash.startsWith('#demo'))
 
 // Demo mode: 'full' = full editor, 'inline' = inline + plugins
@@ -161,7 +161,7 @@ const handleThemeChange = (event: Event) => {
   setTheme(themePreset.value, theme.value)
 }
 
-// 检测手机浏览器，自动使用 mobile 视图
+// Detect mobile browser, automatically use mobile view
 const isMobileBrowser = /Android.*Mobile|iPhone|iPod|Windows Phone|BlackBerry|Opera Mini|IEMobile/i.test(
   typeof navigator !== 'undefined' ? navigator.userAgent : ''
 )
@@ -183,20 +183,20 @@ const antdTheme = computed(() => ({
   algorithm: theme.value === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
 }))
 
-// Locale（初始值跟随浏览器语言自动检测，与 i18n manager 保持一致）
+// Locale (initial value auto-detected from browser language, aligned with i18n manager)
 const locale = ref<LocaleCode>(detectDefaultLocale())
 watch(locale, (newLocale) => {
   createI18n({ locale: newLocale })
 })
 
-// 根据主题选择功能配置
+// Select feature configuration based on theme
 const currentFeatures = computed<FeatureFlags>(() => {
-  // 公开 demo 站不提供「AI 设置」入口：访客不会在陌生网页填自己的 API Key，
-  // 未配置时 AI 助手自动进入演示模式即可
+  // Public demo site does not provide "AI Settings" entry: visitors won't enter API Key on external site,
+  // AI assistant automatically enters demo mode when unconfigured
   const base =
     themePreset.value === 'notion'
-      ? PRESET_CONFIGS.notion.features! // Notion 主题：只显示浮动工具栏和六个点
-      : PRESET_CONFIGS.full.features! // 其他主题：使用完整工具栏
+      ? PRESET_CONFIGS.notion.features! // Notion theme: displays floating toolbar and drag handle only
+      : PRESET_CONFIGS.full.features! // Other themes: use full toolbar
   return { ...base, aiSettings: false }
 })
 
@@ -204,7 +204,7 @@ const currentFeatures = computed<FeatureFlags>(() => {
 const aiStatus = ref<string>('Checking...')
 
 onMounted(() => {
-  // 初始化主题和设备视图
+  // Initialize theme and device view
   setDeviceView(deviceView.value)
   setTheme(themePreset.value, theme.value)
   
@@ -379,7 +379,7 @@ const copyJson = async () => {
   color: #fff;
 }
 
-/* Main - 全宽布局 */
+/* Main - Full width layout */
 .demo-main {
   flex: 1;
   padding: 0;
@@ -397,7 +397,7 @@ const copyJson = async () => {
   gap: 0;
 }
 
-/* Editor Card - 无边框设计 */
+/* Editor Card - Borderless design */
 .demo-card {
   background: #fff;
   border-radius: 0;
@@ -502,8 +502,8 @@ const copyJson = async () => {
   text-decoration: underline;
 }
 
-/* ===== Notion 主题特定样式 ===== */
-/* 注意：不覆盖 demo-app 背景，保留 header 渐变 */
+/* ===== Notion Theme Specific Styles ===== */
+/* Note: Do not override demo-app background, preserve header gradient */
 
 .theme-notion .demo-main {
   padding: 0;
@@ -529,13 +529,13 @@ const copyJson = async () => {
   background: #191919;
 }
 
-/* Notion 主题下隐藏 info 和 output 面板 */
+/* Hide info and output panels under Notion theme */
 .theme-notion .demo-info,
 .theme-notion .demo-output {
   display: none;
 }
 
-/* Notion 主题下的工具栏位置调整 */
+/* Toolbar position adjustment under Notion theme */
 .theme-notion .word-toolbar {
   position: fixed;
   top: 60px;

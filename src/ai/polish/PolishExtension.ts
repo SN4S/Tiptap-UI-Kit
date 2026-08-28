@@ -76,7 +76,7 @@ export const PolishExtension = Extension.create<PolishOptions>({
             state.doc.content.size,
             ' ',
           );
-          const sysPrompt = `以下係完整嘅文件內容:\n\n${fullText}`;
+          const sysPrompt = `Below is the full document content:\n\n${fullText}`;
 
           // Perform AI polish
           performPolish(
@@ -219,7 +219,7 @@ function performPolish(
       console.error('[Polish] Error:', error);
       handleCleanup();
       notification.error({
-        message: '润色失败',
+        message: 'Polish failed',
         description: error.message || t('messages.networkError'),
         duration: 3,
       });

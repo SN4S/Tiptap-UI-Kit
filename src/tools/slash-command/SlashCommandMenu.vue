@@ -112,7 +112,7 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.paragraph'),
         description: t('slashCommand.paragraphDesc'),
         icon: FileTextOutlined,
-        keywords: ['paragraph', 'text', 'plain', '正文', '段落', 'p'],
+        keywords: ['paragraph', 'text', 'plain', 'body', 'paragraph', 'p'],
         action: (editor: Editor) => {
           editor.chain().focus().setParagraph().run()
         },
@@ -122,7 +122,7 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.heading1'),
         description: t('slashCommand.heading1Desc'),
         icon: FontSizeOutlined,
-        keywords: ['heading', 'h1', '标题', '一级标题', 'title'],
+        keywords: ['heading', 'h1', 'heading', 'h1', 'title'],
         action: (editor: Editor) => {
           editor.chain().focus().toggleHeading({ level: 1 }).run()
         },
@@ -132,7 +132,7 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.heading2'),
         description: t('slashCommand.heading2Desc'),
         icon: FontSizeOutlined,
-        keywords: ['heading', 'h2', '标题', '二级标题', 'subtitle'],
+        keywords: ['heading', 'h2', 'heading', 'h2', 'subtitle'],
         action: (editor: Editor) => {
           editor.chain().focus().toggleHeading({ level: 2 }).run()
         },
@@ -142,7 +142,7 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.heading3'),
         description: t('slashCommand.heading3Desc'),
         icon: FontSizeOutlined,
-        keywords: ['heading', 'h3', '标题', '三级标题'],
+        keywords: ['heading', 'h3', 'heading', 'h3'],
         action: (editor: Editor) => {
           editor.chain().focus().toggleHeading({ level: 3 }).run()
         },
@@ -157,7 +157,7 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.bulletList'),
         description: t('slashCommand.bulletListDesc'),
         icon: UnorderedListOutlined,
-        keywords: ['bullet', 'list', 'unordered', '无序列表', '列表', 'ul'],
+        keywords: ['bullet', 'list', 'unordered', 'bullet-list', 'list', 'ul'],
         action: (editor: Editor) => {
           editor.chain().focus().toggleBulletList().run()
         },
@@ -167,7 +167,7 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.orderedList'),
         description: t('slashCommand.orderedListDesc'),
         icon: OrderedListOutlined,
-        keywords: ['ordered', 'list', 'number', '有序列表', '编号列表', 'ol'],
+        keywords: ['ordered', 'list', 'number', 'ordered-list', 'number-list', 'ol'],
         action: (editor: Editor) => {
           editor.chain().focus().toggleOrderedList().run()
         },
@@ -177,7 +177,7 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.taskList'),
         description: t('slashCommand.taskListDesc'),
         icon: CheckSquareOutlined,
-        keywords: ['task', 'todo', 'checklist', '任务列表', '待办', 'checkbox'],
+        keywords: ['task', 'todo', 'checklist', 'task-list', 'todo', 'checkbox'],
         action: (editor: Editor) => {
           editor.chain().focus().toggleTaskList().run()
         },
@@ -192,7 +192,7 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.blockquote'),
         description: t('slashCommand.blockquoteDesc'),
         icon: LineOutlined,
-        keywords: ['quote', 'blockquote', '引用', '引述', 'citation'],
+        keywords: ['quote', 'blockquote', 'quote', 'citation', 'citation'],
         action: (editor: Editor) => {
           editor.chain().focus().toggleBlockquote().run()
         },
@@ -202,7 +202,7 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.codeBlock'),
         description: t('slashCommand.codeBlockDesc'),
         icon: CodeOutlined,
-        keywords: ['code', 'block', '代码块', '代码', 'pre'],
+        keywords: ['code', 'block', 'codeblock', 'code', 'pre'],
         action: (editor: Editor) => {
           editor.chain().focus().toggleCodeBlock().run()
         },
@@ -212,7 +212,7 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.table'),
         description: t('slashCommand.tableDesc'),
         icon: TableOutlined,
-        keywords: ['table', '表格', 'grid'],
+        keywords: ['table', 'table', 'grid'],
         action: (editor: Editor) => {
           editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
         },
@@ -222,9 +222,9 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.image'),
         description: t('slashCommand.imageDesc'),
         icon: PictureOutlined,
-        keywords: ['image', 'picture', '图片', '图像', 'img', 'photo'],
+        keywords: ['image', 'picture', 'image', 'photo', 'img', 'photo'],
         action: (editor: Editor) => {
-          // 插入图片占位
+          // Insert image placeholder
           const url = window.prompt(t('slashCommand.imageUrlPrompt') || 'Enter image URL')
           if (url) {
             editor.chain().focus().setImage({ src: url }).run()
@@ -236,7 +236,7 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         title: t('slashCommand.horizontalRule'),
         description: t('slashCommand.horizontalRuleDesc'),
         icon: MinusOutlined,
-        keywords: ['divider', 'hr', 'horizontal', 'rule', '分割线', '水平线'],
+        keywords: ['divider', 'hr', 'horizontal', 'rule', 'divider', 'hr'],
         action: (editor: Editor) => {
           editor.chain().focus().setHorizontalRule().run()
         },

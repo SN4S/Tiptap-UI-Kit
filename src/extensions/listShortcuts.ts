@@ -1,6 +1,6 @@
 /**
- * ListShortcuts Extension - 列表快捷键扩展
- * @description 提供列表相关的快捷键支持
+ * ListShortcuts Extension - List shortcut extension
+ * @description Provides keyboard shortcut support for lists
  */
 
 import { Extension } from '@tiptap/core'
@@ -10,7 +10,7 @@ export const ListShortcuts = Extension.create({
 
   addKeyboardShortcuts() {
     return {
-      // Enter 键在列表项中创建新项
+      // Enter key creates new item in list items
       Enter: ({ editor }) => {
         const { state } = editor
         const { selection } = state
@@ -24,7 +24,7 @@ export const ListShortcuts = Extension.create({
         }
         return false
       },
-      // Shift+Enter 在列表项中创建新行
+      // Shift+Enter creates new line in list items
       'Shift-Enter': ({ editor }) => {
         return editor.commands.first([
           () => editor.commands.newlineInCode(),

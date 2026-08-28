@@ -7,17 +7,17 @@
     class="bubble-menu floating-menu"
   >
     <div class="bubble-menu-content menu-content">
-      <!-- 标题快捷按钮 -->
+      <!-- Heading quick buttons -->
       <div class="bubble-group menu-group">
         <HeadingButtons :editor="editor" />
       </div>
 
-      <!-- 文本格式 -->
+      <!-- Text formatting -->
       <div class="bubble-group menu-group">
         <TextFormatButtons :editor="editor" />
       </div>
 
-      <!-- 颜色工具 -->
+      <!-- Color tools -->
       <div class="bubble-group menu-group">
         <ColorPicker
           :icon="FontColorsOutlined"
@@ -35,17 +35,17 @@
         />
       </div>
 
-      <!-- 链接 -->
+      <!-- Link -->
       <div class="bubble-group menu-group">
         <LinkButton :editor="editor" />
       </div>
 
-      <!-- 列表工具 -->
+      <!-- List tools -->
       <div class="bubble-group menu-group">
         <ListTools :editor="editor" :show-task-list="true" />
       </div>
 
-      <!-- AI 工具（与主工具栏一致的下拉按钮，支持翻译子菜单） -->
+      <!-- AI tools (dropdown button supporting translation submenu) -->
       <div class="bubble-group menu-group">
         <AiMenuButton
           v-if="editor"
@@ -62,15 +62,15 @@
 
 <script setup lang="ts">
 /**
- * FloatingMenu - 选中文本时的浮动工具栏
- * @description 选中文本时显示的浮动格式化工具栏（类似 Medium、Notion）
+ * FloatingMenu - Floating toolbar on text selection
+ * @description Floating formatting toolbar displayed on text selection (similar to Medium, Notion)
  */
 import { ref, watch } from 'vue'
 import { BubbleMenu } from '@tiptap/vue-3/menus'
 import type { Editor } from '@tiptap/vue-3'
 import { t } from '@/locales'
 
-// 工具函数和配置导入
+// Import helper functions and config
 import { createCommandRunner } from '@/utils/editorCommands'
 import { useReactiveEditor } from '@/utils/editorState'
 import { HeadingButtons } from '@/features/basic/heading'
@@ -80,7 +80,7 @@ import { LinkButton } from '@/features/advanced/link'
 import { ColorPicker } from '@/features/basic/color'
 import { AiMenuButton } from '@/ai'
 
-// Ant Design 组件和图标
+// Ant Design components and icons
 import {
   FontColorsOutlined,
   HighlightOutlined,
@@ -99,21 +99,21 @@ const props = withDefaults(
     enabled: true,
   }
 )
-// 事务响应式 editor：颜色等状态跟随光标/内容变化重新求值
+// Transaction reactive editor: colors re-evaluate on cursor/content changes
 const editor = useReactiveEditor(() => props.editor)
 
 
-// ===== 响应式状态 =====
-// 当前颜色值
+// ===== Reactive state =====
+// Current color values
 const currentTextColor = ref<string>('#000000')
 const currentBgColor = ref<string>('#ffffff')
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const runCommand = createCommandRunner(editor)
 
-// ===== 辅助函数 =====
+// ===== Helper functions =====
 /**
- * 标准化颜色值（确保格式统一）
+ * Standardize color values
  */
 function normalizeColor(color: string | undefined): string {
   if (!color) return '#000000'
@@ -124,7 +124,7 @@ function normalizeColor(color: string | undefined): string {
   return trimmed.toLowerCase()
 }
 
-// 监听编辑器状态，更新当前颜色
+// Listen to editor state to update current colors
 watch(
   () => editor.value?.getAttributes('textStyle'),
   (attrs) => {
@@ -150,37 +150,37 @@ watch(
 )
 
 /**
- * 控制浮动菜单显示时机
- * @description 仅在有文本选中时显示，只读模式下不显示
+ * Control floating menu display condition
+ * @description Display only when text is selected, hidden in read-only mode
  */
 const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: number }) => {
-  // 如果功能未启用，不显示
+  // Do not display if feature disabled
   if (!props.enabled) {
     return false
   }
   
-  // 只读模式下不显示
+  // Do not display in read-only mode
   if (props.readonly) return false
 
   const { from, to } = bubbleProps
   const isEmptySelection = from === to
 
-  // 不显示的情况：无选区、在代码块中、在表格中（表格有自己的上下文菜单）
+  // Hidden when: no selection, inside code block, or inside table
   if (isEmptySelection) return false
   if (bubbleProps.editor.isActive('codeBlock')) return false
   if (bubbleProps.editor.isActive('table')) return false
 
-  // 如果选中的是图片节点，不显示悬浮菜单（图片有自己的工具栏）
+  // Hidden when image node selected (images have dedicated toolbar)
   if (bubbleProps.editor.isActive('image')) return false
   
-  // 检查选中的节点是否是图片
+  // Check if selected node is an image
   const { state } = bubbleProps
   const { selection } = state
   if (selection.node && selection.node.type.name === 'image') {
     return false
   }
   
-  // 检查光标前后的节点是否是图片
+  // Check if surrounding nodes are images
   const $anchor = selection.$anchor
   const nodeAfter = $anchor.nodeAfter
   const nodeBefore = $anchor.nodeBefore
@@ -188,7 +188,7 @@ const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: nu
     return false
   }
 
-  // 如果选中的是链接，不显示文字悬浮框（链接有自己的悬浮框）
+  // If link selected, do not show text bubble menu (links have dedicated bubble menu)
   if (bubbleProps.editor.isActive('link')) {
     return false
   }
@@ -197,7 +197,7 @@ const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: nu
 }
 
 /**
- * 设置文字颜色
+ * Set text color
  */
 const setTextColor = (color: string) => {
   currentTextColor.value = color
@@ -205,7 +205,7 @@ const setTextColor = (color: string) => {
 }
 
 /**
- * 设置背景高亮
+ * Set background highlight
  */
 const setHighlight = (color: string) => {
   currentBgColor.value = color
@@ -331,6 +331,6 @@ const setHighlight = (color: string) => {
   }
 }
 
-/* Bubble Menu 容器样式 */
+/* Bubble Menu container style */
 </style>
 

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>请作者喝杯咖啡 ☕ | Tiptap UI Kit</title>
-  <meta name="description" content="您的支持是我创作的动力，请作者喝杯咖啡吧！">
+  <title>Buy Me a Coffee ☕ | Tiptap UI Kit</title>
+  <meta name="description" content="Your support motivates my creation. Buy me a coffee!">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -485,15 +485,15 @@
     <div class="card">
       <!-- Language Toggle -->
       <div class="lang-toggle">
-        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn active" data-lang="en">English</button>
         <button class="lang-btn" data-lang="en">EN</button>
       </div>
 
       <!-- Header -->
       <div class="header">
         <span class="header-icon">☕</span>
-        <h1 data-i18n="title">请作者喝杯咖啡</h1>
-        <p data-i18n="subtitle">您的支持是我创作的动力</p>
+        <h1 data-i18n="title">Buy Me a Coffee</h1>
+        <p data-i18n="subtitle">Your support motivates my creation</p>
       </div>
 
       <!-- Payment Methods -->
@@ -505,7 +505,7 @@
               <path d="M23.988 14.328c0-3.469-3.465-6.285-7.74-6.285-4.275 0-7.74 2.816-7.74 6.285s3.465 6.285 7.74 6.285c.79 0 1.551-.11 2.27-.304a.688.688 0 0 1 .571.078l1.517.888a.26.26 0 0 0 .133.043.234.234 0 0 0 .23-.235c0-.058-.023-.114-.038-.17l-.311-1.18a.47.47 0 0 1 .17-.53c1.461-1.072 2.198-2.655 2.198-4.875zM14.12 13.59a.77.77 0 1 1 0-1.54.77.77 0 0 1 0 1.54zm4.253 0a.77.77 0 1 1 0-1.54.77.77 0 0 1 0 1.54z"/>
             </svg>
           </span>
-          <span class="text" data-i18n="wechat">微信支付</span>
+          <span class="text" data-i18n="wechat">WeChat Pay</span>
           <span class="arrow">›</span>
         </button>
         
@@ -515,7 +515,7 @@
               <path d="M21.422 15.358c-.574-.264-3.067-1.269-5.013-2.095.557-1.2.996-2.556 1.249-3.992h-3.46v-1.429h4.197V6.9h-4.197V4.715h-2.143c-.158 0-.286.129-.286.287V6.9H7.286v.942h4.483v1.429H8.143v.942h6.833c-.211 1.047-.555 2.04-.999 2.93-2.464-.999-5.227-1.783-6.932-1.175-2.047.728-3.09 2.543-2.363 4.41.727 1.868 2.903 2.8 5.203 2.108 1.586-.48 2.941-1.514 4.086-2.856 1.997.992 5.054 2.208 5.693 2.464.256.1.537.152.817.152a2.14 2.14 0 0 0 2.143-2.143c0-.406-.116-.793-.316-1.121l-.107-.146c-.217-.173-.458-.32-.779-.478zM8.873 17.13c-1.587.477-3.088-.173-3.484-1.191-.396-1.018.494-2.283 2.081-2.76.46-.139.894-.191 1.296-.191 1.09 0 2.036.38 2.92.784-.939 1.545-1.896 2.94-2.813 3.358z"/>
             </svg>
           </span>
-          <span class="text" data-i18n="alipay">支付宝</span>
+          <span class="text" data-i18n="alipay">Alipay</span>
           <span class="arrow">›</span>
         </button>
       </div>
@@ -535,34 +535,34 @@
   <!-- QR Modal -->
   <div class="modal-overlay" id="modal" onclick="closeModal(event)">
     <div class="modal" onclick="event.stopPropagation()">
-      <div class="modal-title" id="modalTitle">微信支付</div>
+      <div class="modal-title" id="modalTitle">WeChat Pay</div>
       <div class="qr-container" id="qrContainer">
-        <img src="IMG_8528.JPG" alt="微信赞赏码" id="wechatQR" class="qr-image">
-        <img src="IMG_8529.JPG" alt="支付宝收款码" id="alipayQR" class="qr-image" style="display: none;">
+        <img src="IMG_8528.JPG" alt="WeChat Pay QR" id="wechatQR" class="qr-image">
+        <img src="IMG_8529.JPG" alt="Alipay QR" id="alipayQR" class="qr-image" style="display: none;">
       </div>
-      <button class="modal-close" onclick="closeModal()" data-i18n="close">关闭</button>
+      <button class="modal-close" onclick="closeModal()" data-i18n="close">Close</button>
     </div>
   </div>
 
   <!-- Toast -->
   <div class="toast" id="toast">
     <span>✓</span>
-    <span data-i18n="copied">已复制到剪贴板</span>
+    <span data-i18n="copied">Copied to Clipboard</span>
   </div>
 
   <script>
     // i18n translations
     const translations = {
       zh: {
-        title: '请作者喝杯咖啡',
-        subtitle: '您的支持是我创作的动力',
-        wechat: '微信支付',
-        alipay: '支付宝',
-        recent_thanks: '最近鸣谢',
-        rights: '保留所有权利',
-        qr_hint: '请添加二维码图片',
-        close: '关闭',
-        copied: '已复制到剪贴板'
+        title: 'Buy Me a Coffee',
+        subtitle: 'Your support motivates my creation',
+        wechat: 'WeChat Pay',
+        alipay: 'Alipay',
+        recent_thanks: 'Recent Thanks',
+        rights: 'All Rights Reserved',
+        qr_hint: 'Please add QR code image',
+        close: 'Close',
+        copied: 'Copied to Clipboard'
       },
       en: {
         title: 'Buy Me a Coffee',
@@ -606,11 +606,11 @@
       const alipayQR = document.getElementById('alipayQR');
       
       if (type === 'wechat') {
-        title.textContent = currentLang === 'zh' ? '微信赞赏' : 'WeChat Pay';
+        title.textContent = 'WeChat Pay';
         wechatQR.style.display = 'block';
         alipayQR.style.display = 'none';
       } else {
-        title.textContent = currentLang === 'zh' ? '支付宝' : 'Alipay';
+        title.textContent = 'Alipay';
         wechatQR.style.display = 'none';
         alipayQR.style.display = 'block';
       }

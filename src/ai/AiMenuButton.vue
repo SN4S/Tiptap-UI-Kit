@@ -429,7 +429,7 @@ const menuItems = computed(() => {
           }
           
           // Use the saved language or the default language
-          const targetLang = currentTranslateLang.value || '英文';
+          const targetLang = currentTranslateLang.value || 'English';
           
           // Use a chain to ensure the command runs in a single transaction
           if (typeof (editor.commands as any).translate === 'function') {

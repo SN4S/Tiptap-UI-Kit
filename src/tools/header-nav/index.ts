@@ -6,7 +6,7 @@
 // Component exports
 export { default as ToolbarNav } from './ToolbarNav.vue'
 
-// 配置导出
+// Config exports
 export type { ToolbarToolsConfig } from './toolbarConfig'
 export {
   DEFAULT_TOOLBAR_CONFIG,

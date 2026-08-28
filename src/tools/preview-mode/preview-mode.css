@@ -1,43 +1,43 @@
 /**
- * Preview Mode - 预览模式样式
- * @description 预览模式专用样式，确保内容不可交互
+ * Preview Mode - Preview mode styles
+ * @description Preview mode styles ensuring content is non-interactive
  */
 
-/* 预览模式容器 */
+/* Preview mode container */
 .tiptap-preview-mode {
   position: relative;
 }
 
-/* 防止内容被选中和点击 */
+/* Prevents selection and click interactions */
 .tiptap-preview-mode .preview-body * {
   user-select: none !important;
   pointer-events: none !important;
   cursor: default !important;
 }
 
-/* 链接在预览模式下保持视觉样式但不可点击 */
+/* Links preserve visual style but are unclickable in preview mode */
 .tiptap-preview-mode .preview-body a {
   cursor: default !important;
   pointer-events: none !important;
 }
 
-/* 图片在预览模式下不显示调整手柄 */
+/* Images do not display resize handles in preview mode */
 .tiptap-preview-mode .preview-body img {
   resize: none !important;
 }
 
-/* 表格在预览模式下不显示调整手柄 */
+/* Tables do not display resize handles in preview mode */
 .tiptap-preview-mode .preview-body table {
   resize: none !important;
 }
 
-/* 复选框在预览模式下显示但不可点击 */
+/* Checkboxes display but are unclickable in preview mode */
 .tiptap-preview-mode .preview-body input[type="checkbox"] {
   pointer-events: none !important;
   cursor: default !important;
 }
 
-/* 打印样式优化 */
+/* Print style optimization */
 @media print {
   .tiptap-preview-mode {
     background: transparent !important;

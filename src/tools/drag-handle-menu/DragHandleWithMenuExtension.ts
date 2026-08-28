@@ -1,11 +1,11 @@
 /**
- * DragHandleWithMenu Extension - 六个点显示扩展
- * @description 为块级元素添加可点击的拖拽手柄（六个点）
+ * DragHandleWithMenu Extension - 6-dot display extension
+ * @description Adds a clickable 6-dot drag handle to block elements
  * @features
- * - 在块级元素左侧显示六个点图标
- * - 点击六个点触发菜单显示
- * - 自动排除表格、图片等特殊节点
- * - 智能处理列表嵌套情况
+ * - Displays 6-dot icon to the left of block elements
+ * - Clicking 6 dots triggers menu display
+ * - Automatically excludes special nodes like tables, images
+ * - Intelligently handles nested lists
  */
 
 import { Extension } from '@tiptap/core'
@@ -16,18 +16,18 @@ import { h, render } from 'vue'
 import { HolderOutlined } from '@ant-design/icons-vue'
 
 // ============================================================================
-// 常量
+// Constants
 // ============================================================================
 
 export const dragHandleWithMenuKey = new PluginKey('dragHandleWithMenu')
 
-// 不显示手柄的节点类型
+// Node types that do not display handle
 const EXCLUDED_NODE_TYPES = ['doc', 'table', 'image', 'figure', 'tableCell', 'tableHeader'] as const
 const EXCLUDED_LIST_TYPES = ['taskList', 'listItem', 'taskItem'] as const
 const ALLOWED_LIST_TYPES = ['orderedList', 'bulletList'] as const
 
 // ============================================================================
-// 类型定义
+// Type definitions
 // ============================================================================
 
 export interface DragHandleClickEvent {
@@ -42,34 +42,34 @@ export interface DragHandleWithMenuOptions {
 }
 
 // ============================================================================
-// 工具函数
+// Helper functions
 // ============================================================================
 
 /**
- * 判断是否应该显示六个点
- * @description 根据节点类型和父节点类型判断是否显示拖拽手柄
- * @param node 当前节点
- * @param parent 父节点
- * @returns 是否显示手柄
+ * Determine if 6-dot handle should be displayed
+ * @description Determines handle display based on node and parent types
+ * @param node Current node
+ * @param parent Parent node
+ * @returns Whether to show handle
  */
 function shouldShowHandle(node: ProseMirrorNode, parent: ProseMirrorNode): boolean {
-  // 必须是块级元素，且不是文档根节点
+  // Must be a block element and not root document node
   if (!node.isBlock || node.type.name === 'doc') return false
 
-  // 排除特定节点类型
+  // Exclude specific node types
   if (EXCLUDED_NODE_TYPES.includes(node.type.name as any)) return false
   if (parent.type.name === 'table') return false
 
-  // 列表处理逻辑
+  // List handling logic
   if (ALLOWED_LIST_TYPES.includes(node.type.name as any)) {
-    return true // 有序列表和无序列表显示手柄
+    return true // Ordered and bullet lists show handle
   }
 
   if (EXCLUDED_LIST_TYPES.includes(node.type.name as any)) {
-    return false // 任务列表和列表项不显示手柄
+    return false // Task lists and list items do not show handle
   }
 
-  // 列表项内部的段落不显示手柄
+  // Paragraphs inside list items do not display handle
   if (
     (parent.type.name === 'listItem' || parent.type.name === 'taskItem') &&
     node.type.name === 'paragraph'
@@ -77,7 +77,7 @@ function shouldShowHandle(node: ProseMirrorNode, parent: ProseMirrorNode): boole
     return false
   }
 
-  // 如果父节点是有序列表或无序列表，其内部的段落不显示手柄
+  // Paragraphs inside ordered/bullet lists do not display handle
   if (
     ALLOWED_LIST_TYPES.includes(parent.type.name as any) &&
     node.type.name === 'paragraph'
@@ -85,25 +85,25 @@ function shouldShowHandle(node: ProseMirrorNode, parent: ProseMirrorNode): boole
     return false
   }
 
-  // 表格单元格内不显示手柄
+  // Table cells do not display handle
   if (parent.type.name === 'tableCell' || parent.type.name === 'tableHeader') {
     return false
   }
 
-  // 空节点不显示手柄
+  // Empty nodes do not display handle
   if (node.content.size === 0) return false
 
   return true
 }
 
 /**
- * 创建六个点的 DOM 元素
- * @description 六个点只负责显示和点击事件，不包含拖拽功能
- * @param node 节点
- * @param pos 节点位置
- * @param view 编辑器视图
- * @param onHandleClick 点击回调
- * @returns 手柄 DOM 元素
+ * Create 6-dot DOM element
+ * @description 6-dot element handles display and click events
+ * @param node Node
+ * @param pos Node position
+ * @param view Editor view
+ * @param onHandleClick Click callback
+ * @returns Handle DOM element
  */
 function createDragHandle(
   node: ProseMirrorNode,
@@ -114,21 +114,21 @@ function createDragHandle(
   const handle = document.createElement('div')
   handle.className = 'drag-handle'
   handle.contentEditable = 'false'
-  // 六个点本身不包含拖拽功能，只用于显示和点击
+  // 6-dot element handles display and click only
   handle.draggable = false
 
-  // 使用 Ant Design Vue 图标：HolderOutlined
-  // 直接渲染到手柄元素内，避免维护自定义 SVG
+  // Uses Ant Design Vue icon: HolderOutlined
+  // Render directly inside handle element
   render(h(HolderOutlined), handle)
 
-  // 阻止 mousedown 冒泡和默认行为，防止触发 ProseMirror 的选区更新导致组件重渲染
-  // 从而解决了"需要点击两次"的问题
+  // Prevent mousedown bubbling to avoid ProseMirror selection re-render
+  // Resolves double-click requirement issue
   handle.addEventListener('mousedown', (e) => {
     e.stopPropagation()
     e.preventDefault()
   })
 
-  // 点击事件处理
+  // Click event handling
   handle.addEventListener('click', (e: MouseEvent) => {
     e.stopPropagation()
     e.preventDefault()
@@ -136,15 +136,15 @@ function createDragHandle(
     const nodeTo = pos + node.nodeSize
     const handleRect = handle.getBoundingClientRect()
 
-    // 移除其他 handle 的 active 类（确保只有一个激活）
+    // Remove active class from other handles
     view.dom.querySelectorAll('.drag-handle.active').forEach((el: Element) => {
       el.classList.remove('active')
     })
 
-    // 添加 active 类
+    // Add active class
     handle.classList.add('active')
 
-    // 触发回调，传递位置和节点信息
+    // Trigger callback with position and node info
     if (onHandleClick) {
       onHandleClick({
         position: { x: handleRect.right + 10, y: handleRect.top },
@@ -159,7 +159,7 @@ function createDragHandle(
 }
 
 // ============================================================================
-// 扩展定义
+// Extension definition
 // ============================================================================
 
 export const DragHandleWithMenuExtension = Extension.create<DragHandleWithMenuOptions>({
@@ -190,7 +190,7 @@ export const DragHandleWithMenuExtension = Extension.create<DragHandleWithMenuOp
                 return true
               }
 
-              // 将手柄插入到块级节点内部（pos + 1），以便 CSS 能在该块 hover 时显示
+              // Insert handle inside block node (pos + 1) for CSS hover display
               decorations.push(
                 Decoration.widget(
                   pos + 1,
@@ -198,8 +198,8 @@ export const DragHandleWithMenuExtension = Extension.create<DragHandleWithMenuOp
                   {
                     side: -1,
                     stopEvent: (e) => {
-                      // 让 ProseMirror 忽略手柄上的 mousedown 和 click 事件
-                      // 确保 DOM 事件能正常被 handle 及其子元素捕获
+                      // Make ProseMirror ignore mousedown and click events on handle
+                      // Ensure DOM events are captured by handle and child elements
                       return e.type === 'mousedown' || e.type === 'click'
                     },
                   }

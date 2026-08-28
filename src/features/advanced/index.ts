@@ -1,6 +1,6 @@
 /**
- * Advanced Components - 高级版组件统一导出
- * @description 高级版功能模块的统一导出入口
+ * Advanced Components - Advanced Components Unified Exports
+ * @description Unified export entry for advanced feature modules
  */
 
 // Undo/Redo

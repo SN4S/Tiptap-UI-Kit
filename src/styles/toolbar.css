@@ -1,6 +1,6 @@
-/* TiptapPro 主工具栏样式 */
+/* TiptapPro Main Toolbar Styles */
 
-/* 主工具栏（固定在顶部，不随内容滚动） */
+/* Main toolbar (fixed at top, does not scroll with content) */
 .word-toolbar {
   flex-shrink: 0;
   z-index: 10;
@@ -8,7 +8,7 @@
   border-bottom: 1px solid #d0d0d0;
 }
 
-/* 深色模式 */
+/* Dark mode */
 .dark .word-toolbar,
 [data-theme="dark"] .word-toolbar {
   background: #1f1f1f;

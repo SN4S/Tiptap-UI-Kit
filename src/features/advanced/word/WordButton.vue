@@ -8,7 +8,7 @@
     />
   </ToolbarGroup>
 
-  <!-- 导入 Word 文件（拖拽上传） -->
+  <!-- Import Word file (drag and drop upload) -->
   <a-modal v-model:open="importModalOpen" :title="t('editor.importWord')" :footer="null">
     <a-upload-dragger
       :show-upload-list="false"
@@ -27,7 +27,7 @@
     </div>
   </a-modal>
 
-  <!-- 导出文件名输入框 -->
+  <!-- Export filename input -->
   <a-modal
     v-model:open="exportModalOpen"
     :title="t('editor.exportWord')"
@@ -48,8 +48,8 @@
 
 <script setup lang="ts">
 /**
- * WordButton - Word 导入/导出按钮组件
- * @description 支持 .docx 文件的导入和导出
+ * WordButton - Word import/export button component
+ * @description Supports importing and exporting .docx files
  */
 import { computed, ref } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -68,14 +68,14 @@ interface Props {
 const props = defineProps<Props>()
 const editor = computed(() => props.editor ?? null)
 
-// ===== 状态 =====
+// ===== State =====
 const importModalOpen = ref(false)
 const exportModalOpen = ref(false)
 const exportFilename = ref('document')
 const importing = ref(false)
 const exporting = ref(false)
 
-// ===== 菜单项 =====
+// ===== Menu Items =====
 const menuItems = computed<MenuItemConfig[]>(() => [
   {
     key: 'import-word',
@@ -97,7 +97,7 @@ const menuItems = computed<MenuItemConfig[]>(() => [
 ])
 
 /**
- * 处理 Word 文件导入
+ * Handle Word file import
  */
 async function handleImport(options: any) {
   const { file, onSuccess, onError } = options || {}
@@ -118,7 +118,7 @@ async function handleImport(options: any) {
 }
 
 /**
- * 执行 Word 导出
+ * Execute Word export
  */
 async function doExport() {
   const e = editor.value

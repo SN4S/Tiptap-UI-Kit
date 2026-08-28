@@ -1,18 +1,18 @@
-# Font - 字体功能模块
+# Font - Font Feature Module
 
-字体功能模块提供了在编辑器中设置字体、字号和行高的能力。
+The font feature module provides capabilities for setting font family, font size, and line height in the editor.
 
-## 功能特性
+## Features
 
-- ✅ 字体选择器：支持选择字体系列
-- ✅ 字号选择器：支持选择字号大小
-- ✅ 行高扩展：支持设置段落和标题的行高
-- ✅ 字号扩展：支持设置文本字号
-- ✅ 自动状态同步：自动同步编辑器中的字体和字号状态
+- ✅ Font family selector: supports selecting font families
+- ✅ Font size selector: supports selecting font sizes
+- ✅ Line height extension: supports setting paragraph and heading line height
+- ✅ Font size extension: supports setting text font sizes
+- ✅ Automatic state synchronization: automatically syncs font and size states in the editor
 
-## 使用方法
+## Usage
 
-### 基础用法
+### Basic Usage
 
 ```vue
 <template>
@@ -30,7 +30,7 @@ const editor = ref<Editor | null>(null)
 </script>
 ```
 
-### 在工具栏中使用
+### Usage in Toolbar
 
 ```vue
 <template>
@@ -43,9 +43,9 @@ const editor = ref<Editor | null>(null)
 </template>
 ```
 
-## 扩展使用
+## Extension Usage
 
-### 在编辑器配置中使用
+### Usage in Editor Configuration
 
 ```typescript
 import { FontSize, LineHeight } from '#/components/tiptapPro-tenant/advanced/font'
@@ -53,7 +53,7 @@ import { FontFamily } from '@tiptap/extension-font-family'
 
 const editor = new Editor({
   extensions: [
-    // ... 其他扩展
+    // ... other extensions
     FontFamily,
     FontSize,
     LineHeight,
@@ -61,7 +61,7 @@ const editor = new Editor({
 })
 ```
 
-## 常量使用
+## Constant Usage
 
 ```typescript
 import {
@@ -71,17 +71,17 @@ import {
   DEFAULT_VALUES,
 } from '#/components/tiptapPro-tenant/advanced/font'
 
-// 获取所有字体选项（首项为空值 = 不指定字体，跟随主题默认）
+// Get all font family options (empty = follow theme default)
 console.log(FONT_FAMILIES) // [{ label: 'Default', value: '' }, { label: 'Arial', value: 'Arial' }, ...]
 
-// 获取所有字号选项
+// Get all font size options
 console.log(FONT_SIZES) // [{ label: '12', value: '12px' }, ...]
 
-// 获取默认值（fontFamily 为空字符串 = 跟随主题默认，不写入 style）
+// Get default values (empty = follow theme default)
 console.log(DEFAULT_VALUES) // { fontFamily: '', fontSize: '16px', lineHeight: '1.5', ... }
 ```
 
-> **注意**：常量定义已统一迁移到 `shared/configs/editorConstants.ts`，此处为重新导出。
+> **Note**: Constant definitions migrated to `shared/configs/editorConstants.ts`, re-exported here.
 
 ## API
 
@@ -89,52 +89,52 @@ console.log(DEFAULT_VALUES) // { fontFamily: '', fontSize: '16px', lineHeight: '
 
 #### Props
 
-| 属性 | 类型 | 默认值 | 说明 |
+| Property | Type | Default | Description |
 |------|------|--------|------|
-| editor | `Editor \| null \| undefined` | - | Tiptap 编辑器实例 |
+| editor | `Editor \| null \| undefined` | - | Tiptap editor instance |
 
-#### 功能
+#### Features
 
-- 点击下拉菜单选择字体
-- 如果当前光标在文本中，会应用到选中文本
-- 如果当前光标不在文本中，会应用到整个段落
-- 自动同步编辑器中的字体状态
+- Click dropdown menu to select font family
+- If cursor is in text, applies to selected text
+- If cursor is not in text, applies to paragraph
+- Auto-syncs font family state in editor
 
 ### FontSizeSelect
 
 #### Props
 
-| 属性 | 类型 | 默认值 | 说明 |
+| Property | Type | Default | Description |
 |------|------|--------|------|
-| editor | `Editor \| null \| undefined` | - | Tiptap 编辑器实例 |
+| editor | `Editor \| null \| undefined` | - | Tiptap editor instance |
 
-#### 功能
+#### Features
 
-- 点击下拉菜单选择字号
-- 如果当前光标在文本中，会应用到选中文本
-- 如果当前光标不在文本中，会应用到整个段落
-- 自动同步编辑器中的字号状态
+- Click dropdown menu to select font size
+- If cursor is in text, applies to selected text
+- If cursor is not in text, applies to paragraph
+- Automatically syncs font size state in editor
 
-## 文件结构
+## File Structure
 
 ```
 font/
-├── FontFamilySelect.vue    # 字体选择器组件
-├── FontSizeSelect.vue      # 字号选择器组件
-├── index.ts                # 统一导出（扩展和常量从 shared 重新导出）
-└── README.md               # 说明文档
+├── FontFamilySelect.vue    # Font family selector component
+├── FontSizeSelect.vue      # Font size selector component
+├── index.ts                # Unified exports (extensions and constants re-exported from shared)
+└── README.md               # Documentation
 ```
 
-> **注意**：
-> - 扩展定义位于 `shared/extensions/fontSize.ts` 和 `shared/extensions/lineHeight.ts`
-> - 常量定义位于 `shared/configs/editorConstants.ts`
-> - 本模块通过 `index.ts` 统一重新导出，方便使用
+> **Note**:
+> - Extension definitions located in `shared/extensions/fontSize.ts` and `shared/extensions/lineHeight.ts`
+> - Constant definitions located in `shared/configs/editorConstants.ts`
+> - Re-exported via `index.ts` for convenience
 
-## 注意事项
+## Notes
 
-1. 使用字体功能需要确保编辑器已配置 `FontFamily` 扩展（来自 `@tiptap/extension-font-family`）
-2. 字号功能需要 `FontSize` 扩展和 `TextStyle` 扩展
-3. 行高功能需要 `LineHeight` 扩展
-4. 字体和字号会自动同步编辑器状态
-5. 多语言支持已集成到 `locales` 模块中
+1. Ensure editor is configured with `FontFamily` extension
+2. Font size feature requires `FontSize` and `TextStyle` extensions
+3. Line height feature requires `LineHeight` extension
+4. Font family and font size sync automatically with editor state
+5. Multi-language support is integrated into `locales` module
 

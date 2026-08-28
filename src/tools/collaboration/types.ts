@@ -1,61 +1,61 @@
 /**
- * Collaboration Types - 协作编辑类型定义
- * @description 协作编辑相关的类型定义
+ * Collaboration Types - Collaboration Type Definitions
+ * @description Collaboration type definitions
  */
 
 /**
- * 协作用户信息
+ * Collaboration user info
  */
 export interface CollaboratorInfo {
-  /** 用户ID */
+  /** User ID */
   id: string | number
-  /** 用户名称 */
+  /** User name */
   name: string
-  /** 用户颜色（用于光标和选区高亮） */
+  /** User color (for cursor and selection highlight) */
   color: string
 }
 
 /**
- * 用户信息（用于设置 awareness）
+ * User info (for setting awareness)
  */
 export interface UserInfo {
-  /** 用户ID */
+  /** User ID */
   id: string | number
-  /** 用户名称 */
+  /** User name */
   name: string
 }
 
 /**
- * 协作编辑初始化选项
+ * Collaboration initialization options
  */
 export interface CollaborationInitOptions {
-  /** 文档ID */
+  /** Document ID */
   documentId: string
-  /** 是否为只读模式 */
+  /** Whether read-only mode */
   readonly?: boolean
-  /** 初始内容（用于新文档或单人编辑场景） */
+  /** Initial content (used for new documents or single-user editing) */
   initialContent?: string | object
-  /** 编辑器实例（用于设置初始内容） */
+  /** Editor instance (used to set initial content) */
   editor?: any
-  /** 用户信息获取函数 */
+  /** User info getter function */
   getUserInfo?: () => UserInfo
-  /** 协作状态变化回调 */
+  /** Collaboration status change callback */
   onCollaboratorsChange?: (count: number) => void
-  /** 协作用户列表变化回调 */
+  /** Collaboration user list change callback */
   onCollaboratorsListChange?: (users: CollaboratorInfo[]) => void
 }
 
 /**
- * 协作编辑实例
+ * Collaboration editing instance
  */
 export interface CollaborationInstance {
-  /** Yjs 文档实例 */
+  /** Yjs document instance */
   doc: any
-  /** WebSocket Provider 实例 */
+  /** WebSocket Provider instance */
   provider: any
-  /** 设置编辑器实例（用于在编辑器创建后更新引用） */
+  /** Set editor instance (used to update reference after editor creation) */
   setEditor?: (editor: any) => void
-  /** 销毁函数 */
+  /** Destroy function */
   destroy: () => void
 }
 

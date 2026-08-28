@@ -1,11 +1,11 @@
 /**
  * Table Feature Module
- * @description 表格功能模块统一导出
- * @deprecated TableToolbar 已迁移到 tools/table-toolbar，请使用新路径导入
+ * @description Table feature module unified exports
+ * @deprecated TableToolbar has been migrated to tools/table-toolbar, please import from new path
  */
-// TableButton 从本地导出
+// Export TableButton locally
 export { default as TableButton } from './TableButton.vue'
-// TableToolbar 从新位置重新导出，保持向后兼容
+// Re-export TableToolbar from new location for backward compatibility
 export { TableToolbar } from '@/tools/table-toolbar'
 export { TableCellWithBackground } from './TableCellWithBackground'
 

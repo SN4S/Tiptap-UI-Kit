@@ -1,6 +1,6 @@
 /**
- * Video Extension - 视频节点扩展
- * @description 支持在编辑器中插入和播放视频
+ * Video Extension - Video node extension
+ * @description Supports inserting and playing videos in the editor
  */
 
 import { Node, mergeAttributes } from '@tiptap/core'
@@ -15,7 +15,7 @@ declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     video: {
       /**
-       * 插入视频
+       * Insert video
        */
       setVideo: (options: { src: string; width?: number; height?: number }) => ReturnType
     }

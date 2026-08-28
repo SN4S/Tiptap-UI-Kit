@@ -1,8 +1,8 @@
 /**
- * Format Clear - 格式清除功能模块
- * @description 提供清除格式功能
+ * Format Clear - Format Clear Feature Module
+ * @description Provides format clear functionality
  */
 
-// 组件导出
+// Component exports
 export { default as ClearFormatButton } from './ClearFormatButton.vue'
 

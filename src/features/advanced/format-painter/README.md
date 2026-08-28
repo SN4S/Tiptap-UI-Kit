@@ -1,21 +1,21 @@
-# Format Painter - 格式刷功能模块
+# Format Painter - Format Painter Feature Module
 
-格式刷功能模块提供了在编辑器中进行格式采样和应用的能力，类似于 Microsoft Word 中的格式刷功能。
+The format painter feature module provides format sampling and application capabilities in the editor, similar to format painter in Microsoft Word.
 
-## 功能特性
+## Features
 
-- ✅ **格式采样**：采样选中文本的所有格式信息，包括文本样式、颜色、字体、对齐等
-- ✅ **单次应用模式**：单击格式刷按钮，采样格式后可以应用一次，应用后自动退出
-- ✅ **连续应用模式**：双击格式刷按钮，采样格式后可以连续应用到多个目标文本
-- ✅ **自动应用**：格式刷激活后，选中目标文本时会自动应用格式
-- ✅ **键盘退出**：按 `ESC` 键可以退出格式刷模式
-- ✅ **状态检测**：自动检测格式刷是否激活，按钮状态实时更新
-- ✅ **协作模式检测**：自动检测协作编辑模式，在协作模式下禁用格式刷功能
-- ✅ **本地存储**：格式信息会保存到浏览器本地存储，刷新页面后仍可使用
+- ✅ **Format Sampling**: Samples formatting of selected text including text styles, colors, fonts, alignment, etc.
+- ✅ **Single Application Mode**: Click format painter button to sample format and apply once, auto-exiting after application
+- ✅ **Continuous Mode**: Double click format painter button to sample format and apply continuously to multiple targets
+- ✅ **Auto Application**: When format painter is active, selecting target text automatically applies formatting
+- ✅ **Keyboard Exit**: Press `ESC` key to exit format painter mode
+- ✅ **State Detection**: Automatically detects format painter active state and updates button status
+- ✅ **Collaboration Detection**: Automatically detects collaboration mode and disables format painter
+- ✅ **Local Storage**: Format info is saved to local storage for persistence across refresh
 
-## 使用方法
+## Usage
 
-### 基础用法
+### Basic Usage
 
 ```vue
 <template>
@@ -32,7 +32,7 @@ const editor = ref<Editor | null>(null)
 </script>
 ```
 
-### 在工具栏中使用
+### Usage in Toolbar
 
 ```vue
 <template>
@@ -44,7 +44,7 @@ const editor = ref<Editor | null>(null)
 </template>
 ```
 
-### 在编辑器中使用扩展
+### Extension Usage in Editor
 
 ```vue
 <template>
@@ -60,7 +60,7 @@ const editor = useEditor({
   extensions: [
     StarterKit,
     FormatPainter,
-    // ... 其他扩展
+    // ... other extensions
   ],
 })
 </script>
@@ -72,42 +72,42 @@ const editor = useEditor({
 
 #### Props
 
-| 属性 | 类型 | 默认值 | 说明 |
+| Property | Type | Default | Description |
 |------|------|--------|------|
-| editor | `Editor \| null \| undefined` | - | Tiptap 编辑器实例 |
+| editor | `Editor \| null \| undefined` | - | Tiptap editor instance |
 
-#### 功能
+#### Features
 
-- **单击按钮（单次模式）**：
-  - 如果格式刷未激活：采样当前选中文本的格式，激活格式刷（单次模式）
-  - 如果格式刷已激活：取消格式刷状态
-- **双击按钮（连续模式）**：
-  - 如果格式刷未激活：采样当前选中文本的格式，激活格式刷（连续模式）
-  - 如果格式刷已激活：取消格式刷状态
-- **自动状态更新**：按钮的激活状态会根据格式刷的激活状态自动更新
-- **协作模式检测**：在协作编辑模式下，按钮会被禁用并显示提示信息
+- **Single Click Button (Single Mode)**:
+  - If format painter inactive: sample selected text format, activate single mode
+  - If format painter active: cancel format painter state
+- **Double Click Button (Continuous Mode)**:
+  - If format painter inactive: sample selected text format, activate continuous mode
+  - If format painter active: cancel format painter state
+- **Automatic State Updates**: Button active state updates automatically
+- **Collaboration Detection**: Disabled with notification in collaboration mode
 
 ### FormatPainter Extension
 
-#### 命令
+#### Commands
 
-| 命令 | 说明 |
+| Commands | Description |
 |------|------|
-| `startFormatPainting(mode?: 1 \| 2)` | 开启格式刷并采样当前选区样式，mode=1 为单次模式（默认），mode=2 为连续模式 |
-| `startContinuousFormatPainting()` | 开启格式刷连续应用模式 |
-| `applyFormat()` | 将采样到的样式应用到当前选区 |
-| `cancelFormatPainting()` | 取消格式刷状态并清除缓存 |
-| `toggleContinuousMode()` | 切换连续应用模式 |
+| `startFormatPainting(mode?: 1 \| 2)` | Enable format painter and sample selection style (mode=1 single, mode=2 continuous) |
+| `startContinuousFormatPainting()` | Enable continuous format painter mode |
+| `applyFormat()` | Apply sampled style to current selection |
+| `cancelFormatPainting()` | Cancel format painter state and clear cache |
+| `toggleContinuousMode()` | Toggle continuous mode |
 
 #### Storage
 
 ```typescript
 interface FormatPainterStorage {
-  /** 格式刷是否激活 */
+  /** Whether format painter is active */
   isActive: boolean
-  /** 是否为连续应用模式 */
+  /** Whether continuous application mode */
   isContinuous: boolean
-  /** 采样的格式 */
+  /** Sampled format */
   formats: {
     bold?: boolean
     italic?: boolean
@@ -125,74 +125,74 @@ interface FormatPainterStorage {
 }
 ```
 
-## 使用流程
+## Usage Flow
 
-### 单次应用模式
+### Single Application Mode
 
-1. 选中要采样的文本（包含目标格式）
-2. 单击格式刷按钮
-3. 选中要应用格式的目标文本
-4. 格式会自动应用到目标文本，格式刷自动退出
+1. Select text to sample (containing target format)
+2. Click format painter button
+3. Select target text to apply format
+4. Format applies automatically to target text, format painter auto-exits
 
-### 连续应用模式
+### Continuous Mode
 
-1. 选中要采样的文本（包含目标格式）
-2. 双击格式刷按钮
-3. 连续选中多个要应用格式的目标文本
-4. 每次选中文本时，格式会自动应用
-5. 按 `ESC` 键或再次单击格式刷按钮退出格式刷模式
+1. Select text to sample (containing target format)
+2. Double click format painter button
+3. Select multiple target texts sequentially
+4. Format automatically applies on each selection
+5. Press `ESC` key or click format painter button again to exit
 
-## 支持的格式
+## Supported Formats
 
-格式刷支持采样和应用以下格式：
+Format painter supports sampling and applying the following formats:
 
-- **文本样式**：粗体、斜体、下划线、删除线、上标、下标
-- **颜色**：文本颜色、背景高亮颜色
-- **字体**：字体家族、字号
-- **段落格式**：文本对齐（左对齐、居中、右对齐、两端对齐）、行距
+- **Text Styles**: Bold, italic, underline, strike, superscript, subscript
+- **Colors**: Text color, background highlight color
+- **Typography**: Font family, font size
+- **Paragraph Format**: Text alignment (left, center, right, justify), line height
 
-## 键盘快捷键
+## Keyboard Shortcuts
 
-- `ESC`：退出格式刷模式
+- `ESC`: Exit format painter mode
 
-## 注意事项
+## Notes
 
-1. 格式刷功能依赖于 Tiptap 的多个扩展，确保编辑器已正确配置相关扩展：
-   - `Bold`、`Italic`、`Underline`、`Strike`（文本样式）
-   - `Subscript`、`Superscript`（上下标）
-   - `TextStyle`、`Color`、`Highlight`（颜色）
-   - `FontFamily`、`FontSize`（字体）
-   - `TextAlign`、`LineHeight`（段落格式）
+1. Format painter relies on multiple Tiptap extensions; ensure proper configuration:
+   - `Bold`, `Italic`, `Underline`, `Strike` (text styles)
+   - `Subscript`, `Superscript` (subscript/superscript)
+   - `TextStyle`, `Color`, `Highlight` (colors)
+   - `FontFamily`, `FontSize` (typography)
+   - `TextAlign`, `LineHeight` (paragraph formatting)
 
-2. 在协作编辑模式下，格式刷功能会被自动禁用，按钮会显示禁用状态
+2. Format painter is automatically disabled in collaboration mode
 
-3. 格式信息会保存到浏览器本地存储（localStorage），键名为 `tiptap-format-painter-formats`
+3. Format info is saved in browser localStorage under key `tiptap-format-painter-formats`
 
-4. 格式刷激活时，编辑器光标会显示为格式刷样式（通过 CSS 类 `cursor-format-painter`）
+4. When active, editor cursor displays format painter style via CSS class `cursor-format-painter`
 
-5. 多语言支持已集成到 `locales` 模块中，包括：
-   - `editor.formatPainter` - 格式刷
-   - `editor.pleaseSelectTextToSample` - 请先选择要采样的文本
-   - `editor.sampleSuccessSingle` - 格式采样成功（单次模式）
-   - `editor.sampleSuccessContinuous` - 格式采样成功（连续模式）
-   - `editor.formatPainterExited` - 已退出格式刷模式
-   - `editor.collaborationNoFormatPainter` - 协作模式下不支持格式刷功能
+5. Multi-language support is integrated into `locales` module, including:
+   - `editor.formatPainter` - Format Painter
+   - `editor.pleaseSelectTextToSample` - Please select text to sample first
+   - `editor.sampleSuccessSingle` - Format sampled successfully (single mode)
+   - `editor.sampleSuccessContinuous` - Format sampled successfully (continuous mode)
+   - `editor.formatPainterExited` - Exited format painter mode
+   - `editor.collaborationNoFormatPainter` - Format painter is unsupported in collaboration mode
 
-## 文件结构
+## File Structure
 
 ```
 format-painter/
-├── FormatPainterButton.vue  # 格式刷按钮组件
-├── formatPainter.ts          # 格式刷扩展实现
-├── index.ts                  # 统一导出
-└── README.md                 # 说明文档
+├── FormatPainterButton.vue  # Format painter button component
+├── formatPainter.ts          # Format painter extension implementation
+├── index.ts                  # Unified exports
+└── README.md                 # Documentation
 ```
 
-## 技术实现
+## Technical Implementation
 
-- 使用 Tiptap Extension API 实现格式采样和应用逻辑
-- 使用 ProseMirror Plugin 监听键盘和鼠标事件
-- 使用响应式 ref 和编辑器事件订阅实现状态同步
-- 使用浏览器 localStorage 实现格式信息的持久化存储
-- 通过 CSS 类名实现格式刷激活时的光标样式变化
+- Uses Tiptap Extension API to implement format sampling and application logic
+- Uses ProseMirror Plugin to listen to keyboard and mouse events
+- Uses reactive refs and editor event subscriptions for state sync
+- Uses browser localStorage for persistent format storage
+- Uses CSS class names for cursor style changes when active
 

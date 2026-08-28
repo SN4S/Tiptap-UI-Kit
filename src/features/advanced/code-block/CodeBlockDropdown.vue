@@ -11,8 +11,8 @@
 
 <script setup lang="ts">
 /**
- * CodeBlockDropdown - 代码块按钮组件
- * @description 点击直接插入代码块，使用默认语言
+ * CodeBlockDropdown - Code block button component
+ * @description Click to directly insert code block using default language
  */
 import { computed } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -30,42 +30,42 @@ interface Props {
 const props = defineProps<Props>()
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const runCommand = createCommandRunner(editor)
 const { isActive } = createStateCheckers(editor)
 
-// ===== 检查是否激活代码块 =====
+// ===== Check if code block active =====
 const isCodeBlockActive = computed(() => {
   return isActive('codeBlock')
 })
 
 /**
- * 插入代码块（使用默认语言）
- * 处理多行选择：将所有选中的文本合并到一个代码块中
+ * Insert code block (using default language)
+ * Handle multi-line selection: merge all selected text into one code block
  */
 function insertCodeBlock() {
   const e = editor.value
   if (!e) return
 
-  // 如果当前已经是代码块，则退出代码块模式
+  // If already inside a code block, exit code block mode
   if (isCodeBlockActive.value) {
     runCommand((chain) => chain.setParagraph())()
     return
   }
 
-  // 获取选区
+  // Get selection
   const { from, to, empty } = e.state.selection
 
-  // 如果没有选中任何内容，直接插入空代码块
+  // If no selection, insert empty code block
   if (empty) {
     runCommand((chain) => chain.setCodeBlock({ language: 'javascript' }))()
     return
   }
 
-  // 获取选中的文本内容（保留换行）
+  // Get selected text content (preserving newlines)
   const selectedText = e.state.doc.textBetween(from, to, '\n')
 
-  // 删除选中内容并插入代码块
+  // Delete selection and insert code block
   e.chain()
     .focus()
     .deleteSelection()

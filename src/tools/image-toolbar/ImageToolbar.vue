@@ -51,7 +51,7 @@
       <img
         v-if="currentImageSrc"
         :src="currentImageSrc"
-        alt="预览"
+        alt="Preview"
         style="width: 100%; height: auto;"
       />
     </a-modal>

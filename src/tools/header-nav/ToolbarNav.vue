@@ -1,35 +1,35 @@
 <template>
   <div v-if="enabled" class="editor-toolbar-container">
     <div class="editor-toolbar">
-      <!-- 左侧：基础工具 -->
+      <!-- Left: Basic tools -->
       <div class="toolbar-left">
-        <!-- 第一组：撤销/重做 -->
+        <!-- Group 1: Undo/Redo -->
         <div v-if="config.undoRedo" class="tool-group">
           <UndoRedoButton :editor="editor" :disabled="config.undoRedoDisabled" />
         </div>
 
-        <!-- 第二组：格式刷 -->
+        <!-- Group 2: Format Painter -->
         <div v-if="config.formatPainter" class="tool-group">
           <FormatPainterButton :editor="editor" :disabled="config.formatPainterDisabled" />
         </div>
 
-        <!-- 第三组：格式清除 -->
+        <!-- Group 3: Clear Format -->
         <div v-if="config.clearFormat" class="tool-group">
           <ClearFormatButton :editor="editor" />
         </div>
 
-        <!-- 第四组：字体工具 -->
+        <!-- Group 4: Font tools -->
         <div v-if="config.font" class="tool-group">
           <FontFamilySelect :editor="editor" />
           <FontSizeSelect :editor="editor" />
         </div>
 
-        <!-- 第五组：文本格式（粗体、斜体、下划线、删除线、行内代码） -->
+        <!-- Group 5: Text format (bold, italic, underline, strike, inline code) -->
         <div v-if="config.textFormat || config.codeBlock" class="tool-group">
           <TextFormatButtons :editor="editor" :show-code="config.codeBlock" />
         </div>
 
-        <!-- 第六组：颜色选择（文本颜色、背景颜色） -->
+        <!-- Group 6: Color picker (text color, background color) -->
         <div v-if="config.colorPicker" class="tool-group">
           <ToolbarGroup>
             <ColorPicker
@@ -49,41 +49,41 @@
           </ToolbarGroup>
         </div>
 
-        <!-- 第七组：标题和列表工具 -->
+        <!-- Group 7: Heading & list tools -->
         <div v-if="config.heading || config.list" class="tool-group">
           <HeadingDropdown v-if="config.heading" :editor="editor" />
           <ListTools v-if="config.list" :editor="editor" :show-task-list="true" />
         </div>
 
-        <!-- 第八组：对齐工具 -->
+        <!-- Group 8: Alignment tools -->
         <div v-if="config.align" class="tool-group">
           <AlignDropdown :editor="editor" />
         </div>
 
-        <!-- 第九组：链接、表格、图片 -->
+        <!-- Group 9: Link, Table, Image -->
         <div v-if="config.link || config.table || config.image" class="tool-group">
           <LinkButton v-if="config.link" :editor="editor" />
           <TableButton v-if="config.table" :editor="editor" />
           <ImageUpload v-if="config.image" :editor="editor" />
         </div>
 
-        <!-- 第十组：上标下标工具 -->
+        <!-- Group 10: Subscript/Superscript tools -->
         <div v-if="config.subscriptSuperscript" class="tool-group">
           <SubscriptSuperscriptButton :editor="editor" />
         </div>
 
-        <!-- 第十一组：Word 导入/导出 -->
+        <!-- Group 11: Word import/export -->
         <div v-if="config.word" class="tool-group">
           <WordButton :editor="editor" />
         </div>
 
-        <!-- 第十二组：模板和图库 -->
+        <!-- Group 12: Templates & Gallery -->
         <div v-if="config.template || config.gallery" class="tool-group">
           <TemplateButton v-if="config.template" :editor="editor" />
           <GalleryButton v-if="config.gallery" :editor="editor" />
         </div>
 
-        <!-- 第十三组：AI工具 -->
+        <!-- Group 13: AI tools -->
         <div v-if="config.ai && editor" class="tool-group">
           <AiMenuButton
             :editor="editor"
@@ -93,11 +93,11 @@
           />
         </div>
 
-        <!-- 更多工具可以通过插槽扩展 -->
+        <!-- More tools can be extended via slots -->
         <slot name="extra" />
       </div>
 
-      <!-- 右侧：额外工具（如协作开关） -->
+      <!-- Right: Extra tools (e.g. Collaboration toggle) -->
       <div v-if="$slots.right" class="toolbar-right">
         <slot name="right" />
       </div>
@@ -107,12 +107,12 @@
 
 <script setup lang="ts">
 /**
- * ToolbarNav - 公共工具栏组件
- * @description 可配置的工具栏组件，支持通过配置控制显示哪些工具
+ * ToolbarNav - Public Toolbar Navigation component
+ * @description Configurable toolbar component supporting toggle of individual tools
  * @example
  * ```vue
  * <ToolbarNav :editor="editor" :config="{ textFormat: true, colorPicker: true }" />
- * <ToolbarNav :editor="editor" :enabled="false" /> // 关闭工具栏
+ * <ToolbarNav :editor="editor" :enabled="false" /> // Disable toolbar
  * ```
  */
 import { computed, ref, watch } from 'vue'
@@ -150,11 +150,11 @@ import {
 
 // ===== Props =====
 interface Props {
-  /** 编辑器实例 */
+  /** Editor instance */
   editor: Editor | null | undefined
-  /** 工具栏配置，控制显示哪些工具 */
+  /** Toolbar config controlling tool visibility */
   config?: ToolbarToolsConfig
-  /** 是否启用工具栏，默认为 true */
+  /** Whether toolbar is enabled, default true */
   enabled?: boolean
 }
 
@@ -163,10 +163,10 @@ const props = withDefaults(defineProps<Props>(), {
   enabled: true,
 })
 
-// 事务响应式 editor：颜色等状态跟随光标/内容变化重新求值
+// Transaction reactive editor: colors re-evaluate on cursor change
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 合并配置 =====
+// ===== Merge configurations =====
 const config = computed(() => {
   return {
     ...DEFAULT_TOOLBAR_CONFIG,
@@ -174,13 +174,13 @@ const config = computed(() => {
   }
 })
 
-// ===== 响应式状态 =====
+// ===== Reactive state =====
 const currentTextColor = ref<string>('#000000')
 const currentBgColor = ref<string>('#ffffff')
 
-// ===== 辅助函数 =====
+// ===== Helper functions =====
 /**
- * 标准化颜色值（确保格式统一）
+ * Standardize color values
  */
 function normalizeColor(color: string | undefined): string {
   if (!color) return '#000000'
@@ -192,11 +192,11 @@ function normalizeColor(color: string | undefined): string {
 }
 
 /**
- * 命令执行器
+ * Command runner
  */
 const runCommand = createCommandRunner(editor)
 
-// ===== 颜色应用函数 =====
+// ===== Color application functions =====
 const setTextColor = (color: string) => {
   currentTextColor.value = color
   runCommand((chain) => chain.setColor(color))()
@@ -207,7 +207,7 @@ const setHighlight = (color: string) => {
   runCommand((chain) => chain.setHighlight({ color }))()
 }
 
-// 监听编辑器状态，更新当前颜色
+// Listen to editor state to update current colors
 watch(
   () => editor.value?.getAttributes('textStyle'),
   (attrs) => {
@@ -234,10 +234,10 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-// Dark 模式选择器变量（用于统一管理暗色主题样式）
+// Dark mode selector variables (for managing dark theme styles)
 $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *) &';
 
-/* ===== 工具栏容器 ===== */
+/* ===== Toolbar container ===== */
 .editor-toolbar-container {
   position: sticky;
   top: 0;
@@ -252,7 +252,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* ===== 工具栏主体 ===== */
+/* ===== Toolbar main ===== */
 .editor-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -263,7 +263,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   padding: 6px 12px;
 }
 
-/* ===== 工具栏左侧区域 ===== */
+/* ===== Toolbar left area ===== */
 .toolbar-left {
   display: flex;
   flex-wrap: wrap;
@@ -273,7 +273,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   flex: 1;
 }
 
-/* ===== 工具栏右侧区域 ===== */
+/* ===== Toolbar right area ===== */
 .toolbar-right {
   display: flex;
   align-items: center;
@@ -282,7 +282,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   padding-left: 12px;
 }
 
-/* ===== 工具组 ===== */
+/* ===== Tool group ===== */
 .tool-group {
   display: flex;
   gap: 2px;

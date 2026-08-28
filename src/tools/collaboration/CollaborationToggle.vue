@@ -6,7 +6,7 @@
   >
     <template #content>
       <div class="all-collaborators-popover">
-        <div class="popover-title">在线用户 ({{ collaboratorsList.length }})</div>
+        <div class="popover-title">Online Users ({{ collaboratorsList.length }})</div>
         <div class="popover-users">
           <div
             v-for="user in collaboratorsList"
@@ -25,10 +25,10 @@
       </div>
     </template>
     
-    <!-- 触发器：只显示人数和第一个用户头像 -->
+    <!-- Trigger: shows user count and first user avatar -->
     <div class="collaboration-toggle">
-      <span class="toggle-label">协作</span>
-      <span class="toggle-text enabled">已开启 ({{ collaboratorsList.length }})</span>
+      <span class="toggle-label">Collaboration</span>
+      <span class="toggle-text enabled">Enabled ({{ collaboratorsList.length }})</span>
       <div
         v-if="firstUser"
         class="avatar-item"
@@ -39,31 +39,31 @@
     </div>
   </a-popover>
   
-  <!-- 未开启协作或无用户时的显示 -->
+  <!-- Display when collaboration is disabled or no users -->
   <div v-else class="collaboration-toggle">
-    <span class="toggle-label">协作</span>
-    <span v-if="!enabled" class="toggle-text">已关闭</span>
-    <span v-else class="toggle-text enabled">已开启 (0)</span>
+    <span class="toggle-label">Collaboration</span>
+    <span v-if="!enabled" class="toggle-text">Disabled</span>
+    <span v-else class="toggle-text enabled">Enabled (0)</span>
   </div>
 </template>
 
 <script setup lang="ts">
 /**
- * CollaborationToggle - 协作编辑状态显示组件
- * @description 根据传入的 modelValue 控制协作功能的开启/关闭，默认关闭
+ * CollaborationToggle - Collaboration status display component
+ * @description Controls enabling/disabling collaboration based on modelValue, default disabled
  */
 import { computed } from 'vue'
 import { Popover as APopover } from 'ant-design-vue'
 import type { CollaboratorInfo } from './types'
 
 interface Props {
-  /** 是否启用协作功能（v-model 绑定，默认 false） */
+  /** Whether collaboration is enabled (v-model binding, default false) */
   modelValue?: boolean
-  /** 是否显示标签 */
+  /** Whether to show label */
   showLabel?: boolean
-  /** 在线用户数（已废弃，使用 collaboratorsList） */
+  /** Online user count (deprecated, use collaboratorsList) */
   collaboratorsCount?: number
-  /** 在线用户列表 */
+  /** Online user list */
   collaboratorsList?: CollaboratorInfo[]
 }
 
@@ -79,7 +79,7 @@ const emit = defineEmits<{
   'change': [value: boolean]
 }>()
 
-/** 是否启用（内部计算属性，基于 modelValue） */
+/** Whether enabled (internal computed property based on modelValue) */
 const enabled = computed({
   get: () => props.modelValue,
   set: (value: boolean) => {
@@ -88,20 +88,20 @@ const enabled = computed({
   },
 })
 
-/** 在线用户列表（直接使用 props，已有默认值） */
+/** Online user list (from props with default values) */
 const collaboratorsList = computed(() => props.collaboratorsList)
 
-/** 第一个用户（用于头像显示） */
+/** First user (for avatar display) */
 const firstUser = computed(() => collaboratorsList.value[0] || null)
 
 /**
- * 获取头像文本（用户名首字符或前两个字符）
- * @description 中文取前两个字符，英文取首字母大写
+ * Get avatar text (first character or initial of username)
+ * @description Takes first initial for avatar display
  */
 const getAvatarText = (name: string): string => {
   if (!name?.trim()) return '?'
   const trimmed = name.trim()
-  // 检测是否为中文（包括中文标点）
+  // Check if language/script requires initial extraction
   return /[\u4e00-\u9fa5]/.test(trimmed) ? trimmed.slice(0, 2) : trimmed.charAt(0).toUpperCase()
 }
 </script>
@@ -136,7 +136,7 @@ const getAvatarText = (name: string): string => {
   color: #52c41a;
 }
 
-/* 头像样式 */
+/* Avatar style */
 .avatar-item,
 .popover-avatar {
   border-radius: 50%;
@@ -156,7 +156,7 @@ const getAvatarText = (name: string): string => {
   font-size: 12px;
 }
 
-/* Popover 样式 */
+/* Popover style */
 .all-collaborators-popover {
   min-width: 180px;
 }

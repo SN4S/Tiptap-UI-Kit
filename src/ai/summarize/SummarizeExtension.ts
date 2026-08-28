@@ -63,7 +63,7 @@ function performSummarize(
   // Get full document context for system prompt
   const state = editor.state;
   const fullText = state.doc.textBetween(0, state.doc.content.size, ' ');
-  const sysPrompt = `以下係完整嘅文件內容:\n\n${fullText}`;
+  const sysPrompt = `Below is the full document content:\n\n${fullText}`;
 
   const callback = {
     onStart: () => {
@@ -91,7 +91,7 @@ function performSummarize(
       console.error('[Summarize] Error:', error);
       aiSuggestionManager.hide();
       notification.error({
-        message: '总结失败',
+        message: 'Summarize failed',
         description: error.message || t('messages.networkError'),
         duration: 3,
       });

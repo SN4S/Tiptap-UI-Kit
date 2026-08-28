@@ -1,42 +1,42 @@
-# Drag Handle Menu - 六个点功能
+# Drag Handle Menu - 6-Dot Feature
 
-## 功能说明
+## Feature Description
 
-拖拽手柄菜单（六个点功能）为编辑器中的块级元素提供快速操作菜单。当鼠标悬停在块级元素上时，会在左侧显示六个点图标，点击后弹出操作菜单。
+The drag handle menu (6-dot feature) provides quick action menus for block elements in the editor. Hovering over a block displays a 6-dot icon on the left, clicking pops up the action menu.
 
-## 主要特性
+## Key Features
 
-- **六个点显示**：在块级元素左侧显示可点击的六个点图标
-- **操作菜单**：点击六个点后显示包含多种编辑操作的菜单
-- **智能定位**：菜单自动调整位置，避免溢出屏幕
-- **丰富的操作**：
-  - 标题级别切换（H1-H3）
-  - 文本格式（粗体、斜体、下划线、删除线）
-  - 列表操作（有序列表、无序列表、任务列表）
-  - 对齐和缩进
-  - 颜色设置（文本颜色、高亮颜色）
-  - 编辑操作（剪切、复制、删除）
+- **6-Dot Display**: Displays clickable 6-dot icon on the left of block elements
+- **Action Menu**: Clicking 6 dots shows a menu with various editing operations
+- **Smart Positioning**: Menu adjusts position automatically to prevent overflowing screen
+- **Rich Operations**:
+  - Heading level switching (H1-H3)
+  - Text formatting (bold, italic, underline, strike)
+  - List operations (ordered, bullet, task list)
+  - Alignment and indentation
+  - Color settings (text color, highlight color)
+  - Edit actions (cut, copy, delete)
 
-## 文件结构
+## File Structure
 
 ```
 drag-handle-menu/
-├── DragHandleMenu.vue              # 菜单组件
-├── DragHandleWithMenuExtension.ts  # 六个点显示扩展
-├── dragHandleMenuConfig.ts         # 菜单配置
-├── index.ts                        # 统一导出
-└── README.md                       # 说明文档
+├── DragHandleMenu.vue              # Menu component
+├── DragHandleWithMenuExtension.ts  # 6-dot handle extension
+├── dragHandleMenuConfig.ts         # Menu configuration
+├── index.ts                        # Unified exports
+└── README.md                       # Documentation
 ```
 
-## 使用方法
+## Usage
 
-### 1. 导入扩展和组件
+### 1. Import Extension and Component
 
 ```typescript
 import { DragHandleWithMenuExtension, DragHandleMenu } from '@/components/tiptapPro-tenant/tools/drag-handle-menu'
 ```
 
-### 2. 在编辑器中使用扩展
+### 2. Extension Usage in Editor
 
 ```typescript
 import { useEditor } from '@tiptap/vue-3'
@@ -44,18 +44,18 @@ import { DragHandleWithMenuExtension } from '@/components/tiptapPro-tenant/tools
 
 const editor = useEditor({
   extensions: [
-    // ... 其他扩展
+    // ... other extensions
     DragHandleWithMenuExtension.configure({
       onHandleClick: (event) => {
-        // 处理六个点点击事件
-        // 可以通过 ref 调用 DragHandleMenu 的 handleDragHandleClick 方法
+        // Handle 6-dot click event
+        // Call DragHandleMenu handleDragHandleClick method via ref
       }
     })
   ]
 })
 ```
 
-### 3. 在模板中使用菜单组件
+### 3. Usage of Menu Component in Template
 
 ```vue
 <template>
@@ -76,7 +76,7 @@ import { DragHandleWithMenuExtension } from '@/components/tiptapPro-tenant/tools
 
 const dragHandleMenuRef = ref<InstanceType<typeof DragHandleMenu>>()
 
-// 在扩展配置中连接菜单
+// Connect menu in extension configuration
 const editor = useEditor({
   extensions: [
     DragHandleWithMenuExtension.configure({
@@ -89,9 +89,9 @@ const editor = useEditor({
 </script>
 ```
 
-## 配置选项
+## Configuration Options
 
-### DragHandleWithMenuExtension 配置
+### DragHandleWithMenuExtension Configuration
 
 ```typescript
 interface DragHandleWithMenuOptions {
@@ -99,44 +99,44 @@ interface DragHandleWithMenuOptions {
 }
 ```
 
-### DragHandleMenu 组件 Props
+### DragHandleMenu Component Props
 
 ```typescript
 interface Props {
   editor: Editor | null | undefined
-  readonly?: boolean                    // 是否只读，默认 false
-  positionStrategy?: 'auto' | 'right' | 'left'  // 菜单位置策略，默认 'auto'
+  readonly?: boolean                    // Whether read-only, default false
+  positionStrategy?: 'auto' | 'right' | 'left'  // Menu position strategy, default 'auto'
 }
 ```
 
-## 样式说明
+## Style Instructions
 
-样式文件位于 `shared/styles/drag-handle-with-menu.css`，包含：
+Style files located in `shared/styles/drag-handle-with-menu.css`, including:
 
-- 六个点图标样式
-- 菜单容器样式
-- 菜单项样式
-- 颜色选择器样式
-- 响应式设计
-- 暗黑模式支持
+- 6-dot icon style
+- Menu container style
+- Menu item style
+- Color picker style
+- Responsive design
+- Dark mode support
 
-## 注意事项
+## Notes
 
-1. **样式依赖**：确保已导入 `drag-handle-with-menu.css` 样式文件
-2. **国际化**：菜单文本使用 `t()` 函数进行国际化，确保已配置 locales
-3. **编辑器扩展**：某些功能（如颜色、对齐）需要相应的 Tiptap 扩展支持
-4. **事件处理**：六个点点击事件需要通过 `onHandleClick` 回调连接到菜单组件
+1. **Style Dependency**: Ensure `drag-handle-with-menu.css` is imported
+2. **Internationalization**: Menu text uses `t()` function for i18n
+3. **Editor Extensions**: Features like colors and alignment require corresponding Tiptap extensions
+4. **Event Handling**: 6-dot click event connects to menu component via `onHandleClick` callback
 
-## 技术实现
+## Technical Implementation
 
-- **六个点显示**：使用 ProseMirror 的 Decoration 系统在块级元素上添加装饰
-- **菜单定位**：根据手柄位置和屏幕尺寸自动计算菜单位置
-- **状态管理**：使用 Vue 3 Composition API 管理菜单状态
-- **工具函数**：使用共享的 `editorState`、`editorCommands`、`clipboard` 工具函数
+- **6-Dot Display**: Uses ProseMirror Decoration system to add decoration on block elements
+- **Menu Positioning**: Calculates menu position automatically based on handle position and screen size
+- **State Management**: Uses Vue 3 Composition API to manage menu state
+- **Utility Functions**: Uses shared `editorState`, `editorCommands`, `clipboard` helper functions
 
-## 相关文件
+## Related Files
 
-- 样式文件：`shared/styles/drag-handle-with-menu.css`
-- 工具函数：`shared/utils/editorState.ts`、`shared/utils/editorCommands.ts`、`shared/utils/clipboard.ts`
-- 国际化：`locales/index.ts`
+- Style file: `shared/styles/drag-handle-with-menu.css`
+- Utility functions: `shared/utils/editorState.ts`, `shared/utils/editorCommands.ts`, `shared/utils/clipboard.ts`
+- Internationalization: `locales/index.ts`
 

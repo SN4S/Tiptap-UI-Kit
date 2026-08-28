@@ -33,7 +33,7 @@ editor = new Editor({
   extensions: [
     // ... other extensions
     TranslationExtension.configure({
-      defaultTargetLang: '英文', // Optional: set the default target language
+      defaultTargetLang: 'English', // Optional: set the default target language
     }),
   ],
 });
@@ -46,8 +46,8 @@ editor = new Editor({
 editor.commands.translate();
 
 // Or specify a target language
-editor.commands.translate('英文');
-editor.commands.translate('中文');
+editor.commands.translate('English');
+editor.commands.translate('Chinese');
 ```
 
 ### 3. Manage the translation language state
@@ -63,7 +63,7 @@ import {
 const lang = currentTranslateLang.value;
 
 // Set the target language
-setTranslateLang('英文');
+setTranslateLang('English');
 
 // Clear the saved language
 clearTranslateLang();
@@ -121,7 +121,7 @@ This translation feature follows the implementation approach of the continue-wri
 ## Notes
 
 1. **Text selection**: the translate feature requires selecting the text to translate first
-2. **Language labels**: uses language labels (e.g. "英文", "中文") rather than language codes (e.g. "en", "zh")
+2. **Language labels**: uses language labels (e.g. "English", "Chinese") rather than language codes (e.g. "en", "zh")
 3. **Internationalization**: language labels are obtained via `t('editor.lang.${key}')`; make sure there is a corresponding translation in the locales files
 4. **API dependency**: requires the `aiApiService.translate()` method support
 

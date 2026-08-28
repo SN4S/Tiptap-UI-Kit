@@ -1,18 +1,18 @@
 /**
  * AI Configuration Store
- * @description AI 配置的 localStorage 持久化存储
+ * @description AI configuration localStorage persistent storage
  */
 
 import type { AiUserConfig, AiConfigStore } from './types'
 import { DEFAULT_CONFIG, getProviderInfo } from './types'
 
-/** 存储键 */
+/** Storage keys */
 const STORAGE_KEY = 'tiptap-ai-config'
 const API_KEY_STORAGE_KEY = 'tiptap-ai-apikey'
 
 /**
- * 简单的混淆编码（非加密，仅防止明文存储）
- * 注意：这不是真正的加密，只是基本的混淆
+ * Simple obfuscation encoding (non-encrypted, only prevents plaintext storage)
+ * Note: This is not real encryption, just basic obfuscation
  */
 function obfuscate(str: string): string {
   if (!str) return ''
@@ -24,7 +24,7 @@ function obfuscate(str: string): string {
 }
 
 /**
- * 解混淆
+ * Deobfuscation
  */
 function deobfuscate(str: string): string {
   if (!str) return ''
@@ -36,7 +36,7 @@ function deobfuscate(str: string): string {
 }
 
 /**
- * 安全的 localStorage 操作
+ * Safe localStorage operations
  */
 function safeGetItem(key: string): string | null {
   try {
@@ -64,7 +64,7 @@ function safeRemoveItem(key: string): void {
 }
 
 /**
- * 获取存储的配置（不含 API Key）
+ * Get stored configuration (excluding API Key)
  */
 function getStoredConfig(): Omit<AiUserConfig, 'apiKey'> | null {
   const data = safeGetItem(STORAGE_KEY)
@@ -72,7 +72,7 @@ function getStoredConfig(): Omit<AiUserConfig, 'apiKey'> | null {
 
   try {
     const parsed = JSON.parse(data)
-    // 验证必要字段
+    // Validate required fields
     if (parsed && typeof parsed.provider === 'string') {
       return {
         provider: parsed.provider,
@@ -90,7 +90,7 @@ function getStoredConfig(): Omit<AiUserConfig, 'apiKey'> | null {
 }
 
 /**
- * 获取存储的 API Key
+ * Get stored API Key
  */
 function getStoredApiKey(): string {
   const obfuscated = safeGetItem(API_KEY_STORAGE_KEY)
@@ -98,7 +98,7 @@ function getStoredApiKey(): string {
 }
 
 /**
- * 创建 AI 配置存储
+ * Create AI configuration store
  */
 export function createAiConfigStore(): AiConfigStore {
   return {
@@ -113,7 +113,7 @@ export function createAiConfigStore(): AiConfigStore {
     },
 
     saveConfig(config: AiUserConfig): void {
-      // 分离存储：配置和 API Key 分开
+      // Separate storage: configuration and API Key stored separately
       const { apiKey, ...rest } = config
       const configToStore = {
         ...rest,
@@ -122,7 +122,7 @@ export function createAiConfigStore(): AiConfigStore {
 
       safeSetItem(STORAGE_KEY, JSON.stringify(configToStore))
 
-      // API Key 单独混淆存储
+      // API Key stored with separate obfuscation
       if (apiKey) {
         safeSetItem(API_KEY_STORAGE_KEY, obfuscate(apiKey))
       } else {
@@ -147,12 +147,12 @@ export function createAiConfigStore(): AiConfigStore {
       const providerInfo = getProviderInfo(config.provider)
       if (!providerInfo) return false
 
-      // 检查必要条件
+      // Check necessary conditions
       if (providerInfo.requiresApiKey && !config.apiKey) {
         return false
       }
 
-      // 自定义提供商需要 endpoint
+      // Custom provider requires endpoint
       if (config.provider === 'custom' && !config.endpoint) {
         return false
       }
@@ -162,11 +162,11 @@ export function createAiConfigStore(): AiConfigStore {
   }
 }
 
-/** 单例实例 */
+/** Singleton instance */
 let storeInstance: AiConfigStore | null = null
 
 /**
- * 获取配置存储实例
+ * Get configuration store instance
  */
 export function getAiConfigStore(): AiConfigStore {
   if (!storeInstance) {
@@ -176,7 +176,7 @@ export function getAiConfigStore(): AiConfigStore {
 }
 
 /**
- * 重置存储实例（用于测试）
+ * Reset store instance (for testing)
  */
 export function resetAiConfigStore(): void {
   storeInstance = null

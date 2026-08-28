@@ -1,14 +1,14 @@
-# Format Clear - 格式清除功能模块
+# Format Clear - Format Clear Feature Module
 
-格式清除功能模块提供了在编辑器中清除格式的能力。
+The format clear feature module provides capabilities for clearing formatting in the editor.
 
-## 功能特性
+## Features
 
-- ✅ **清除格式**：一键清除当前选区的所有格式（文本样式、颜色、字体等）
+- ✅ **Clear format**：One-click clearing of all formatting (text styles, colors, fonts, etc.) in current selection
 
-## 使用方法
+## Usage
 
-### 基础用法
+### Basic Usage
 
 ```vue
 <template>
@@ -25,7 +25,7 @@ const editor = ref<Editor | null>(null)
 </script>
 ```
 
-### 在工具栏中使用
+### Usage in Toolbar
 
 ```vue
 <template>
@@ -43,29 +43,29 @@ const editor = ref<Editor | null>(null)
 
 #### Props
 
-| 属性 | 类型 | 默认值 | 说明 |
+| Property | Type | Default | Description |
 |------|------|--------|------|
-| editor | `Editor \| null \| undefined` | - | Tiptap 编辑器实例 |
+| editor | `Editor \| null \| undefined` | - | Tiptap editor instance |
 
-#### 功能
+#### Features
 
-- 点击按钮清除当前选区的所有格式
-- 包括文本样式（粗体、斜体、下划线等）、颜色、字体、对齐等
+- Click button to clear all formatting in current selection
+- Includes text styles (bold, italic, underline, etc.), colors, fonts, alignment, etc.
 
-## 文件结构
+## File Structure
 
 ```
 format-clear/
-├── ClearFormatButton.vue    # 清除格式按钮组件
-├── index.ts                  # 统一导出
-└── README.md                 # 说明文档
+├── ClearFormatButton.vue    # Clear format button component
+├── index.ts                  # Unified exports
+└── README.md                 # Documentation
 ```
 
-## 注意事项
+## Notes
 
-1. 清除格式会移除当前选区的所有格式，包括：
-   - 文本样式：粗体、斜体、下划线、删除线、上下标
-   - 颜色：文字颜色、背景高亮
-   - 字体：字体系列、字号、行高
-   - 对齐：左对齐、居中、右对齐、两端对齐
-2. 多语言支持已集成到 `locales` 模块中
+1. Format clearing removes all formatting in current selection, including:
+   - Text styles: bold, italic, underline, strike, subscript, superscript
+   - Colors: text color, background highlight
+   - Typography: font family, font size, line height
+   - Alignment: align left, center, right, justify
+2. Multi-language support integrated into `locales` module

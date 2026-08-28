@@ -122,7 +122,7 @@ Perfect for building modern document editors, content management systems, note-t
 - OpenAI (GPT-4o, GPT-4o-mini)
 - DeepSeek (DeepSeek-V3, DeepSeek-R1)
 - Anthropic (Claude, via OpenAI-compatible endpoint)
-- 阿里云通义千问 (Aliyun Qwen)
+- Aliyun Qwen
 - Ollama (local deployment)
 - Custom — any OpenAI-compatible API
 
@@ -401,7 +401,7 @@ import 'katex/dist/katex.min.css'
 
 Once AI is configured (see [AI Configuration](#ai-configuration) below), a floating **⚡ AI** button appears at the bottom-right of the editor. Open it and describe what you want:
 
-> 「在文档末尾加一个 3x3 的表格」 · "Rewrite the second paragraph to be more concise" · 「把所有出现的产品名加粗」
+> "Add a 3x3 table at the end of document" · "Rewrite the second paragraph to be more concise" · "Bold all occurrences of the product name"
 
 The AI reads the document and edits it directly through a set of structured tools (insert/replace/delete blocks, edit/format text). Every step is shown in the chat, edits apply live, and **Cmd/Ctrl+Z undoes them** like any other edit. Works with all supported providers via OpenAI-style function calling.
 
@@ -619,11 +619,11 @@ If you find Tiptap UI Kit useful, please consider:
 
 <div align="center">
 
-### ☕ 请作者喝杯咖啡 | Buy Me a Coffee
+### ☕ Buy Me a Coffee
 
 [![Sponsor](https://img.shields.io/badge/☕_Sponsor_Me-FF813F?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white)](https://tiptap-ui-kit.vercel.app/sponsor.html)
 
-**您的支持是我创作的动力！Your support motivates my creation!**
+**Your support motivates my creation!**
 
 </div>
 

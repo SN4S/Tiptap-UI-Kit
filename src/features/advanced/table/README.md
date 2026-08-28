@@ -1,28 +1,28 @@
-# Table - 表格功能模块
+# Table - Table Feature Module
 
-表格功能模块提供了在编辑器中操作表格的能力，包括插入行/列、删除行/列、合并/拆分单元格、设置单元格背景色和对齐方式等功能。
+The table feature module provides table editing capabilities in the editor, including inserting/deleting rows/columns, merging/splitting cells, background colors, alignment, etc.
 
-## 功能特性
+## Features
 
-- ✅ 表格插入按钮：在工具栏中点击即可插入表格（默认 3x3 带表头）
-- ✅ 表格工具栏：悬浮在表格上方，提供丰富的表格操作功能
-- ✅ 行操作：在上方/下方插入行、删除行
-- ✅ 列操作：在左侧/右侧插入列、删除列
-- ✅ 单元格操作：合并单元格、拆分单元格、切换表头行/列
-- ✅ 样式设置：设置单元格背景色、文本对齐方式
-- ✅ 表格删除：一键删除整个表格
-- ✅ 扩展支持：支持背景色和对齐方式的表格单元格扩展
+- ✅ Table Insertion Button: Click in toolbar to insert table (default 3x3 with header)
+- ✅ Table Toolbar: Floats above table providing extensive table actions
+- ✅ Row Operations: Insert rows above/below, delete row
+- ✅ Column Operations: Insert columns left/right, delete column
+- ✅ Cell Operations: Merge cells, split cells, toggle header row/col
+- ✅ Style Settings: Set cell background color, text alignment
+- ✅ Table Deletion: One-click deletion of entire table
+- ✅ Extension Support: Table cell extension supporting background color and alignment
 
-## 使用方法
+## Usage
 
-### 基础用法
+### Basic Usage
 
-#### 使用表格按钮（工具栏）
+#### Using Table Button (Toolbar)
 
 ```vue
 <template>
   <ToolbarNav :editor="editor" :config="{ table: true }">
-    <!-- 其他工具栏按钮 -->
+    <!-- Other toolbar buttons -->
   </ToolbarNav>
 </template>
 
@@ -34,7 +34,7 @@ const editor = ref<Editor | null>(null)
 </script>
 ```
 
-#### 使用表格工具栏（悬浮菜单）
+#### Using Table Toolbar (Floating Menu)
 
 ```vue
 <template>
@@ -51,7 +51,7 @@ const editor = ref<Editor | null>(null)
 </script>
 ```
 
-#### 单独使用表格按钮
+#### Using Table Button Alone
 
 ```vue
 <template>
@@ -66,7 +66,7 @@ const editor = ref<Editor | null>(null)
 </script>
 ```
 
-### 在编辑器配置中使用扩展
+### Using Extensions in Editor Configuration
 
 ```typescript
 import { TableCellWithBackground } from '#/components/tiptapPro-tenant/advanced/table'
@@ -74,152 +74,152 @@ import { Table, TableRow, TableHeader } from '@tiptap/extension-table'
 
 const editor = new Editor({
   extensions: [
-    // ... 其他扩展
+    // ... other extensions
     Table.configure({
       resizable: true,
     }),
     TableRow,
     TableHeader,
-    TableCellWithBackground, // 使用支持背景色的表格单元格扩展
+    TableCellWithBackground, // Use table cell extension supporting background color
   ],
 })
 ```
 
-## 组件说明
+## Component Description
 
 ### TableButton
 
-表格插入按钮组件，用于在工具栏中插入表格。
+Table insertion button component for inserting tables from toolbar.
 
 #### Props
 
-| 属性 | 类型 | 默认值 | 说明 |
+| Property | Type | Default | Description |
 |------|------|--------|------|
-| editor | `Editor \| null \| undefined` | - | Tiptap 编辑器实例 |
+| editor | `Editor \| null \| undefined` | - | Tiptap editor instance |
 
-#### 功能
+#### Features
 
-- 点击按钮插入 3x3 表格（带表头行）
-- 如果当前光标已在表格中，按钮会显示为激活状态
-- 按钮会根据表格状态自动更新激活状态
+- Click button to insert 3x3 table (with header row)
+- If cursor is inside a table, button displays as active
+- Button status updates automatically based on table state
 
 ### TableToolbar
 
-表格工具栏组件，当光标在表格中或选中表格单元格时，会自动显示悬浮工具栏。
+Table toolbar component; floats automatically when cursor/selection is inside a table.
 
 #### Props
 
-| 属性 | 类型 | 默认值 | 说明 |
+| Property | Type | Default | Description |
 |------|------|--------|------|
-| editor | `Editor \| null \| undefined` | - | Tiptap 编辑器实例 |
-| readonly | `boolean` | `false` | 是否只读模式，只读模式下工具栏不显示 |
-| showMode | `1 \| 2` | `2` | 显示模式：1-仅在表格中显示，2-仅在选中单元格时显示 |
+| editor | `Editor \| null \| undefined` | - | Tiptap editor instance |
+| readonly | `boolean` | `false` | Whether read-only mode, toolbar hidden in read-only |
+| showMode | `1 \| 2` | `2` | Display mode: 1-only in table, 2-only when cell selected |
 
-#### 功能
+#### Features
 
-- **行操作**：
-  - 在上方插入行
-  - 在下方插入行
-  - 删除当前行
+- **Row Operations**:
+  - Insert row above
+  - Insert row below
+  - Delete current row
 
-- **列操作**：
-  - 在左侧插入列
-  - 在右侧插入列
-  - 删除当前列
+- **Column Operations**:
+  - Insert column left
+  - Insert column right
+  - Delete current column
 
-- **单元格操作**：
-  - 合并单元格
-  - 拆分单元格
-  - 切换表头行
-  - 切换表头列
+- **Cell Operations**:
+  - Merge cells
+  - Split cells
+  - Toggle header row
+  - Toggle header column
 
-- **样式设置**：
-  - 设置单元格背景色（8种预设颜色）
-  - 设置文本对齐方式（左对齐、居中、右对齐）
+- **Style Settings**:
+  - Set cell background color (8 preset colors)
+  - Set text alignment (left, center, right)
 
-- **删除表格**：一键删除整个表格
+- **Table Deletion**: One-click deletion of entire table
 
 ### TableCellWithBackground
 
-支持背景色和对齐方式的表格单元格扩展。
+Table cell extension supporting background color and alignment.
 
-#### 功能
+#### Features
 
-- 支持 `backgroundColor` 属性，用于设置单元格背景色
-- 支持 `textAlign` 属性，用于设置单元格文本对齐方式
-- 兼容 Tiptap TableKit 的所有功能
+- Supports `backgroundColor` attribute for cell background color
+- Supports `textAlign` attribute for cell text alignment
+- Compatible with all Tiptap TableKit features
 
-#### 使用示例
+#### Usage Example
 
 ```typescript
 import { TableCellWithBackground } from '#/components/tiptapPro-tenant/advanced/table'
 
-// 在编辑器配置中使用
+// Usage in Editor Configuration
 const editor = new Editor({
   extensions: [
     Table,
     TableRow,
     TableHeader,
-    TableCellWithBackground, // 替换默认的 TableCell
+    TableCellWithBackground, // Replace default TableCell
   ],
 })
 
-// 通过命令设置单元格背景色
+// Set cell background color via commands
 editor.chain().focus().setCellAttribute('backgroundColor', '#e3f2fd').run()
 
-// 通过命令设置单元格对齐方式
+// Set cell alignment via commands
 editor.chain().focus().setCellAttribute('textAlign', 'center').run()
 ```
 
-## 常量使用
+## Constant Usage
 
 ```typescript
 import { TABLE_CELL_COLORS } from '#/components/tiptapPro-tenant/shared/configs/editorConstants'
 
-// 获取所有表格单元格背景色选项
+// Get all table cell background color options
 console.log(TABLE_CELL_COLORS) // ['#ffffff', '#f5f5f5', '#e8f5e9', ...]
 ```
 
-> **注意**：常量定义已统一迁移到 `shared/configs/editorConstants.ts`。
+> **Note**: Constant definitions migrated to `shared/configs/editorConstants.ts`.
 
-## 文件结构
+## File Structure
 
 ```
 table/
-├── TableButton.vue                # 表格插入按钮组件
-├── TableToolbar.vue               # 表格工具栏组件（悬浮菜单）
-├── TableCellWithBackground.ts    # 支持背景色的表格单元格扩展
-├── TableCell.vue                 # 占位组件（预留）
-├── index.ts                      # 统一导出
-└── README.md                      # 说明文档
+├── TableButton.vue                # Table insertion button component
+├── TableToolbar.vue               # Table toolbar component (floating menu)
+├── TableCellWithBackground.ts    # Table cell extension supporting background color
+├── TableCell.vue                 # Placeholder component (reserved)
+├── index.ts                      # Unified exports
+└── README.md                      # Documentation
 ```
 
-## 样式文件
+## Style Files
 
-表格相关的样式文件位于 `shared/styles/`：
+Table related style files are located in `shared/styles/`:
 
-- `table-bubble-menu.css` - 表格悬浮工具栏样式
-- `table-insert-plus.css` - 表格插入按钮样式（如使用）
+- `table-bubble-menu.css` - Table bubble menu style
+- `table-insert-plus.css` - Table insertion button style (if used)
 
-## 注意事项
+## Notes
 
-1. 使用表格功能需要确保编辑器已配置以下扩展：
-   - `Table`（来自 `@tiptap/extension-table`）
-   - `TableRow`（来自 `@tiptap/extension-table-row`）
-   - `TableHeader`（来自 `@tiptap/extension-table-header`）
-   - `TableCellWithBackground`（本模块提供，或使用默认的 `TableCell`）
+1. Ensure the following extensions are configured to use table features:
+   - `Table` (from `@tiptap/extension-table`)
+   - `TableRow` (from `@tiptap/extension-table-row`)
+   - `TableHeader` (from `@tiptap/extension-table-header`)
+   - `TableCellWithBackground` (provided by module or default `TableCell`)
 
-2. 表格工具栏使用 `BubbleMenu` 实现，会在光标进入表格或选中单元格时自动显示
+2. Table toolbar uses `BubbleMenu` and displays automatically on entering a table or selecting cells
 
-3. 背景色和对齐方式功能需要 `TableCellWithBackground` 扩展支持
+3. Cell background color and alignment features require `TableCellWithBackground` extension
 
-4. 工具栏按钮会根据当前状态自动启用/禁用（例如，无法合并时合并按钮会禁用）
+4. Toolbar buttons auto enable/disable based on state (e.g. merge button disabled when unmergableView)
 
-5. 多语言支持已集成到 `locales` 模块中
+5. Multi-language support is integrated into `locales` module
 
-6. 样式已支持暗色模式（dark mode）
+6. Styles support dark mode
 
-## 迁移说明
+## Migration Notes
 
-本模块从 `tiptapPro/features/table` 迁移而来，保持了相同的 API 和功能，但调整了导入路径以适配 `tiptapPro-tenant` 的目录结构。
+Migrated from `tiptapPro/features/table`, preserving same API and features adapted for tenant structure.
 

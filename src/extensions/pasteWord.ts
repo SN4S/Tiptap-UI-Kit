@@ -1,6 +1,6 @@
 /**
- * PasteWord Extension - 粘贴 Word 文档扩展
- * @description 支持粘贴 Word 文档内容
+ * PasteWord Extension - Paste Word document extension
+ * @description Supports pasting Word document content
  */
 
 import { Extension } from '@tiptap/core'
@@ -17,8 +17,8 @@ export const PasteWord = Extension.create({
           transformPastedHTML: (html: string) => {
             if (!html) return html
             
-            // 简单的 Word 粘贴处理
-            // 移除 Word 特定的样式和标签
+            // Simple Word paste handling
+            // Remove Word-specific styles and tags
             return html
               .replace(/<o:p>[\s\S]*?<\/o:p>/gi, '')
               .replace(/<!--[\s\S]*?-->/gi, '')

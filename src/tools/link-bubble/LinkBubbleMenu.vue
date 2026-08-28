@@ -7,17 +7,17 @@
     class="link-bubble-menu"
   >
     <div class="link-bubble-menu-content">
-      <!-- 链接URL显示 -->
+      <!-- Link URL display -->
       <div class="link-url-display">
         <span class="link-url-text" :title="currentLinkUrl">{{ currentLinkUrl }}</span>
       </div>
 
-      <!-- 操作按钮组 -->
+      <!-- Action button group -->
       <div class="link-actions">
-        <!-- 分隔线 -->
+        <!-- Divider -->
         <div class="link-divider"></div>
         
-        <!-- 编辑链接按钮 -->
+        <!-- Edit link button -->
         <button
           class="link-action-btn"
           @click="editLink"
@@ -26,10 +26,10 @@
           <EditOutlined />
         </button>
 
-        <!-- 分隔线 -->
+        <!-- Divider -->
         <div class="link-divider"></div>
 
-        <!-- 打开链接按钮 -->
+        <!-- Open link button -->
         <button
           class="link-action-btn"
           @click="openLink"
@@ -38,10 +38,10 @@
           <LinkOutlined />
         </button>
 
-        <!-- 分隔线 -->
+        <!-- Divider -->
         <div class="link-divider"></div>
 
-        <!-- 删除链接按钮 -->
+        <!-- Delete link button -->
         <button
           class="link-action-btn link-action-btn--danger"
           @click="removeLink"
@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    <!-- 编辑链接模态框 -->
+    <!-- Edit link modal -->
     <a-modal
       v-model:open="linkModalOpen"
       :title="t('editor.editLink')"
@@ -70,9 +70,9 @@
 
 <script setup lang="ts">
 /**
- * LinkBubbleMenu - 链接悬浮框组件
- * @description 选中链接时显示的悬浮框，提供链接编辑、打开、删除等功能
- * @description 此组件位于 tools/link-bubble 文件夹，可通过 features.linkBubbleMenu 配置是否启用
+ * LinkBubbleMenu - Link bubble menu component
+ * @description Displays bubble menu on selecting links, providing edit, open, delete capabilities
+ * @description Located in tools/link-bubble folder, toggled via features.linkBubbleMenu
  */
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { BubbleMenu } from '@tiptap/vue-3/menus'
@@ -89,20 +89,20 @@ const props = withDefaults(
   }>(),
   {
     readonly: false,
-    enabled: false, // 默认启用
+    enabled: false, // Default enabled
   }
 )
 
 const editor = computed(() => props.editor ?? null)
 const runCommand = createCommandRunner(editor)
 
-// 响应式状态
+// Reactive state
 const currentLinkUrl = ref('')
 const linkModalOpen = ref(false)
 const linkUrl = ref('')
 
 /**
- * 更新当前链接URL
+ * Update current link URL
  */
 function updateCurrentLinkUrl() {
   const e = editor.value
@@ -120,16 +120,16 @@ function updateCurrentLinkUrl() {
 }
 
 /**
- * 检查是否应该显示链接悬浮框
- * @description 只在选中链接文本时显示（部分或全部），选中非链接文本时不显示
+ * Check if link bubble menu should be displayed
+ * @description Displays only when link text is selected
  */
 const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: number }) => {
-  // 如果功能未启用，不显示
+  // If feature disabled, do not display
   if (!props.enabled) {
     return false
   }
 
-  // 只读模式下不显示
+  // Do not display in read-only mode
   if (props.readonly) {
     return false
   }
@@ -142,23 +142,23 @@ const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: nu
   const { from, to } = bubbleProps
   const { state } = bubbleProps
 
-  // 关键：只有当选择范围不为空时才显示（即必须选中文本）
-  // 如果 from === to，说明只是光标位置，没有选中文本，不显示
+  // Key: display only when selection range is non-empty
+  // If from === to, cursor position only, do not display
   if (from === to) {
     return false
   }
 
-  // 检查选中的文本是否包含链接标记
-  // 必须确保选中的文本本身是链接，而不是选择范围内有其他链接
+  // Check if selected text contains link mark
+  // Ensure selected text itself is a link
   try {
     const start = Math.min(from, to)
     const end = Math.max(from, to)
     
-    // 使用 resolve 获取选择范围的标记
+    // Use resolve to get marks in selection range
     const $from = state.doc.resolve(start)
     const $to = state.doc.resolve(end)
     
-    // 检查起始位置的标记（选中的文本开始位置）
+    // Check start mark
     const marksAtStart = $from.marks()
     let linkMarkAtStart = null
     for (const mark of marksAtStart) {
@@ -168,7 +168,7 @@ const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: nu
       }
     }
     
-    // 检查结束位置的标记（选中的文本结束位置）
+    // Check end mark
     const marksAtEnd = $to.marks()
     let linkMarkAtEnd = null
     for (const mark of marksAtEnd) {
@@ -178,24 +178,24 @@ const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: nu
       }
     }
     
-    // 只有当起始和结束位置都有链接标记，且是同一个链接时，才显示悬浮框
-    // 这确保选中的文本本身是链接，而不是选择范围内有其他链接
+    // Show bubble menu only when both start and end have matching link mark
+    // Ensures selected text itself is a link
     if (linkMarkAtStart && linkMarkAtEnd) {
-      // 检查是否是同一个链接（通过比较 href）
+      // Compare href to check if same link
       if (linkMarkAtStart.attrs?.href === linkMarkAtEnd.attrs?.href) {
         currentLinkUrl.value = linkMarkAtStart.attrs.href
         return true
       }
     }
     
-    // 如果起始或结束位置只有一个有链接标记，也检查选择范围内的所有文本节点
-    // 确保选中的文本节点本身都包含链接标记
+    // Check all text nodes in selection
+    // Ensure all selected text nodes contain link mark
     let allNodesHaveLink = false
     let linkHref = ''
     let hasNonLinkText = false
     
     state.doc.nodesBetween(start, end, (node: any) => {
-      // 只检查文本节点，忽略其他类型的节点
+      // Only check text nodes
       if (node.isText) {
         if (node.marks && node.marks.length > 0) {
           const linkMark = node.marks.find(
@@ -205,44 +205,44 @@ const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: nu
             if (!linkHref) {
               linkHref = linkMark.attrs.href
             } else if (linkHref !== linkMark.attrs.href) {
-              // 如果选中的文本包含不同的链接，不显示
+              // Do not display if selection spans different links
               hasNonLinkText = true
               return false
             }
             allNodesHaveLink = true
           } else {
-            // 如果文本节点没有链接标记，说明选中的不是链接文本
+            // Do not display if text node lacks link mark
             hasNonLinkText = true
             return false
           }
         } else {
-          // 如果文本节点没有任何标记，说明选中的不是链接文本
+          // Do not display if text node has no marks
           hasNonLinkText = true
           return false
         }
       }
     })
     
-    // 只有当所有选中的文本节点都包含链接标记，且没有非链接文本时，才显示
+    // Display only if all text nodes are link marked
     if (allNodesHaveLink && !hasNonLinkText && linkHref) {
       currentLinkUrl.value = linkHref
       return true
     }
   } catch (error) {
-    // 忽略错误
+    // Ignore errors
   }
 
   return false
 }
 
 /**
- * 编辑器选区变化时同步链接URL
+ * Sync link URL on editor selection change
  */
 function handleSelectionUpdate() {
   updateCurrentLinkUrl()
 }
 
-// 监听编辑器选区变化事件，更新链接URL（editor.state 非响应式，不能用 deep watch）
+// Listen to selection change event to update link URL
 watch(
   () => editor.value,
   (newEditor, oldEditor) => {
@@ -257,13 +257,13 @@ watch(
   { immediate: true }
 )
 
-// 组件卸载时清理监听
+// Clean up listener on component unmount
 onBeforeUnmount(() => {
   editor.value?.off('selectionUpdate', handleSelectionUpdate)
 })
 
 /**
- * 编辑链接
+ * Edit link
  */
 function editLink() {
   const e = editor.value
@@ -279,7 +279,7 @@ function editLink() {
 }
 
 /**
- * 应用链接编辑
+ * Apply link edit
  */
 function applyLink() {
   const e = editor.value
@@ -288,7 +288,7 @@ function applyLink() {
   const finalUrl = linkUrl.value.trim()
   
   if (finalUrl) {
-    // 验证URL格式
+    // Validate URL format
     let urlToSet = finalUrl
     try {
       const url = new URL(finalUrl)
@@ -297,30 +297,30 @@ function applyLink() {
       }
       urlToSet = finalUrl
     } catch {
-      // 如果不是完整URL，尝试添加https://
+      // Add https:// if URL incomplete
       urlToSet = finalUrl.startsWith('http')
         ? finalUrl
         : `https://${finalUrl}`
     }
     
-    // 更新链接 - 直接使用编辑器实例确保状态同步
+    // Update link using editor instance
     if (e) {
       const hasSelection = !e.state.selection.empty
       const chain = e.chain().focus()
       
       if (hasSelection) {
-        // 如果有选中文本，扩展标记范围并设置链接
+        // Extend mark range and set link if text selected
         const success = chain.extendMarkRange('link').setLink({ href: urlToSet, target: '_blank' }).run()
         if (success) {
-          // 立即更新显示的链接URL
+          // Immediately update displayed link URL
           currentLinkUrl.value = urlToSet
-          // 等待状态同步后再次确认
+          // Wait state sync then confirm
           nextTick(() => {
             updateCurrentLinkUrl()
           })
         }
       } else {
-        // 如果没有选中文本，在当前光标位置设置链接
+        // Set link at current cursor if no selection
         const success = chain.setLink({ href: urlToSet, target: '_blank' }).run()
         if (success) {
           currentLinkUrl.value = urlToSet
@@ -331,18 +331,18 @@ function applyLink() {
       }
     }
   } else {
-    // 如果URL为空，移除链接
+    // Remove link if URL empty
     runCommand((chain: any) => chain.unsetLink())()
     currentLinkUrl.value = ''
   }
 
-  // 关闭模态框并清空输入
+  // Close modal and reset input
   linkModalOpen.value = false
   linkUrl.value = ''
 }
 
 /**
- * 打开链接
+ * Open link
  */
 function openLink() {
   const e = editor.value
@@ -358,7 +358,7 @@ function openLink() {
 }
 
 /**
- * 删除链接
+ * Delete link
  */
 function removeLink() {
   runCommand((chain: any) => chain.unsetLink())()
@@ -366,9 +366,9 @@ function removeLink() {
 </script>
 
 <style scoped>
-/* 链接悬浮框容器 */
+/* Link bubble menu container */
 .link-bubble-menu {
-  z-index: 1002; /* 比图片工具栏稍高，确保链接悬浮框显示在上层 */
+  z-index: 1002; /* Positioned above image toolbar */
 }
 
 .link-bubble-menu-content {
@@ -387,7 +387,7 @@ function removeLink() {
   }
 }
 
-/* 链接URL显示区域 */
+/* Link URL display area */
 .link-url-display {
   flex: 1;
   min-width: 0;
@@ -409,14 +409,14 @@ function removeLink() {
   }
 }
 
-/* 操作按钮组 */
+/* Action button group */
 .link-actions {
   display: flex;
   align-items: center;
   gap: 0;
 }
 
-/* 分隔线 */
+/* Divider */
 .link-divider {
   width: 1px;
   height: 20px;
@@ -428,7 +428,7 @@ function removeLink() {
   }
 }
 
-/* 操作按钮 */
+/* Action button */
 .link-action-btn {
   display: flex;
   align-items: center;
@@ -461,7 +461,7 @@ function removeLink() {
   cursor: not-allowed;
 }
 
-/* 危险按钮样式（删除） */
+/* Danger button style (Delete) */
 .link-action-btn--danger {
   color: #ff4d4f;
 
@@ -480,7 +480,7 @@ function removeLink() {
   }
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media (max-width: 768px) {
   .link-bubble-menu-content {
     padding: 6px 10px;

@@ -1,9 +1,9 @@
 /**
  * AI Configuration Types
- * @description AI 用户配置系统类型定义
+ * @description AI user configuration system type definitions
  */
 
-/** 支持的 AI 提供商 */
+/** Supported AI providers */
 export type AiProvider =
   | 'openai'
   | 'deepseek'
@@ -12,76 +12,76 @@ export type AiProvider =
   | 'ollama'
   | 'custom'
 
-/** AI 提供商信息 */
+/** AI provider information */
 export interface AiProviderInfo {
-  /** 提供商 ID */
+  /** Provider ID */
   id: AiProvider
-  /** 显示名称 */
+  /** Display name */
   name: string
-  /** 描述 */
+  /** Description */
   description: string
-  /** 默认 API 端点 */
+  /** Default API endpoint */
   defaultEndpoint: string
-  /** 默认模型 */
+  /** Default model */
   defaultModel: string
-  /** 是否需要 API Key */
+  /** Whether API Key is required */
   requiresApiKey: boolean
-  /** 文档链接 */
+  /** Documentation link */
   docsUrl?: string
 }
 
-/** 用户 AI 配置 */
+/** User AI configuration */
 export interface AiUserConfig {
-  /** 选择的提供商 */
+  /** Selected provider */
   provider: AiProvider
-  /** API Key（加密存储） */
+  /** API Key (encrypted storage) */
   apiKey: string
-  /** API 端点（可选，用于自定义或代理） */
+  /** API Endpoint (optional, for custom or proxy) */
   endpoint?: string
-  /** 模型名称 */
+  /** Model name */
   model: string
-  /** 请求超时（毫秒） */
+  /** Request timeout (ms) */
   timeout: number
-  /** 是否启用 */
+  /** Whether enabled */
   enabled: boolean
-  /** 最后更新时间 */
+  /** Last updated timestamp */
   updatedAt: number
 }
 
-/** AI 配置状态 */
+/** AI configuration state */
 export interface AiConfigState {
-  /** 用户配置 */
+  /** User configuration */
   config: AiUserConfig | null
-  /** 是否已初始化 */
+  /** Whether initialized */
   initialized: boolean
-  /** 连接测试状态 */
+  /** Connection test status */
   testStatus: 'idle' | 'testing' | 'success' | 'error'
-  /** 测试错误信息 */
+  /** Test error message */
   testError: string | null
 }
 
-/** AI 配置存储接口 */
+/** AI configuration store interface */
 export interface AiConfigStore {
-  /** 获取配置 */
+  /** Get configuration */
   getConfig: () => AiUserConfig | null
-  /** 保存配置 */
+  /** Save configuration */
   saveConfig: (config: AiUserConfig) => void
-  /** 清除配置 */
+  /** Clear configuration */
   clearConfig: () => void
-  /** 获取 API Key（解密） */
+  /** Get API Key (decrypted) */
   getApiKey: () => string | null
-  /** 检查是否已配置 */
+  /** Check if configured */
   isConfigured: () => boolean
 }
 
-/** 连接测试结果 */
+/** Connection test result */
 export interface ConnectionTestResult {
   success: boolean
   message: string
   latency?: number
 }
 
-/** 默认配置值 */
+/** Default configuration values */
 export const DEFAULT_CONFIG: Omit<AiUserConfig, 'apiKey' | 'updatedAt'> = {
   provider: 'openai',
   endpoint: '',
@@ -90,12 +90,12 @@ export const DEFAULT_CONFIG: Omit<AiUserConfig, 'apiKey' | 'updatedAt'> = {
   enabled: true,
 }
 
-/** 提供商列表 */
+/** Provider list */
 export const AI_PROVIDERS: AiProviderInfo[] = [
   {
     id: 'openai',
     name: 'OpenAI',
-    description: 'GPT-4o, GPT-4o-mini 等模型',
+    description: 'GPT-4o, GPT-4o-mini and other models',
     defaultEndpoint: 'https://api.openai.com/v1',
     defaultModel: 'gpt-4o-mini',
     requiresApiKey: true,
@@ -104,7 +104,7 @@ export const AI_PROVIDERS: AiProviderInfo[] = [
   {
     id: 'deepseek',
     name: 'DeepSeek',
-    description: 'DeepSeek-V3, DeepSeek-R1 等模型',
+    description: 'DeepSeek-V3, DeepSeek-R1 and other models',
     defaultEndpoint: 'https://api.deepseek.com',
     defaultModel: 'deepseek-chat',
     requiresApiKey: true,
@@ -113,7 +113,7 @@ export const AI_PROVIDERS: AiProviderInfo[] = [
   {
     id: 'anthropic',
     name: 'Anthropic',
-    description: 'Claude 3.5 Sonnet, Claude 3 Opus 等模型',
+    description: 'Claude 3.5 Sonnet, Claude 3 Opus and other models',
     defaultEndpoint: 'https://api.anthropic.com/v1',
     defaultModel: 'claude-3-5-sonnet-20241022',
     requiresApiKey: true,
@@ -121,8 +121,8 @@ export const AI_PROVIDERS: AiProviderInfo[] = [
   },
   {
     id: 'aliyun',
-    name: '阿里云通义千问',
-    description: 'Qwen-Max, Qwen-Plus 等模型',
+    name: 'Aliyun Qwen',
+    description: 'Qwen-Max, Qwen-Plus and other models',
     defaultEndpoint: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
     defaultModel: 'qwen-plus',
     requiresApiKey: true,
@@ -130,8 +130,8 @@ export const AI_PROVIDERS: AiProviderInfo[] = [
   },
   {
     id: 'ollama',
-    name: 'Ollama (本地)',
-    description: '本地运行的开源模型',
+    name: 'Ollama (Local)',
+    description: 'Locally running open-source models',
     defaultEndpoint: 'http://localhost:11434/v1',
     defaultModel: 'llama3.2',
     requiresApiKey: false,
@@ -139,15 +139,15 @@ export const AI_PROVIDERS: AiProviderInfo[] = [
   },
   {
     id: 'custom',
-    name: '自定义',
-    description: '自定义 OpenAI 兼容接口',
+    name: 'Custom',
+    description: 'Custom OpenAI compatible interface',
     defaultEndpoint: '',
     defaultModel: '',
     requiresApiKey: true,
   },
 ]
 
-/** 根据 provider ID 获取提供商信息 */
+/** Get provider information by provider ID */
 export function getProviderInfo(provider: AiProvider): AiProviderInfo | undefined {
   return AI_PROVIDERS.find(p => p.id === provider)
 }

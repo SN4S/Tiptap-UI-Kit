@@ -1,6 +1,6 @@
 /**
  * AI Configuration Composable
- * @description Vue Composable for AI 配置管理
+ * @description Vue Composable for AI configuration management
  */
 
 import { ref, computed, readonly } from 'vue'
@@ -13,7 +13,7 @@ import type {
 import { DEFAULT_CONFIG, getProviderInfo, AI_PROVIDERS } from './types'
 import { getAiConfigStore } from './store'
 
-/** 全局响应式状态 */
+/** Global reactive state */
 const state = ref<AiConfigState>({
   config: null,
   initialized: false,
@@ -21,11 +21,11 @@ const state = ref<AiConfigState>({
   testError: null,
 })
 
-/** 初始化标志 */
+/** Initialization flag */
 let isInitialized = false
 
 /**
- * 初始化配置
+ * Initialize configuration
  */
 function initConfig(): void {
   if (isInitialized) return
@@ -42,28 +42,28 @@ function initConfig(): void {
 }
 
 /**
- * 测试 API 连接
+ * Test API connection
  */
 async function testConnection(config: AiUserConfig): Promise<ConnectionTestResult> {
   const providerInfo = getProviderInfo(config.provider)
   if (!providerInfo) {
-    return { success: false, message: '未知的提供商' }
+    return { success: false, message: 'Unknown provider' }
   }
 
-  // 检查必要参数
+  // Check required parameters
   if (providerInfo.requiresApiKey && !config.apiKey) {
-    return { success: false, message: '请输入 API Key' }
+    return { success: false, message: 'Please enter API Key' }
   }
 
   const endpoint = config.endpoint || providerInfo.defaultEndpoint
   if (!endpoint) {
-    return { success: false, message: '请输入 API 端点' }
+    return { success: false, message: 'Please enter API endpoint' }
   }
 
   const startTime = Date.now()
 
   try {
-    // 构建测试请求
+    // Build test request
     let testUrl = endpoint
     let testBody: string
     const headers: Record<string, string> = {
@@ -71,7 +71,7 @@ async function testConnection(config: AiUserConfig): Promise<ConnectionTestResul
     }
 
     if (config.provider === 'ollama') {
-      // Ollama 使用 /api/tags 测试
+      // Ollama uses /api/tags to test
       testUrl = endpoint.replace(/\/api\/?$/, '') + '/api/tags'
       const response = await fetch(testUrl, {
         method: 'GET',
@@ -83,11 +83,11 @@ async function testConnection(config: AiUserConfig): Promise<ConnectionTestResul
       }
 
       const latency = Date.now() - startTime
-      return { success: true, message: '连接成功', latency }
+      return { success: true, message: 'Connection successful', latency }
     }
 
     if (config.provider === 'anthropic') {
-      // Anthropic 使用不同的头部
+      // Anthropic uses different headers
       headers['x-api-key'] = config.apiKey
       headers['anthropic-version'] = '2023-06-01'
       testUrl = endpoint.replace(/\/$/, '') + '/messages'
@@ -97,7 +97,7 @@ async function testConnection(config: AiUserConfig): Promise<ConnectionTestResul
         messages: [{ role: 'user', content: 'Hi' }],
       })
     } else {
-      // OpenAI 兼容接口
+      // OpenAI compatible interface
       headers['Authorization'] = `Bearer ${config.apiKey}`
       testUrl = endpoint.replace(/\/$/, '') + '/chat/completions'
       testBody = JSON.stringify({
@@ -123,16 +123,16 @@ async function testConnection(config: AiUserConfig): Promise<ConnectionTestResul
       return { success: false, message: errorMessage, latency }
     }
 
-    return { success: true, message: '连接成功', latency }
+    return { success: true, message: 'Connection successful', latency }
   } catch (error) {
     const latency = Date.now() - startTime
     if (error instanceof Error) {
       if (error.name === 'AbortError' || error.name === 'TimeoutError') {
-        return { success: false, message: '连接超时', latency }
+        return { success: false, message: 'Connection timeout', latency }
       }
       return { success: false, message: error.message, latency }
     }
-    return { success: false, message: '连接失败', latency }
+    return { success: false, message: 'Connection failed', latency }
   }
 }
 
@@ -140,12 +140,12 @@ async function testConnection(config: AiUserConfig): Promise<ConnectionTestResul
  * useAiConfig Composable
  */
 export function useAiConfig() {
-  // 确保初始化
+  // Ensure initialization
   initConfig()
 
   const store = getAiConfigStore()
 
-  // 计算属性
+  // Computed properties
   const config = computed(() => state.value.config)
   const isConfigured = computed(() => store.isConfigured())
   const isEnabled = computed(() => state.value.config?.enabled ?? false)
@@ -155,7 +155,7 @@ export function useAiConfig() {
   const testError = computed(() => state.value.testError)
 
   /**
-   * 保存配置
+   * Save configuration
    */
   function saveConfig(newConfig: AiUserConfig): void {
     store.saveConfig(newConfig)
@@ -165,7 +165,7 @@ export function useAiConfig() {
   }
 
   /**
-   * 更新部分配置
+   * Update partial configuration
    */
   function updateConfig(partial: Partial<AiUserConfig>): void {
     const current = state.value.config || {
@@ -177,7 +177,7 @@ export function useAiConfig() {
   }
 
   /**
-   * 切换提供商
+   * Switch provider
    */
   function setProvider(provider: AiProvider): void {
     const providerInfo = getProviderInfo(provider)
@@ -191,12 +191,12 @@ export function useAiConfig() {
   }
 
   /**
-   * 测试连接
+   * Test connection
    */
   async function testConnectionAsync(): Promise<ConnectionTestResult> {
     const currentConfig = state.value.config
     if (!currentConfig) {
-      return { success: false, message: '请先配置 AI 设置' }
+      return { success: false, message: 'Please configure AI settings first' }
     }
 
     state.value.testStatus = 'testing'
@@ -211,7 +211,7 @@ export function useAiConfig() {
   }
 
   /**
-   * 清除配置
+   * Clear configuration
    */
   function clearConfig(): void {
     store.clearConfig()
@@ -221,7 +221,7 @@ export function useAiConfig() {
   }
 
   /**
-   * 获取用于 API 请求的配置
+   * Get configuration for API requests
    */
   function getRequestConfig(): {
     endpoint: string
@@ -244,7 +244,7 @@ export function useAiConfig() {
   }
 
   return {
-    // 状态
+    // State
     config: readonly(config),
     isConfigured: readonly(isConfigured),
     isEnabled: readonly(isEnabled),
@@ -254,7 +254,7 @@ export function useAiConfig() {
     testError: readonly(testError),
     providers: AI_PROVIDERS,
 
-    // 方法
+    // Methods
     saveConfig,
     updateConfig,
     setProvider,
@@ -265,7 +265,7 @@ export function useAiConfig() {
 }
 
 /**
- * 获取静态配置（非响应式，用于 API 调用）
+ * Get static configuration (non-reactive, for API calls)
  */
 export function getAiRequestConfig(): {
   endpoint: string
@@ -282,7 +282,7 @@ export function getAiRequestConfig(): {
   const providerInfo = getProviderInfo(config.provider)
   if (!providerInfo) return null
 
-  // 检查必要条件
+  // Check required conditions
   if (providerInfo.requiresApiKey && !config.apiKey) {
     return null
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="ai-toolbar-menu" ref="containerRef">
-    <BaseTooltip :title="isConfigured ? 'AI 助手' : t('aiSettings.title')">
+    <BaseTooltip :title="isConfigured ? 'AI Assistant' : t('aiSettings.title')">
       <button
         class="ai-toolbar-trigger"
         :class="{ 'is-open': isOpen, 'is-loading': isLoading, 'not-configured': !isConfigured }"

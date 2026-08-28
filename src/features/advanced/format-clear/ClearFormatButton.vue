@@ -10,8 +10,8 @@
 
 <script setup lang="ts">
 /**
- * ClearFormatButton - 清除格式按钮组件
- * @description 可复用的清除格式按钮组件
+ * ClearFormatButton - Clear format button component
+ * @description Reusable clear format button component
  */
 import { computed } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -28,12 +28,12 @@ interface Props {
 const props = defineProps<Props>()
 const editor = computed(() => props.editor ?? null)
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const runCommand = createCommandRunner(editor)
 
 /**
- * 清除格式
- * @description 清除当前选区的所有格式（文本样式、颜色、字体等）
+ * Clear format
+ * @description Clear all formatting in current selection (text styles, colors, fonts, etc.)
  */
 function clearFormat() {
   runCommand((chain) => chain.clearNodes().unsetAllMarks())()

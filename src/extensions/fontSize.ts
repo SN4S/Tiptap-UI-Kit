@@ -1,12 +1,12 @@
 /**
- * FontSize Extension - 字号扩展
- * @description 自定义字号扩展
+ * FontSize Extension - Font Size extension
+ * @description Custom font size extension
  */
 
 import { Extension } from '@tiptap/core'
 
 /**
- * FontSize 扩展
+ * FontSize Extension
  */
 export const FontSize = Extension.create({
   name: 'fontSize',

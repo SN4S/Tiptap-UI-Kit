@@ -22,7 +22,7 @@ export interface AiApiResponse {
 /**
  * Load API configuration
  * Priority: User config > Environment variables > Defaults
- * @description 也供 ai/agent 的 tool-use 循环复用
+ * @description Reused by ai/agent tool-use loop
  */
 export function getAiConfig() {
   // First check user config (localStorage)
@@ -74,11 +74,11 @@ async function simulateAiStream(
   demoType: 'continue' | 'polish' | 'summarize' | 'translate' | 'custom'
 ): Promise<void> {
   const demoMessages: Record<typeof demoType, string> = {
-    continue: '这是 AI 续写功能的演示效果。\n\n💡 提示：要使用真实的 AI 功能，请在工具栏的 AI 设置中配置您的 API Key。\n\n支持的 AI 提供商：\n• OpenAI (GPT-4, GPT-3.5)\n• 阿里云通义千问\n• DeepSeek\n• Ollama (本地部署)\n\n配置后，AI 将根据您的内容智能续写，帮助您快速完成文档创作。',
-    polish: '这是 AI 润色功能的演示效果。\n\n💡 提示：要使用真实的 AI 润色功能，请在工具栏的 AI 设置中配置您的 API Key。\n\n配置后，AI 将帮助您：\n• 优化文字表达，使语句更流畅\n• 修正语法错误\n• 提升专业度和可读性\n• 保持原意的同时改善文风',
-    summarize: '这是 AI 总结功能的演示效果。\n\n💡 提示：要使用真实的 AI 总结功能，请在工具栏的 AI 设置中配置您的 API Key。\n\n配置后，AI 将智能提取内容要点，生成简洁的摘要，帮助读者快速理解核心信息。',
-    translate: '这是 AI 翻译功能的演示效果。\n\n💡 Tip: To use the real AI translation feature, please configure your API Key in the AI Settings on the toolbar.\n\nAfter configuration, AI will provide high-quality translations while maintaining the original meaning and style.',
-    custom: '这是自定义 AI 命令的演示效果。\n\n💡 提示：要使用真实的自定义 AI 功能，请在工具栏的 AI 设置中配置您的 API Key。\n\n配置后，您可以输入任何自定义指令，AI 将根据您的要求处理选中的文本。',
+    continue: 'This is a demo of the AI continue writing feature.\n\n💡 Tip: To use real AI capabilities, please configure your API Key in the toolbar AI Settings.\n\nSupported AI providers:\n• OpenAI (GPT-4, GPT-3.5)\n• Aliyun Qwen\n• DeepSeek\n• Ollama (local deployment)\n\nAfter configuration, AI will intelligently continue writing based on your content.',
+    polish: 'This is a demo of the AI text polishing feature.\n\n💡 Tip: To use real AI polishing capabilities, please configure your API Key in the toolbar AI Settings.\n\nAfter configuration, AI will help you:\n• Optimize text phrasing for smooth reading\n• Correct grammatical errors\n• Enhance professionalism and readability\n• Improve writing style while preserving original meaning',
+    summarize: 'This is a demo of the AI summarization feature.\n\n💡 Tip: To use real AI summarization capabilities, please configure your API Key in the toolbar AI Settings.\n\nAfter configuration, AI will intelligently extract key points and generate concise summaries to help readers quickly grasp core information.',
+    translate: 'This is a demo of the AI translation feature.\n\n💡 Tip: To use the real AI translation feature, please configure your API Key in the AI Settings on the toolbar.\n\nAfter configuration, AI will provide high-quality translations while maintaining the original meaning and style.',
+    custom: 'This is a demo of custom AI commands.\n\n💡 Tip: To use real custom AI capabilities, please configure your API Key in the toolbar AI Settings.\n\nAfter configuration, you can enter any custom prompt, and AI will process the selected text according to your instructions.',
   }
 
   const message = demoMessages[demoType]
@@ -224,7 +224,7 @@ export const aiApiService = {
     sysPrompt: string,
     callback: AiStreamCallback
   ): void {
-    const prompt = `${sysPrompt}\n\n你是一个专业的写作助手。请根据用户选中的文字，续写接下来的内容。保持原文的风格和语气。只输出续写的内容，不要重复用户选中的文字。`
+    const prompt = `${sysPrompt}\n\nYou are a professional writing assistant. Please continue writing based on the text selected by the user. Maintain the style and tone of the original text. Output only the continuation, do not repeat the selected text.`
     sendStreamingRequest(prompt, content, callback, 'continue')
   },
 
@@ -236,7 +236,7 @@ export const aiApiService = {
     sysPrompt: string,
     callback: AiStreamCallback
   ): void {
-    const prompt = `${sysPrompt}\n\n你是一个专业的文字润色助手。请润色以下文字，使其更加流畅、专业。保持原意，只输出润色后的文字。`
+    const prompt = `${sysPrompt}\n\nYou are a professional text polishing assistant. Please polish the following text to make it more fluent and professional. Preserve the original meaning and output only the polished text.`
     sendStreamingRequest(prompt, content, callback, 'polish')
   },
 
@@ -248,7 +248,7 @@ export const aiApiService = {
     sysPrompt: string,
     callback: AiStreamCallback
   ): void {
-    const prompt = `${sysPrompt}\n\n你是一个专业的总结助手。请总结以下内容的要点。简洁明了，输出总结内容。`
+    const prompt = `${sysPrompt}\n\nYou are a professional summarization assistant. Please summarize the key points of the following content. Output only a concise summary.`
     sendStreamingRequest(prompt, content, callback, 'summarize')
   },
 
@@ -261,7 +261,7 @@ export const aiApiService = {
     sysPrompt: string,
     callback: AiStreamCallback
   ): void {
-    const prompt = `${sysPrompt}\n\n你是一个专业的翻译助手。请将以下内容翻译为${targetLang}。只输出翻译结果。`
+    const prompt = `${sysPrompt}\n\nYou are a professional translation assistant. Please translate the following content into ${targetLang}. Output only the translation result.`
     sendStreamingRequest(prompt, content, callback, 'translate')
   },
 

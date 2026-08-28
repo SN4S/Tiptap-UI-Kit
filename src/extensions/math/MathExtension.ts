@@ -1,6 +1,6 @@
 /**
  * Math Extension
- * @description Tiptap 数学公式扩展，支持 LaTeX 语法和 KaTeX 渲染
+ * @description Tiptap math extension supporting LaTeX syntax and KaTeX rendering
  */
 
 import { Node, mergeAttributes, InputRule } from '@tiptap/core'
@@ -12,11 +12,11 @@ import MathNodeView from './MathNodeView.vue'
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     math: {
-      /** 插入行内公式 */
+      /** Insert inline math */
       insertInlineMath: (latex?: string) => ReturnType
-      /** 插入块级公式 */
+      /** Insert block math */
       insertBlockMath: (latex?: string) => ReturnType
-      /** 更新公式内容 */
+      /** Update math content */
       updateMath: (latex: string) => ReturnType
     }
   }
@@ -66,7 +66,7 @@ export const MathExtension = Node.create<MathExtensionOptions>({
       {
         tag: 'div[data-type="math"]',
       },
-      // 支持从 Markdown 粘贴的 LaTeX
+      // Support LaTeX pasted from Markdown
       {
         tag: 'span.math-inline',
       },
@@ -106,7 +106,7 @@ export const MathExtension = Node.create<MathExtensionOptions>({
       insertBlockMath:
         (latex = '') =>
         ({ chain }) => {
-          // 块级公式作为段落插入
+          // Block math inserted as paragraph
           return chain()
             .insertContent({
               type: 'paragraph',
@@ -130,20 +130,20 @@ export const MathExtension = Node.create<MathExtensionOptions>({
 
   addKeyboardShortcuts() {
     return {
-      // Ctrl/Cmd + M: 插入行内公式
+      // Ctrl/Cmd + M: Insert inline math
       'Mod-m': () => this.editor.commands.insertInlineMath(),
-      // Ctrl/Cmd + Shift + M: 插入块级公式
+      // Ctrl/Cmd + Shift + M: Insert block math
       'Mod-Shift-m': () => this.editor.commands.insertBlockMath(),
     }
   },
 
   addInputRules() {
-    // 支持 $...$ 语法（行内公式）
+    // Support $...$ syntax (inline math)
     const nodeType = this.type
 
     return [
       new InputRule({
-        // 匹配 $latex$ 格式
+        // Match $latex$ format
         find: /\$([^$]+)\$$/,
         handler: ({ state, range, match }) => {
           const latex = match[1]

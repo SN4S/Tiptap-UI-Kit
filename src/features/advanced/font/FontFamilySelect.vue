@@ -14,8 +14,8 @@
 
 <script setup lang="ts">
 /**
- * FontFamilySelect - 字体选择器组件
- * @description 可复用的字体选择器组件，支持选择字体系列
+ * FontFamilySelect - Font family selector component
+ * @description Reusable font family selector component
  */
 import { ref, watch } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -30,16 +30,16 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-// 事务响应式 editor：当前字体跟随光标/内容变化重新求值
+// Transaction reactive editor: current font re-evaluates on cursor/content changes
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const runCommand = createCommandRunner(editor)
 
-// ===== 响应式状态 =====
+// ===== Reactive state =====
 const currentFont = ref<string>(DEFAULT_VALUES.fontFamily)
 
-// ===== 监听编辑器状态，更新当前字体 =====
+// ===== Listen to editor state, update current font =====
 watch(
   () => editor.value?.getAttributes('textStyle')?.fontFamily,
   (fontFamily) => {
@@ -53,8 +53,8 @@ watch(
 )
 
 /**
- * 字体切换处理
- * @description 如果无选区则应用到整个段落，有选区则应用到选区
+ * Font switch handler
+ * @description Applies to whole paragraph if no selection, or to selection if present
  */
 function onFontChange(val: string) {
   const e = editor.value
@@ -62,12 +62,12 @@ function onFontChange(val: string) {
 
   currentFont.value = val
 
-  // 空值 = 清除字体设置，回到主题默认
+  // Empty value = clear font setting, revert to theme default
   const applyFont = (chain: any) => (val === '' ? chain.unsetFontFamily() : chain.setFontFamily(val))
 
   const { from, to, empty } = e.state.selection
   if (empty) {
-    // 无选区时：选中整个段落并应用字体
+    // No selection: select entire paragraph and apply font
     const $from = e.state.selection.$from
     const start = $from.start($from.depth)
     const end = $from.end($from.depth)
@@ -77,7 +77,7 @@ function onFontChange(val: string) {
       (chain) => chain.setTextSelection({ from, to }),
     ])
   } else {
-    // 有选区时：直接应用到选区
+    // With selection: apply directly to selection
     runCommand(applyFont)()
   }
 }

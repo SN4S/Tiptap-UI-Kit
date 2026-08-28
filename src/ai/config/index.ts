@@ -1,6 +1,6 @@
 /**
  * AI Configuration Module
- * @description AI 用户配置系统
+ * @description AI user configuration system
  */
 
 export * from './types'

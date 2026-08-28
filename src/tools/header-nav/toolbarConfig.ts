@@ -1,58 +1,58 @@
 /**
- * Toolbar Configuration - 工具栏配置类型
- * @description 定义工具栏工具的显示配置
+ * Toolbar Configuration - Toolbar configuration types
+ * @description Defines display configuration for toolbar tools
  */
 
 /**
- * 工具栏工具配置接口
+ * Toolbar tool configuration interface
  */
 export interface ToolbarToolsConfig {
-  /** 是否显示文本格式工具（粗体、斜体、下划线、删除线） */
+  /** Whether to display text formatting tools (bold, italic, underline, strike) */
   textFormat?: boolean
-  /** 是否显示颜色选择器（文本颜色、背景颜色） */
+  /** Whether to display color picker (text color, background color) */
   colorPicker?: boolean
-  /** 是否显示标题下拉菜单 */
+  /** Whether to display heading dropdown */
   heading?: boolean
-  /** 是否显示列表工具（有序、无序、任务列表） */
+  /** Whether to display list tools (ordered, bullet, task list) */
   list?: boolean
-  /** 是否显示对齐工具 */
+  /** Whether to display alignment tools */
   align?: boolean
-  /** 是否显示图片上传工具 */
+  /** Whether to display image upload tool */
   image?: boolean
-  /** 是否显示代码块工具 */
+  /** Whether to display code block tool */
   codeBlock?: boolean
-  /** 是否显示链接工具 */
+  /** Whether to display link tool */
   link?: boolean
-  /** 是否显示表格工具 */
+  /** Whether to display table tool */
   table?: boolean
-  /** 是否显示撤销/重做工具 */
+  /** Whether to display undo/redo tools */
   undoRedo?: boolean
-  /** 是否禁用撤销/重做工具（协作模式下需要禁用） */
+  /** Whether to disable undo/redo tools (disabled in collaboration mode) */
   undoRedoDisabled?: boolean
-  /** 是否显示清除格式工具 */
+  /** Whether to display format clear tool */
   clearFormat?: boolean
-  /** 是否显示字体工具 */
+  /** Whether to display font tools */
   font?: boolean
-  /** 是否显示行距工具 */
+  /** Whether to display line height tool */
   lineHeight?: boolean
-  /** 是否显示下标/上标工具 */
+  /** Whether to display subscript/superscript tools */
   subscriptSuperscript?: boolean
-  /** 是否显示格式刷工具 */
+  /** Whether to display format painter tool */
   formatPainter?: boolean
-  /** 是否禁用格式刷工具（协作模式多人时需要禁用） */
+  /** Whether to disable format painter tool in multi-user collaboration mode */
   formatPainterDisabled?: boolean
-  /** 是否显示 Word 导入/导出工具 */
+  /** Whether to display Word import/export tools */
   word?: boolean
-  /** 是否显示模板插入工具 */
+  /** Whether to display template insertion tool */
   template?: boolean
-  /** 是否显示图库工具 */
+  /** Whether to display gallery tool */
   gallery?: boolean
-  /** 是否显示AI工具 */
+  /** Whether to display AI tools */
   ai?: boolean
 }
 
 /**
- * 默认工具栏配置（显示所有工具）
+ * Default toolbar config (displays all tools)
  */
 export const DEFAULT_TOOLBAR_CONFIG: ToolbarToolsConfig = {
   textFormat: true,
@@ -74,7 +74,7 @@ export const DEFAULT_TOOLBAR_CONFIG: ToolbarToolsConfig = {
 }
 
 /**
- * 基础版工具栏配置（只显示基础功能）
+ * Basic toolbar config (displays basic tools only)
  */
 export const BASIC_TOOLBAR_CONFIG: ToolbarToolsConfig = {
   textFormat: true,
@@ -96,7 +96,7 @@ export const BASIC_TOOLBAR_CONFIG: ToolbarToolsConfig = {
 }
 
 /**
- * 进阶版工具栏配置（包含更多功能）
+ * Advanced toolbar config (includes extended features)
  */
 export const ADVANCED_TOOLBAR_CONFIG: ToolbarToolsConfig = {
   textFormat: true,

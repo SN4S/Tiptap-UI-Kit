@@ -1,33 +1,33 @@
 /**
- * Page Constants - 页面常量配置
- * @description A4 页面相关的尺寸常量
+ * Page Constants - Page constant configuration
+ * @description Dimension constants for A4 page
  */
 
 /**
- * A4 纸张宽度（像素）
- * A4 标准尺寸：210mm × 297mm
- * 在 96 DPI 下：794px × 1123px
+ * A4 paper width (pixels)
+ * Standard A4 size: 210mm × 297mm
+ * At 96 DPI: 794px × 1123px
  */
 export const A4_WIDTH_PX = 794
 
 /**
- * A4 纸张高度（像素）
+ * A4 paper height (pixels)
  */
 export const A4_HEIGHT_PX = 1123
 
 /**
- * 页面顶部内边距（像素）
+ * Page top padding (pixels)
  */
 export const PAGE_PADDING_TOP_PX = 96
 
 /**
- * 页面底部内边距（像素）
+ * Page bottom padding (pixels)
  */
 export const PAGE_PADDING_BOTTOM_PX = 96
 
 /**
- * 页面内容区域高度（像素）
- * 总高度减去上下内边距
+ * Page content area height (pixels)
+ * Total height minus top and bottom padding
  */
 export const PAGE_CONTENT_HEIGHT_PX = A4_HEIGHT_PX - PAGE_PADDING_TOP_PX - PAGE_PADDING_BOTTOM_PX
 

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!-- 表格单元格组件 -->
+    <!-- Table cell component -->
   </div>
 </template>
 
 <script setup lang="ts">
-// 占位组件
+// Placeholder component
 </script>
 

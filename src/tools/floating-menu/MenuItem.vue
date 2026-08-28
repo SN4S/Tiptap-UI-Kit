@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!-- 菜单项组件 -->
+    <!-- Menu item component -->
   </div>
 </template>
 
 <script setup lang="ts">
-// 占位组件
+// Placeholder component
 </script>
 

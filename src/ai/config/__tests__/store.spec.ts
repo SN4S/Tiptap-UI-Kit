@@ -1,5 +1,5 @@
 /**
- * AI 配置存储单元测试
+ * AI configuration store unit tests
  */
 import { describe, it, expect, beforeEach } from 'vitest'
 import { createAiConfigStore } from '../store'
@@ -42,8 +42,8 @@ describe('AI config store', () => {
 
   it('round-trips API keys containing unicode/special characters', () => {
     const store = createAiConfigStore()
-    store.saveConfig(makeConfig({ apiKey: 'key-带中文-!@#$%^&*()' }))
-    expect(store.getApiKey()).toBe('key-带中文-!@#$%^&*()')
+    store.saveConfig(makeConfig({ apiKey: 'key-with-special-!@#$%^&*()' }))
+    expect(store.getApiKey()).toBe('key-with-special-!@#$%^&*()')
   })
 
   it('does not store the API key in plain text', () => {

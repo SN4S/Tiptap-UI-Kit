@@ -1,6 +1,6 @@
 /**
  * Math Extension
- * @description 数学公式扩展，支持 LaTeX 语法和 KaTeX 渲染
+ * @description Math extension supporting LaTeX syntax and KaTeX rendering
  */
 
 export { MathExtension, default } from './MathExtension'

@@ -19,11 +19,11 @@
               <a-checkbox v-model:checked="tableWithHeader">{{ t('editor.includeHeader') }}</a-checkbox>
             </div>
             
-            <!-- 表格操作工具栏 -->
+            <!-- Table action toolbar -->
             <div  class="table-toolbar-section">
-              <!-- 第一行 -->
+              <!-- Row 1 -->
               <div class="table-menu-row">
-                <!-- 行操作 -->
+                <!-- Row operations -->
                 <div class="table-menu-group">
                   <button
                     v-for="item in rowTools"
@@ -37,7 +37,7 @@
                   </button>
                 </div>
 
-                <!-- 列操作 -->
+                <!-- Column operations -->
                 <div class="table-menu-group">
                   <button
                     v-for="item in columnTools"
@@ -52,9 +52,9 @@
                 </div>
               </div>
 
-              <!-- 第二行 -->
+              <!-- Row 2 -->
               <div class="table-menu-row">
-                <!-- 单元格操作 -->
+                <!-- Cell operations -->
                 <div class="table-menu-group">
                   <button
                     v-for="item in cellTools"
@@ -88,8 +88,8 @@
 
 <script setup lang="ts">
 /**
- * TableButton - 表格按钮组件
- * @description 提供表格插入面板，支持自定义行列与表头，以及删除表格功能
+ * TableButton - Table button component
+ * @description Provides table insertion panel, supporting custom rows/cols, headers, and deletion
  */
 import { ref } from 'vue'
 import { Popover } from 'ant-design-vue'
@@ -118,11 +118,11 @@ interface Props {
 const props = defineProps<Props>()
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const runCommand = createCommandRunner(editor)
 const { canExecute } = createStateCheckers(editor)
 
-// ===== 表格操作工具 =====
+// ===== Table action tools =====
 const rowTools = [
   {
     name: 'addRowBefore',
@@ -202,7 +202,7 @@ const cellTools = [
   },
 ]
 
-// ===== 响应式状态 =====
+// ===== Reactive state =====
 const tableDropdownOpen = ref(false)
 const tableWithHeader = ref(true)
 const gridRows = 10
@@ -210,9 +210,9 @@ const gridCols = 10
 const hoverRows = ref(0)
 const hoverCols = ref(0)
 
-// ===== 表格插入：网格悬停与创建 =====
+// ===== Table insertion: grid hover & creation =====
 /**
- * 设置网格悬停状态
+ * Set grid hover state
  */
 function setHover(r: number, c: number) {
   hoverRows.value = r
@@ -220,7 +220,7 @@ function setHover(r: number, c: number) {
 }
 
 /**
- * 重置网格悬停状态
+ * Reset grid hover state
  */
 function resetGridHover() {
   hoverRows.value = 0
@@ -228,9 +228,9 @@ function resetGridHover() {
 }
 
 /**
- * 应用创建表格
- * @param rows 行数
- * @param cols 列数
+ * Apply and create table
+ * @param rows Row count
+ * @param cols Column count
  */
 function applyCreateTable(rows: number, cols: number) {
   const r = Math.max(1, Number(rows))
@@ -240,7 +240,7 @@ function applyCreateTable(rows: number, cols: number) {
 }
 
 /**
- * 删除表格
+ * Delete table
  */
 function deleteTable() {
   runCommand((chain) => chain.deleteTable())()
@@ -248,7 +248,7 @@ function deleteTable() {
 </script>
 
 <style scoped>
-/* ===== 插入表格面板 ===== */
+/* ===== Insert table panel ===== */
 .table-insert-panel {
   display: grid;
   grid-template-columns: 1fr;
@@ -320,7 +320,7 @@ function deleteTable() {
   gap: 8px;
 }
 
-/* ===== 表格工具栏样式 ===== */
+/* ===== Table toolbar style ===== */
 .table-toolbar-section {
   padding: 8px;
   background: #fafafa;

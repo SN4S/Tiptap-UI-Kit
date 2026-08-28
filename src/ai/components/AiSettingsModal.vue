@@ -8,7 +8,7 @@
     class="ai-settings-modal"
   >
     <div class="ai-settings">
-      <!-- 提供商选择 -->
+      <!-- Provider selection -->
       <div class="ai-settings__section">
         <label class="ai-settings__label">{{ t('aiSettings.provider') }}</label>
         <a-select
@@ -36,7 +36,7 @@
         <p class="ai-settings__hint ai-settings__hint--warning">{{ t('aiSettings.securityNote') }}</p>
       </div>
 
-      <!-- 自定义端点 -->
+      <!-- Custom endpoint -->
       <div v-if="formData.provider === 'custom' || formData.provider === 'ollama'" class="ai-settings__section">
         <label class="ai-settings__label">{{ t('aiSettings.endpoint') }}</label>
         <a-input
@@ -46,7 +46,7 @@
         />
       </div>
 
-      <!-- 模型选择 -->
+      <!-- Model selection -->
       <div class="ai-settings__section">
         <label class="ai-settings__label">{{ t('aiSettings.model') }}</label>
         <a-input
@@ -57,7 +57,7 @@
         <p class="ai-settings__hint">{{ currentProviderInfo?.description }}</p>
       </div>
 
-      <!-- 连接测试 -->
+      <!-- Connection test -->
       <div class="ai-settings__section">
         <a-button
           :loading="testStatus === 'testing'"
@@ -77,13 +77,13 @@
         <p v-if="testError" class="ai-settings__error">{{ testError }}</p>
       </div>
 
-      <!-- 启用开关 -->
+      <!-- Enable toggle -->
       <div class="ai-settings__section ai-settings__section--inline">
         <label class="ai-settings__label">{{ t('aiSettings.enableAi') }}</label>
         <a-switch v-model:checked="formData.enabled" />
       </div>
 
-      <!-- 操作按钮 -->
+      <!-- Action buttons -->
       <div class="ai-settings__actions">
         <a-button @click="handleClear" danger>{{ t('aiSettings.clear') }}</a-button>
         <div class="ai-settings__actions-right">
@@ -132,7 +132,7 @@ const {
   clearConfig,
 } = useAiConfig()
 
-// 表单数据
+// Form data
 const formData = reactive<Omit<AiUserConfig, 'updatedAt'>>({
   provider: 'openai',
   apiKey: '',
@@ -142,12 +142,12 @@ const formData = reactive<Omit<AiUserConfig, 'updatedAt'>>({
   enabled: true,
 })
 
-// 测试状态
+// Test status
 const testStatus = ref<'idle' | 'testing' | 'success' | 'error'>('idle')
 const testError = ref<string | null>(null)
 const testLatency = ref<number | null>(null)
 
-// 计算属性
+// Computed properties
 const providerOptions = computed(() =>
   AI_PROVIDERS.map(p => ({
     value: p.id,
@@ -174,7 +174,7 @@ const testButtonText = computed(() => {
   }
 })
 
-// 监听弹窗打开，初始化表单
+// Listen to modal open to initialize form
 watch(() => props.open, (isOpen) => {
   if (isOpen && config.value) {
     Object.assign(formData, {
@@ -191,7 +191,7 @@ watch(() => props.open, (isOpen) => {
   }
 })
 
-// 切换提供商
+// Switch provider
 function onProviderChange(value: unknown) {
   const provider = value as AiProvider
   const info = getProviderInfo(provider)
@@ -203,13 +203,13 @@ function onProviderChange(value: unknown) {
   testError.value = null
 }
 
-// 测试连接
+// Test connection
 async function handleTest() {
   testStatus.value = 'testing'
   testError.value = null
   testLatency.value = null
 
-  // 临时保存以进行测试
+  // Temporarily save for testing
   const tempConfig: AiUserConfig = {
     ...formData,
     updatedAt: Date.now(),
@@ -222,7 +222,7 @@ async function handleTest() {
   testLatency.value = result.latency ?? null
 }
 
-// 保存配置
+// Save configuration
 function handleSave() {
   const configToSave: AiUserConfig = {
     ...formData,
@@ -233,7 +233,7 @@ function handleSave() {
   handleClose()
 }
 
-// 清除配置
+// Clear configuration
 function handleClear() {
   clearConfig()
   Object.assign(formData, {
@@ -249,7 +249,7 @@ function handleClear() {
   testLatency.value = null
 }
 
-// 关闭弹窗
+// Close modal
 function handleClose() {
   visible.value = false
 }

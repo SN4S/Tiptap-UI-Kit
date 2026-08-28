@@ -1,32 +1,32 @@
-/* Footer Nav - 底部导航样式 */
-/* 迁移自 tiptapPro 的 zoom-toolbar.css，专门用于底部导航栏 */
-/* 注意：ZoomBar 组件已导入 zoom-toolbar.css，此处仅做样式增强和覆盖 */
+/* Footer Nav - Footer navigation style */
+/* Migrated from zoom-toolbar.css for footer nav */
+/* Note: ZoomBar component already imports zoom-toolbar.css */
 
-/* ===== 底部导航容器 ===== */
+/* ===== Footer navigation container ===== */
 .footer-nav-container {
   position: sticky;
   bottom: 0;
   width: 100%;
   flex-shrink: 0;
   z-index: 100;
-  margin-top: auto; /* 确保在 flex 布局中推到底部 */
-  background: transparent; /* 透明背景，让内部组件控制背景色 */
+  margin-top: auto; /* Pushes to bottom in flex layout */
+  background: transparent; /* Transparent background */
 }
 
-/* ===== 缩放控制条（底部位置样式增强） ===== */
-/* 确保底部导航的样式优先级，覆盖默认样式 */
+/* ===== Zoom control bar (bottom placement variant) ===== */
+/* Ensures footer nav style specificity */
 .footer-nav-container .zoom-controls--bottom {
-  position: relative; /* 改为 relative，因为父容器已经是 sticky */
+  position: relative; /* Relative positioning */
   bottom: auto;
   width: 100%;
   flex-shrink: 0;
   z-index: 100;
-  margin-bottom: 0; /* 移除底部留白，由父容器控制 */
+  margin-bottom: 0; /* Removes bottom margin */
   border-top: 1px solid #d0d0d0;
   border-bottom: none;
-  border-radius: 0; /* 移除圆角，底部导航应该贴合底部 */
+  border-radius: 0; /* Remove rounded corners for flush bottom layout */
   box-shadow: 0 -2px 8px rgb(0 0 0 / 5%);
-  background: #f5f5f5; /* 确保有背景色 */
+  background: #f5f5f5; /* Ensure background color */
 
   :where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *) & {
     background: #262626;
@@ -35,8 +35,8 @@
   }
 }
 
-/* ===== 响应式设计 ===== */
-/* 平板（≤1024px） */
+/* ===== Responsive Design ===== */
+/* Tablet (<= 1024px) */
 @media (max-width: 1024px) {
   .footer-nav-container .zoom-controls--bottom {
     gap: 8px;
@@ -44,7 +44,7 @@
   }
 }
 
-/* 移动端（≤768px） */
+/* Mobile (<= 768px) */
 @media (max-width: 768px) {
   .footer-nav-container .zoom-controls--bottom {
     gap: 6px;
@@ -53,7 +53,7 @@
   }
 }
 
-/* 小屏手机（≤480px） */
+/* Small Phone (<= 480px) */
 @media (max-width: 480px) {
   .footer-nav-container .zoom-controls--bottom {
     gap: 4px;
@@ -61,13 +61,13 @@
     flex-wrap: wrap;
   }
 
-  /* 小屏时隐藏字数统计 */
+  /* Hide word count on small screens */
   .footer-nav-container .char-count {
     display: none;
   }
 }
 
-/* ===== 暗黑模式按钮样式 ===== */
+/* ===== Dark Mode Button Style ===== */
 :where([data-theme="dark"], [data-theme="dark"] *) .footer-nav-container .ant-btn {
   color: rgba(255, 255, 255, 0.85);
   border-color: #434343;

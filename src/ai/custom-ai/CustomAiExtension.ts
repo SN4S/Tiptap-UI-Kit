@@ -410,8 +410,8 @@ function performCustomAi(
       console.error('[Custom AI] Error:', error);
       handleCleanup();
       notification.error({
-        message: '自定义 AI 失败',
-        description: error.message || '请稍后重试',
+        message: 'Custom AI failed',
+        description: error.message || 'Please try again later',
         duration: 3,
       });
     },
@@ -421,7 +421,7 @@ function performCustomAi(
   aiApiService.customCommand(
     selectedText,
     prompt,
-    '你係一個專業嘅文本處理助手。直接返回處理結果,唔好加任何解釋。',
+    'You are a professional text processing assistant. Return the processing result directly without adding any explanation.',
     callback,
   );
 }

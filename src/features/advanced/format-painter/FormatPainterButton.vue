@@ -11,9 +11,9 @@
 
 <script setup lang="ts">
 /**
- * FormatPainterButton - 格式刷按钮组件
- * @description 可复用的格式刷按钮组件，提供格式采样和应用功能
- * 支持单击单次模式和双击连续模式
+ * FormatPainterButton - Format painter button component
+ * @description Reusable format painter button component, providing format sampling and application
+ * Supports single-click single mode and double-click continuous mode
  */
 import { computed, ref, watch, onBeforeUnmount } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -26,7 +26,7 @@ import type { FormatPainterStorage } from './formatPainter'
 // ===== Props =====
 interface Props {
   editor: Editor | null | undefined
-  /** 外部传入的禁用状态（优先级高于内部协作检测） */
+  /** External disabled prop (takes precedence over internal collaboration detection) */
   disabled?: boolean
 }
 
@@ -35,24 +35,24 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const editor = computed(() => props.editor ?? null)
 
-// ===== 类型定义 =====
+// ===== Type definitions =====
 interface EditorWithStorage {
   storage?: {
     formatPainter?: FormatPainterStorage
   }
 }
 
-// ===== 禁用状态检查 =====
+// ===== Disabled state check =====
 /**
- * 计算是否禁用格式刷
- * @description 优先使用外部传入的 disabled 属性，否则检查协作扩展是否存在
+ * Compute if format painter is disabled
+ * @description Prefers external disabled prop, otherwise checks if collaboration extension exists
  */
 const isDisabled = computed(() => {
-  // 如果外部明确传入了 disabled 属性，使用外部值
+  // If external disabled prop provided, use external value
   if (props.disabled !== undefined) {
     return props.disabled
   }
-  // 否则检查协作扩展是否存在（兼容旧逻辑）
+  // Otherwise check if collaboration extension exists
   const e = editor.value
   if (!e) return false
   try {
@@ -65,20 +65,20 @@ const isDisabled = computed(() => {
   }
 })
 
-// ===== 格式刷状态管理 =====
+// ===== Format painter state management =====
 /**
- * 获取格式刷存储对象
+ * Get format painter storage object
  */
 function getFormatPainterStorage(): FormatPainterStorage | undefined {
   const e = editor.value as EditorWithStorage | null
   return e?.storage?.formatPainter
 }
 
-// 使用响应式 ref 订阅编辑器事件，确保激活态能实时更新
+// Use reactive refs to subscribe to editor events for live active status updates
 const isFormatPainterActive = ref(false)
 
 /**
- * 更新格式刷激活状态
+ * Update format painter active state
  */
 function updateFormatPainterActive() {
   const storage = getFormatPainterStorage()
@@ -86,23 +86,23 @@ function updateFormatPainterActive() {
 }
 
 /**
- * 设置格式刷事件订阅
+ * Setup format painter event subscriptions
  */
 function setupFormatPainterSubscriptions() {
-  // 先清理旧订阅
+  // Clean up previous subscriptions
   cleanupFormatPainterSubscriptions()
   const e = editor.value
   if (!e) return
-  // 初始化一次状态
+  // Initialize state once
   updateFormatPainterActive()
-  // 订阅常见会引起状态变化的事件
+  // Subscribe to events triggering state changes
   e.on('update', updateFormatPainterActive)
   e.on('selectionUpdate', updateFormatPainterActive)
   e.on('transaction', updateFormatPainterActive)
 }
 
 /**
- * 清理格式刷事件订阅
+ * Clean up format painter event subscriptions
  */
 function cleanupFormatPainterSubscriptions() {
   const e = editor.value
@@ -112,30 +112,30 @@ function cleanupFormatPainterSubscriptions() {
     e.off('selectionUpdate', updateFormatPainterActive)
     e.off('transaction', updateFormatPainterActive)
   } catch (error) {
-    // 忽略取消订阅时的错误
+    // Ignore errors when unsubscribing
   }
 }
 
-// 初始化与后续 editor 变更时设置订阅
+// Setup subscriptions on init and editor changes
 if (editor.value) setupFormatPainterSubscriptions()
-// 监听 editor 引用的变化（在父组件传入实例后触发）
+// Watch editor reference changes (triggered after parent passes instance)
 watch(editor, setupFormatPainterSubscriptions, { immediate: true })
 
-// 组件卸载时清理订阅
+// Clean up subscriptions on component unmount
 onBeforeUnmount(() => {
   cleanupFormatPainterSubscriptions()
 })
 
-// ===== 格式刷命令 =====
+// ===== Format painter commands =====
 /**
- * 单击切换格式刷（单次模式）
- * @description 单击格式刷按钮，采样格式或应用格式
+ * Single click to toggle format painter (single mode)
+ * @description Single click format painter button to sample or apply format
  */
 function toggleFormatPainter() {
   const e = editor.value as any
   if (!e) return
   
-  // 检查是否禁用，如果禁用则提示
+  // Check if disabled; notify if disabled
   if (isDisabled.value) {
     message.warning(t('editor.collaborationNoFormatPainter'))
     return
@@ -144,7 +144,7 @@ function toggleFormatPainter() {
   const active = e.storage?.formatPainter?.isActive ?? false
   
   if (!active) {
-    // 格式刷未激活：检查是否有选中内容
+    // Format painter inactive: check if selection exists
     try {
       const selection = e.state.selection
       if (!selection || selection.empty) {
@@ -156,14 +156,14 @@ function toggleFormatPainter() {
       return
     }
     
-    // 采样格式并激活格式刷（单次模式）
+    // Sample format and activate format painter (single mode)
     const success = e.commands.startFormatPainting()
     if (success) {
       message.success(t('editor.sampleSuccessSingle'))
       updateFormatPainterActive()
     }
   } else {
-    // 格式刷已激活：取消格式刷状态
+    // Format painter active: cancel format painter state
     e.commands.cancelFormatPainting()
     updateFormatPainterActive()
     message.info(t('editor.formatPainterExited'))
@@ -171,14 +171,14 @@ function toggleFormatPainter() {
 }
 
 /**
- * 双击切换格式刷连续应用模式
- * @description 双击格式刷按钮，开启连续应用模式
+ * Double click to toggle continuous format painter mode
+ * @description Double click format painter button to enable continuous mode
  */
 function toggleFormatPainterContinuous() {
   const e = editor.value as any
   if (!e) return
   
-  // 检查是否禁用，如果禁用则提示
+  // Check if disabled; notify if disabled
   if (isDisabled.value) {
     message.warning(t('editor.collaborationNoFormatPainter'))
     return
@@ -187,7 +187,7 @@ function toggleFormatPainterContinuous() {
   const active = e.storage?.formatPainter?.isActive ?? false
   
   if (!active) {
-    // 格式刷未激活：检查是否有选中内容
+    // Format painter inactive: check if selection exists
     try {
       const selection = e.state.selection
       if (!selection || selection.empty) {
@@ -199,14 +199,14 @@ function toggleFormatPainterContinuous() {
       return
     }
     
-    // 采样格式并激活格式刷（连续模式）
+    // Sample format and activate format painter (continuous mode)
     const success = e.commands.startContinuousFormatPainting()
     if (success) {
       message.success(t('editor.sampleSuccessContinuous'))
       updateFormatPainterActive()
     }
   } else {
-    // 格式刷已激活：取消格式刷
+    // Format painter active: cancel format painter
     e.commands.cancelFormatPainting()
     updateFormatPainterActive()
     message.info(t('editor.formatPainterExited'))

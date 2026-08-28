@@ -13,8 +13,8 @@
 
 <script setup lang="ts">
 /**
- * SubscriptSuperscriptButton - 上标下标按钮组
- * @description 可复用的上标下标按钮组件，提供上标和下标切换功能
+ * SubscriptSuperscriptButton - Subscript/superscript button group
+ * @description Reusable subscript/superscript button component for subscript and superscript toggle
  */
 import { computed } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -31,10 +31,10 @@ interface Props {
 const props = defineProps<Props>()
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const { isActive } = createStateCheckers(editor)
 
-// ===== 格式配置 =====
+// ===== Format configuration =====
 const formats = computed(() => [
   {
     name: 'superscript',

@@ -1,8 +1,8 @@
 /**
- * Subscript Superscript - 上标下标功能模块
- * @description 提供上标和下标工具栏按钮功能
+ * Subscript Superscript - Subscript & Superscript Feature Module
+ * @description Provides subscript and superscript toolbar button functionality
  */
 
-// 组件导出
+// Component exports
 export { default as SubscriptSuperscriptButton } from './SubscriptSuperscriptButton.vue'
 

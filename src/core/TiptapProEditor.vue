@@ -328,6 +328,7 @@ const toolbarConfig = computed<ToolbarToolsConfig>(() => {
         subscriptSuperscript: true,
         formatPainter: true,
         formatPainterDisabled: disableUndoRedo,
+        ...props.toolbarConfig,
       }
     case 'basic':
     default:
@@ -335,6 +336,7 @@ const toolbarConfig = computed<ToolbarToolsConfig>(() => {
         ...BASIC_TOOLBAR_CONFIG,
         undoRedo: true,
         undoRedoDisabled: disableUndoRedo,
+        ...props.toolbarConfig,
       }
   }
 })

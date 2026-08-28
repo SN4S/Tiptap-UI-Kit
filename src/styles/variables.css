@@ -53,6 +53,12 @@
   --tiptap-table-border: #d0d0d0;
   --tiptap-table-header-bg: #f5f5f5;
   --tiptap-table-selected: rgba(59, 130, 246, 0.1);
+  /* Generic table cell vars (inherited by .ProseMirror table cells in any mode) */
+  --table-border-color: var(--tiptap-table-border, #d0d0d0);
+  --table-header-bg: var(--tiptap-table-header-bg, #f5f5f5);
+  --table-cell-bg: transparent;
+  --table-selected-bg: rgba(59, 130, 246, 0.12);
+  --table-border-color-active: var(--tiptap-primary, #3b82f6);
   
   /* ===== Blockquote ===== */
   --tiptap-blockquote-border: var(--tiptap-primary);
@@ -129,6 +135,11 @@
   --tiptap-codeblock-bg: #0d0d0d;
   
   --tiptap-table-header-bg: #2a2a2a;
-  
+
+  --table-border-color: #434343;
+  --table-header-bg: var(--tiptap-table-header-bg, #2a2a2a);
+  --table-selected-bg: rgba(96, 165, 250, 0.18);
+  --table-border-color-active: var(--tiptap-primary, #60a5fa);
+
   --tiptap-blockquote-bg: #262626;
 }

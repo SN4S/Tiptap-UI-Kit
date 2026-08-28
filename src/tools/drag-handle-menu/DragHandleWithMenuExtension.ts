@@ -124,28 +124,40 @@ function createDragHandle(
   render(h(HolderOutlined), handle)
 
   // Prevent mousedown bubbling to avoid ProseMirror selection re-render
-  // Resolves double-click requirement issue
+  // (e.g. the double-click requirement issue). NOTE: do NOT call
+  // e.preventDefault() here — it prevents Chrome/Edge from starting the
+  // native HTML5 drag on the draggable handle (verified empirically).
   handle.addEventListener('mousedown', (e) => {
     e.stopPropagation()
-    e.preventDefault()
   })
 
   // Native drag&drop of the attached block via the handle.
   // Setting view.dragging lets ProseMirror's dragover/drop handlers
   // move the whole node (with drop cursor) to the drop position.
-  handle.addEventListener('dragstart', (e) => {
+  // NOTE: do NOT dispatch a transaction here. A dispatch re-renders the
+  // decoration widgets synchronously, which can detach/replace the draggable
+  // source element while dragging starts — Chrome then cancels the native
+  // drag. handleDrop uses dragging.node (not the editor selection), so no
+  // dispatch is required for the move to work.
+  handle.addEventListener('dragstart', (e: DragEvent) => {
     e.stopPropagation()
+    if (e.button === 2) return
     const dragNode = view.state.doc.nodeAt(pos)
     if (!dragNode || !e.dataTransfer) return
 
     const nodeSel = NodeSelection.create(view.state.doc, pos)
-    view.dispatch(view.state.tr.setSelection(nodeSel).setMeta('uiEvent', 'drag'))
-
     const slice = nodeSel.content()
-    const nodeDom = view.nodeDOM(pos) as HTMLElement | null
+
     e.dataTransfer.effectAllowed = 'copyMove'
-    e.dataTransfer.setData('text/html', nodeDom ? nodeDom.outerHTML : '')
-    e.dataTransfer.setData('text/plain', slice.content.textBetween(0, slice.content.size, '\n', '\n'))
+    const nodeDom = view.nodeDOM(pos) as HTMLElement | null
+    e.dataTransfer.setData(
+      'text/html',
+      nodeDom ? nodeDom.outerHTML : ''
+    )
+    e.dataTransfer.setData(
+      'text/plain',
+      slice.content.textBetween(0, slice.content.size, '\n', '\n')
+    )
 
     view.dragging = { slice, move: true, node: nodeSel }
   })

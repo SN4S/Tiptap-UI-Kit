@@ -6,6 +6,7 @@ import type { JSONContent } from '@tiptap/core'
 import type { Editor } from '@tiptap/vue-3'
 
 import type { SlashCommandGroup, SlashCommandItem } from '../tools/slash-command'
+import type { ToolbarToolsConfig } from '../tools/header-nav'
 
 export type { SlashCommandGroup, SlashCommandItem }
 
@@ -108,6 +109,8 @@ export interface TiptapProEditorProps {
   customSlashCommands?: Array<SlashCommandGroup | SlashCommandItem>
   /** Function to filter, reorder, or transform slash command groups */
   transformSlashCommands?: (groups: SlashCommandGroup[]) => SlashCommandGroup[]
+  /** Toolbar tool config override (merged over the version default config) */
+  toolbarConfig?: ToolbarToolsConfig
 }
 
 /**

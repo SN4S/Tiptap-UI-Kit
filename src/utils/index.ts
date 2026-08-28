@@ -1,5 +1,5 @@
 /**
- * Shared Utils - 共享工具函数统一导出
+ * Shared Utils - unified export of shared utility functions
  */
 export * from './editorCommands'
 export * from './editorState'

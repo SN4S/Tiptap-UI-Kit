@@ -1,43 +1,43 @@
 /**
- * Document Tools - AI 文档编辑工具集
- * @description 把编辑器的基本操作封装成结构化「工具」（OpenAI function-calling 格式），
- * 供 AI agent 通过 tool-use 循环调用，实现「用文字描述来编写和修改文档」。
+ * Document Tools - AI document editing toolset
+ * @description Wraps the editor's basic operations into structured "tools" (OpenAI function-calling format),
+ * for the AI agent to invoke through a tool-use loop to "write and modify a document using text descriptions".
  *
- * 寻址设计：
- * - 块级操作用「块索引」（文档顶层节点的序号，read_document 返回）
- * - 行内操作用「文本查找」（find + occurrence），不暴露脆弱的 ProseMirror 位置
- * - 每次修改后返回最新文档概要，模型无需再调 read_document 对齐索引
+ * Addressing design:
+ * - Block-level operations use a "block index" (the index of the document's top-level node, returned by read_document)
+ * - Inline operations use "text search" (find + occurrence), without exposing fragile ProseMirror positions
+ * - After each modification, the latest document outline is returned, so the model doesn't need to call read_document again to align indexes
  */
 
 import type { Editor } from '@tiptap/core'
 
 // ============================================================================
-// 类型
+// Types
 // ============================================================================
 
-/** 工具定义（parameters 为 JSON Schema，与 OpenAI function calling 对齐） */
+/** Tool definition (parameters is a JSON Schema, aligned with OpenAI function calling) */
 export interface DocumentTool {
   name: string
   description: string
   parameters: Record<string, unknown>
-  /** 执行工具，返回给模型看的结果文本；抛错时错误信息也会回传给模型 */
+  /** Execute the tool; returns result text for the model to see; errors thrown are also relayed back to the model */
   execute: (editor: Editor, args: Record<string, unknown>) => string
 }
 
 interface BlockInfo {
   index: number
-  /** 节点起点前的位置（block 边界） */
+  /** Position before the block's start (the block boundary) */
   from: number
-  /** 节点终点后的位置 */
+  /** Position after the block's end */
   to: number
   node: import('@tiptap/pm/model').Node
 }
 
 // ============================================================================
-// 内部工具函数
+// Internal helper functions
 // ============================================================================
 
-/** 收集文档顶层块 */
+/** Collects the document's top-level blocks */
 function getBlocks(editor: Editor): BlockInfo[] {
   const blocks: BlockInfo[] = []
   editor.state.doc.forEach((node, offset, index) => {
@@ -46,7 +46,7 @@ function getBlocks(editor: Editor): BlockInfo[] {
   return blocks
 }
 
-/** 单个块的简短描述（类型 + 截断文本） */
+/** A short description of a single block (type + truncated text) */
 function describeBlock(node: import('@tiptap/pm/model').Node, maxLen: number): string {
   let type = node.type.name
   if (type === 'heading') type = `h${node.attrs.level}`
@@ -69,7 +69,7 @@ function truncate(text: string, maxLen: number): string {
   return t.length > maxLen ? `${t.slice(0, maxLen)}…` : t
 }
 
-/** 文档概要：[i] type: text（模型用它获得块索引） */
+/** Document outline: [i] type: text (the model uses it to obtain block indexes) */
 export function getDocumentOutline(editor: Editor, maxLenPerBlock = 150, maxBlocks = 300): string {
   const blocks = getBlocks(editor)
   if (blocks.length === 0) return '(document is empty)'
@@ -82,12 +82,12 @@ export function getDocumentOutline(editor: Editor, maxLenPerBlock = 150, maxBloc
   return lines.join('\n')
 }
 
-/** 修改成功后返回给模型的统一结果（附最新概要，避免索引漂移） */
+/** Unified result returned to the model after a successful modification (with the latest outline, to avoid index drift) */
 function okWithOutline(editor: Editor, message: string): string {
   return `${message}\nDocument now:\n${getDocumentOutline(editor, 80)}`
 }
 
-/** 校验并解析块索引范围 */
+/** Validates and resolves a block index range */
 function resolveBlockRange(
   editor: Editor,
   fromBlock: number,
@@ -112,21 +112,21 @@ function resolveBlockRange(
 interface TextMatch {
   from: number
   to: number
-  /** 匹配所在顶层块索引（用于多匹配歧义提示） */
+  /** The top-level block index where the match is located (used for multi-match disambiguation hints) */
   blockIndex: number
 }
 
 /**
- * 扫描全文，返回 find 文本的所有匹配区间（绝对位置）。
- * 支持跨行内节点边界（如一半加粗一半普通）的匹配；
- * 在块级结构边界（嵌套段落/表格单元格）和硬换行处插入不可匹配的哨兵字符，
- * 避免「相邻单元格文本拼起来恰好等于 find」这类跨结构假匹配。
+ * Scans the full document and returns all match ranges of the find text (absolute positions).
+ * Supports matches crossing inline node boundaries (e.g. half bold, half normal);
+ * inserts unmatchable sentinel characters at block-level structural boundaries (nested paragraphs/table cells) and hard breaks,
+ * to prevent cross-structure false matches such as "adjacent cell text concatenated happens to equal find".
  */
 function findAllTextRanges(editor: Editor, find: string): TextMatch[] {
   if (!find) throw new Error('`find` must be a non-empty string.')
   const doc = editor.state.doc
 
-  // 逐块拼接文本并记录每个字符的绝对位置，避免跨块误匹配
+  // Concatenate the text block by block and record the absolute position of each character, avoiding cross-block false matches
   const matches: TextMatch[] = []
   doc.forEach((block, blockOffset, blockIndex) => {
     let text = ''
@@ -135,11 +135,11 @@ function findAllTextRanges(editor: Editor, find: string): TextMatch[] {
       if (node.isText && node.text) {
         for (let i = 0; i < node.text.length; i++) {
           text += node.text[i]
-          // +1 跳过块的开始 token
+          // +1 to skip the block's start token
           positions.push(blockOffset + 1 + pos + i)
         }
       } else if (node.isBlock || node.type.name === 'hardBreak') {
-        // 结构边界：用户的 find 不会包含 \u0000，跨边界的假匹配自然失配
+        // Structural boundary: the user's find will never contain \u0000, so cross-boundary false matches naturally fail
         if (text) {
           text += '\u0000'
           positions.push(-1)
@@ -161,8 +161,8 @@ function findAllTextRanges(editor: Editor, find: string): TextMatch[] {
 }
 
 /**
- * 解析出唯一目标匹配。
- * occurrence 未显式传入且存在多个匹配时抛错要求消歧，避免默默改错位置。
+ * Resolves a single unique target match.
+ * When occurrence is not explicitly passed and multiple matches exist, throws an error requesting disambiguation, to avoid silently editing the wrong position.
  */
 function resolveSingleMatch(
   editor: Editor,
@@ -189,7 +189,7 @@ function resolveSingleMatch(
 }
 
 // ============================================================================
-// 工具定义
+// Tool definitions
 // ============================================================================
 
 const readDocument: DocumentTool = {
@@ -335,8 +335,8 @@ const editText: DocumentTool = {
     const replace = String(args.replace ?? '')
 
     if (args.replaceAll) {
-      // 一次性收集全部区间，单条事务里从后往前替换：
-      // 前面的位置不受影响、每个原始匹配恰好替换一次、一次 Cmd+Z 可全部撤销
+      // Collect all ranges at once and replace from back to front within a single transaction:
+      // earlier positions are unaffected, each original match is replaced exactly once, and one Cmd+Z undoes everything
       const matches = findAllTextRanges(editor, find)
       if (matches.length === 0) throw new Error(`Text not found: "${truncate(find, 60)}"`)
       editor
@@ -364,7 +364,7 @@ const editText: DocumentTool = {
   },
 }
 
-/** 行内格式 → mark 名与属性 */
+/** Inline format -> mark name and attributes */
 const FORMAT_MARKS: Record<string, { mark: string; attrs?: (args: Record<string, unknown>) => Record<string, unknown> }> = {
   bold: { mark: 'bold' },
   italic: { mark: 'italic' },
@@ -422,7 +422,7 @@ const formatText: DocumentTool = {
       if (action === 'add') {
         chain = chain.setMark(def.mark, def.attrs ? def.attrs(args) : undefined)
       } else if (format === 'textColor') {
-        // 不能 unsetMark('textStyle')：会连带清掉 fontSize/fontFamily 等其它 textStyle 属性
+        // Cannot unsetMark('textStyle'): it would also clear other textStyle attributes like fontSize/fontFamily
         chain = chain.setMark('textStyle', { color: null })
       } else {
         chain = chain.unsetMark(def.mark)
@@ -439,10 +439,10 @@ const formatText: DocumentTool = {
 }
 
 // ============================================================================
-// 导出
+// Exports
 // ============================================================================
 
-/** 所有文档编辑工具（顺序即推荐调用优先级） */
+/** All document editing tools (the order is the recommended call priority) */
 export const documentTools: DocumentTool[] = [
   readDocument,
   getSelection,
@@ -453,12 +453,12 @@ export const documentTools: DocumentTool[] = [
   formatText,
 ]
 
-/** 按名称查找工具 */
+/** Finds a tool by name */
 export function getDocumentTool(name: string): DocumentTool | undefined {
   return documentTools.find((t) => t.name === name)
 }
 
-/** 转成 OpenAI function-calling 的 tools 数组 */
+/** Converts to the OpenAI function-calling tools array */
 export function toOpenAiTools(tools: DocumentTool[] = documentTools) {
   return tools.map((t) => ({
     type: 'function' as const,

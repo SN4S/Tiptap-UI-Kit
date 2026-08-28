@@ -1,27 +1,27 @@
 <!--
-  ColorPicker - 颜色选择器组件
-  @description 用于文本编辑器中选择文字颜色或背景颜色的组件
+  ColorPicker - color picker component
+  @description Component for selecting text color or background color in the text editor
   @features
-    - 支持文字颜色和背景颜色两种模式
-    - 使用 Popover 弹出层展示颜色选择面板
-    - 提供常用颜色网格（默认20个颜色，每行5个）
-    - 支持清空颜色功能
-    - 预览区域根据类型显示文字颜色或背景颜色效果
+    - Supports both text color and background color modes
+    - Uses a Popover popup to display the color selection panel
+    - Provides a common color grid (20 colors by default, 5 per row)
+    - Supports clearing the color
+    - The preview area shows text color or background color effects based on the type
 -->
 <template>
-  <!-- 使用 Ant Design Popover 组件实现弹出层 -->
+  <!-- Use the Ant Design Popover component for the popup layer -->
   <Popover
     trigger="click"
     placement="bottomLeft"
     v-model:open="showPicker"
     overlay-class-name="tt-color-picker-popover"
   >
-    <!-- Popover 内容：颜色选择面板 -->
+    <!-- Popover content: color selection panel -->
     <template #content>
       <div class="tt-color-picker-content">
-        <!-- 头部区域：颜色预览、标题、清空按钮 -->
+        <!-- Header area: color preview, title, clear button -->
         <div class="tt-color-picker-header">
-          <!-- 当前颜色预览方块（可点击打开高级颜色选择器） -->
+          <!-- Current color preview swatch (clickable to open the advanced color picker) -->
           <button
             class="tt-color-picker-preview-btn"
             type="button"
@@ -32,11 +32,11 @@
               <div class="tt-color-picker-preview-color" :style="{ backgroundColor: normalizedColor }" />
             </div>
           </button>
-          <!-- 分隔线 -->
+          <!-- Separator -->
           <div class="tt-color-picker-separator" />
-          <!-- 标题 -->
+          <!-- Title -->
           <div class="tt-color-picker-title">{{ t('editor.colors') }}</div>
-          <!-- 预览文字：根据类型显示文字颜色或背景颜色效果 -->
+          <!-- Preview text: shows text color or background color effects based on the type -->
           <div
             class="tt-color-picker-preview-text"
             :class="{ 'is-background': type === 'background' }"
@@ -44,7 +44,7 @@
           >
             A
           </div>
-          <!-- 清空颜色按钮 -->
+          <!-- Clear color button -->
           <button
             class="tt-color-clear-btn"
             type="button"
@@ -55,7 +55,7 @@
           </button>
         </div>
 
-        <!-- 默认颜色网格 -->
+        <!-- Default color grid -->
         <div class="tt-color-picker-section">
           <div class="tt-color-picker-section-title">{{ t('editor.defaultColors') }}</div>
           <div class="tt-color-picker-grid" :style="gridStyle">
@@ -75,7 +75,7 @@
           </div>
         </div>
 
-        <!-- 标准色 -->
+        <!-- Standard colors -->
         <div class="tt-color-picker-section">
           <div class="tt-color-picker-section-title">{{ t('editor.standardColors') }}</div>
           <div class="tt-color-picker-grid" :style="standardGridStyle">
@@ -95,7 +95,7 @@
           </div>
         </div>
 
-        <!-- 高级颜色选择器 -->
+        <!-- Advanced color picker -->
         <div v-if="showAdvancedPicker" class="tt-color-picker-advanced">
           <div class="tt-color-picker-advanced-header">
             <span class="tt-color-picker-advanced-title">{{ t('editor.showAdvanced') }}</span>
@@ -126,13 +126,13 @@
         </div>
       </div>
     </template>
-    <!-- Popover 触发器：颜色选择按钮 -->
+    <!-- Popover trigger: color selection button -->
     <Tooltip :title="buttonTitle" placement="top" :open="showPicker ? false : undefined">
       <div
         class="tt-color-current-btn"
         :class="{ 'has-icon': icon }"
       >
-        <!-- 如果提供了图标，显示图标；否则显示颜色预览 -->
+        <!-- If an icon is provided, show the icon; otherwise show the color preview -->
         <component
           v-if="icon"
           :is="icon"
@@ -152,27 +152,27 @@ import { StopOutlined } from '@ant-design/icons-vue'
 import { t } from '@/locales'
 
 /**
- * 组件 Props 接口定义
+ * Component Props interface definition
  */
 interface Props {
-  /** 颜色网格列数，默认 5 列 */
+  /** Number of columns in the color grid, defaults to 5 columns */
   columns?: number
-  /** 每个颜色块的大小（px），默认 20px */
+  /** Size of each color swatch (px), defaults to 20px */
   itemSize?: number
-  /** 当前选中的颜色值（v-model） */
+  /** Currently selected color value (v-model) */
   modelValue?: string
-  /** 颜色块之间的间距（px），默认 8px */
+  /** Gap between color swatches (px), defaults to 8px */
   gap?: number
-  /** 按钮图标组件（可选） */
+  /** Button icon component (optional) */
   icon?: Component
-  /** 颜色类型：'text' 文字颜色 | 'background' 背景颜色 */
+  /** Color type: 'text' text color | 'background' background color */
   type?: 'text' | 'background'
-  /** 按钮标题（tooltip 显示文本，可选，默认根据 type 自动生成） */
+  /** Button title (tooltip text, optional, auto-generated from type by default) */
   title?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  columns: 10,  // 10 列，适应更多颜色（50个颜色 = 5行 × 10列）
+  columns: 10,  // 10 columns to fit more colors (50 colors = 5 rows x 10 columns)
   itemSize: 20,
   modelValue: undefined,
   gap: 8,
@@ -182,77 +182,77 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 /**
- * 组件事件定义
+ * Component events definition
  */
 const emit = defineEmits<{
-  /** 颜色值更新事件（v-model 支持） */
+  /** Color value update event (v-model support) */
   (e: 'update:modelValue', value: string | undefined): void
-  /** 颜色选择事件 */
+  /** Color selection event */
   (e: 'select', value: string): void
 }>()
 
 /**
- * 默认颜色列表（50个常用颜色，按主题颜色模式排列，无重复）
- * @description 参考 Office 颜色选择器，每个主色一列，每列有多个色阶（从浅到深）
- * 数组按行优先排列：第1行（各列的第1个颜色）→ 第2行（各列的第2个颜色）→ ...
+ * Default color list (50 common colors, arranged by theme color patterns, no duplicates)
+ * @description Based on the Office color picker, each primary color is a column, and each column has multiple shades (from light to dark)
+ * The array is arranged row-major: row 1 (first color of each column) -> row 2 (second color of each column) -> ...
  * 
- * 颜色列结构（10列 × 5行 = 50个颜色，每个颜色唯一）：
- * 列1: 白色系（#ffffff → #f5f5f5 → #d9d9d9 → #a6a6a6 → #000000）
- * 列2: 浅灰系（#f2f2f2 → #e6e6e6 → #cccccc → #999999 → #666666）
- * 列3: 灰色系（#e0e0e0 → #c0c0c0 → #808080 → #595959 → #404040）
- * 列4: 红色系（#ffcccc → #ff9999 → #ff6666 → #ff0000 → #990000）
- * 列5: 橙色系（#ffcc99 → #ff9966 → #ff9900 → #ff7700 → #cc6600）
- * 列6: 黄色系（#ffffcc → #ffff99 → #ffff00 → #ffd700 → #cccc00）
- * 列7: 绿色系（#ccffcc → #99ff99 → #66ff66 → #00ff00 → #006600）
- * 列8: 蓝色系（#cce5ff → #99ccff → #6699ff → #0066ff → #003366）
- * 列9: 紫色系（#e4d9ff → #ccb3ff → #9966ff → #6600cc → #330066）
- * 列10: 粉色系（#ffd9e6 → #ffb3cc → #ff6699 → #ff0066 → #cc0033）
+ * Column structure (10 columns x 5 rows = 50 colors, each unique):
+ * Column 1: White family (#ffffff -> #f5f5f5 -> #d9d9d9 -> #a6a6a6 -> #000000)
+ * Column 2: Light gray family (#f2f2f2 -> #e6e6e6 -> #cccccc -> #999999 -> #666666)
+ * Column 3: Gray family (#e0e0e0 -> #c0c0c0 -> #808080 -> #595959 -> #404040)
+ * Column 4: Red family (#ffcccc -> #ff9999 -> #ff6666 -> #ff0000 -> #990000)
+ * Column 5: Orange family (#ffcc99 -> #ff9966 -> #ff9900 -> #ff7700 -> #cc6600)
+ * Column 6: Yellow family (#ffffcc -> #ffff99 -> #ffff00 -> #ffd700 -> #cccc00)
+ * Column 7: Green family (#ccffcc -> #99ff99 -> #66ff66 -> #00ff00 -> #006600)
+ * Column 8: Blue family (#cce5ff -> #99ccff -> #6699ff -> #0066ff -> #003366)
+ * Column 9: Purple family (#e4d9ff -> #ccb3ff -> #9966ff -> #6600cc -> #330066)
+ * Column 10: Pink family (#ffd9e6 -> #ffb3cc -> #ff6699 -> #ff0066 -> #cc0033)
  */
 const DEFAULT_COLORS = [
-  // 第1行：各列的最浅色（主色）
+  // Row 1: lightest shade of each column (primary color)
   '#ffffff', '#f2f2f2', '#e0e0e0', '#ffcccc', '#ffcc99', '#ffffcc', '#ccffcc', '#cce5ff', '#e4d9ff', '#ffd9e6',
-  // 第2行：各列的浅色（80% 主色）
+  // Row 2: light shade of each column (80% primary)
   '#f5f5f5', '#e6e6e6', '#c0c0c0', '#ff9999', '#ff9966', '#ffff99', '#99ff99', '#99ccff', '#ccb3ff', '#ffb3cc',
-  // 第3行：各列的中等色（60% 主色）
+  // Row 3: medium shade of each column (60% primary)
   '#d9d9d9', '#cccccc', '#808080', '#ff6666', '#ff9900', '#ffff00', '#66ff66', '#6699ff', '#9966ff', '#ff6699',
-  // 第4行：各列的深色（40% 主色）
+  // Row 4: dark shade of each column (40% primary)
   '#a6a6a6', '#999999', '#595959', '#ff0000', '#ff7700', '#ffd700', '#00ff00', '#0066ff', '#6600cc', '#ff0066',
-  // 第5行：各列的最深色（20% 主色）
+  // Row 5: darkest shade of each column (20% primary)
   '#000000', '#666666', '#404040', '#990000', '#cc6600', '#cccc00', '#006600', '#003366', '#330066', '#cc0033'
 ] as const
 
 /**
- * 标准颜色列表（10个标准色）
- * @description 参考 Office 颜色选择器，包含常用的标准颜色
+ * Standard color list (10 standard colors)
+ * @description Based on the Office color picker, includes common standard colors
  */
 const STANDARD_COLORS = [
-  '#c00000', // 深红
-  '#ff6600', // 亮橙
-  '#ffc000', // 亮黄
-  '#92d050', // 浅绿
-  '#00b050', // 标准绿
-  '#00b0f0', // 浅蓝
-  '#0070c0', // 青色
-  '#0050d0', // 中蓝
-  '#002060', // 深蓝
-  '#7030a0'  // 紫色
+  '#c00000', // dark red
+  '#ff6600', // bright orange
+  '#ffc000', // bright yellow
+  '#92d050', // light green
+  '#00b050', // standard green
+  '#00b0f0', // light blue
+  '#0070c0', // cyan
+  '#0050d0', // medium blue
+  '#002060', // dark blue
+  '#7030a0'  // purple
 ] as const
 
 /**
- * 颜色标准化函数
- * @param color - 颜色值（可能包含空格、大小写不一致）
- * @returns 标准化后的颜色值（小写、去除空格，默认 '#000000'）
+ * Color normalization function
+ * @param color - color value (may contain spaces or inconsistent casing)
+ * @returns Normalized color value (lowercase, whitespace removed, defaults to '#000000')
  */
 const normalizeColor = (color: string | undefined | null) => color?.trim().toLowerCase() || '#000000'
 
 /**
- * 标准化后的当前颜色值（计算属性）
+ * Normalized current color value (computed property)
  */
 const normalizedColor = computed(() => normalizeColor(props.modelValue))
 
 /**
- * 按钮标题（tooltip 文本）
- * @description 如果提供了 title prop 则使用，否则根据 type 自动生成
+ * Button title (tooltip text)
+ * @description Uses the title prop if provided, otherwise auto-generates based on the type
  */
 const buttonTitle = computed(() => {
   if (props.title) return props.title
@@ -260,57 +260,57 @@ const buttonTitle = computed(() => {
 })
 
 /**
- * 根据背景颜色计算合适的文字颜色
- * @description 使用感知亮度公式计算背景色亮度，自动返回黑色或白色文字以确保可读性
- * @param bgColor - 背景颜色值
- * @returns '#000' 或 '#fff' - 根据背景亮度返回合适的文字颜色
+ * Calculate a suitable text color based on the background color
+ * @description Uses a perceived-luminance formula to compute the background brightness, automatically returning black or white text to ensure readability
+ * @param bgColor - background color value
+ * @returns '#000' or '#fff' - returns a suitable text color based on the background brightness
  * 
  * @example
- * getTextColorForBackground('#ffffff') // 返回 '#000' (白色背景用黑字)
- * getTextColorForBackground('#000000') // 返回 '#fff' (黑色背景用白字)
+ * getTextColorForBackground('#ffffff') // returns '#000' (black text on white background)
+ * getTextColorForBackground('#000000') // returns '#fff' (white text on black background)
  */
 const getTextColorForBackground = (bgColor: string) => {
-  // 处理透明或空值
+  // Handle transparent or empty values
   if (!bgColor || bgColor === 'transparent') return '#000'
   
-  // 移除 # 号
+  // Remove the # prefix
   let hex = bgColor.replace('#', '')
   
-  // 支持 3 位十六进制格式（如 #fff）转换为 6 位（如 #ffffff）
+  // Support 3-digit hex format (e.g. #fff) converted to 6 digits (e.g. #ffffff)
   if (hex.length === 3) {
     hex = hex.split('').map(c => c + c).join('')
   }
   
-  // 验证格式
+  // Validate the format
   if (hex.length !== 6) return '#000'
   
-  // 提取 RGB 分量
-  const r = parseInt(hex.substr(0, 2), 16)  // 红色分量 (0-255)
-  const g = parseInt(hex.substr(2, 2), 16)  // 绿色分量 (0-255)
-  const b = parseInt(hex.substr(4, 2), 16)  // 蓝色分量 (0-255)
+  // Extract RGB components
+  const r = parseInt(hex.substr(0, 2), 16)  // red component (0-255)
+  const g = parseInt(hex.substr(2, 2), 16)  // green component (0-255)
+  const b = parseInt(hex.substr(4, 2), 16)  // blue component (0-255)
   
-  // 计算感知亮度（使用人眼对不同颜色的敏感度权重）
-  // 公式：亮度 = (R × 299 + G × 587 + B × 114) / 1000
-  // 绿色权重最高(587)，红色次之(299)，蓝色最低(114)
+  // Calculate perceived luminance (using the human eye's sensitivity weights for different colors)
+  // Formula: brightness = (R x 299 + G x 587 + B x 114) / 1000
+  // Green has the highest weight (587), red next (299), blue the lowest (114)
   const brightness = (r * 299 + g * 587 + b * 114) / 1000
   
-  // 使用更严格的阈值（120 而不是 128），确保更好的对比度
-  // 亮度 > 120（浅色背景）返回黑色文字，否则返回白色文字
+  // Use a stricter threshold (120 instead of 128) to ensure better contrast
+  // brightness > 120 (light background) returns black text, otherwise white text
   return brightness > 120 ? '#000' : '#fff'
 }
 
 /**
- * 预览文字样式（计算属性）
- * @description 根据类型返回不同的样式：
- *   - text: 显示文字颜色
- *   - background: 显示背景颜色，并自动计算合适的文字颜色
+ * Preview text style (computed property)
+ * @description Returns different styles based on the type:
+ *   - text: shows the text color
+ *   - background: shows the background color and automatically calculates a suitable text color
  */
 const previewTextStyle = computed(() => {
   if (props.type === 'text') {
-    // 文字颜色模式：直接应用颜色到文字
+    // Text color mode: apply the color directly to the text
     return { color: normalizedColor.value }
   } else {
-    // 背景颜色模式：应用背景色，并自动计算文字颜色
+    // Background color mode: apply the background color and automatically calculate a suitable text color
     return {
       backgroundColor: normalizedColor.value,
       color: getTextColorForBackground(normalizedColor.value)
@@ -319,41 +319,41 @@ const previewTextStyle = computed(() => {
 })
 
 /**
- * 颜色网格样式（计算属性）
- * @description 根据 columns、itemSize 动态生成 CSS Grid 布局样式
- * @note gap 间距由 CSS 统一控制，不在此处设置
+ * Color grid style (computed property)
+ * @description Dynamically generates the CSS Grid layout based on columns and itemSize
+ * @note The gap spacing is controlled uniformly by CSS and is not set here
  * @example
  * columns=10, itemSize=20
- * 生成: { gridTemplateColumns: 'repeat(10, 20px)' }
+ * generates: { gridTemplateColumns: 'repeat(10, 20px)' }
  */
 const gridStyle = computed(() => ({
   gridTemplateColumns: `repeat(${props.columns}, ${props.itemSize}px)`
 }))
 
 /**
- * 标准色网格样式（计算属性）
- * @description 标准色固定为10列，使用固定的 itemSize 确保对齐
+ * Standard color grid style (computed property)
+ * @description The standard colors are fixed at 10 columns, using a fixed itemSize to ensure alignment
  */
 const standardGridStyle = computed(() => ({
   gridTemplateColumns: `repeat(10, ${props.itemSize}px)`
 }))
 
 /**
- * Popover 显示/隐藏状态
+ * Popover show/hide state
  */
 const showPicker = ref(false)
 
 /**
- * 高级颜色选择器显示/隐藏状态
+ * Advanced color picker show/hide state
  */
 const showAdvancedPicker = ref(false)
 
 /**
- * 高级颜色选择器的颜色值
+ * Advanced color picker color value
  */
 const advancedColor = ref(normalizedColor.value || '#000000')
 
-// 监听 showAdvancedPicker，当打开时同步当前颜色
+// Watch showAdvancedPicker and sync the current color when opened
 watch(showAdvancedPicker, (isOpen) => {
   if (isOpen) {
     advancedColor.value = normalizedColor.value || '#000000'
@@ -361,8 +361,8 @@ watch(showAdvancedPicker, (isOpen) => {
 })
 
 /**
- * 统一触发颜色变化事件
- * @param color - 颜色值
+ * Uniformly trigger the color change event
+ * @param color - color value
  */
 const updateColor = (color: string) => {
   emit('update:modelValue', color)
@@ -370,25 +370,25 @@ const updateColor = (color: string) => {
 }
 
 /**
- * 处理颜色选择
- * @param color - 选中的颜色值
+ * Handle color selection
+ * @param color - the selected color value
  */
 const handleSelectColor = (color: string) => {
   updateColor(normalizeColor(color))
 }
 
 /**
- * 清空颜色
- * @description 根据类型返回默认值：
- *   - text: 恢复为黑色 '#000000'
- *   - background: 恢复为透明 'transparent'
+ * Clear the color
+ * @description Returns the default value based on the type:
+ *   - text: revert to black '#000000'
+ *   - background: revert to transparent 'transparent'
  */
 const clearColor = () => {
   updateColor(props.type === 'text' ? '#000000' : 'transparent')
 }
 
 /**
- * 处理高级颜色选择器的颜色变化（color input）
+ * Handle color changes in the advanced color picker (color input)
  */
 const handleAdvancedColorChange = (e: Event) => {
   const target = e.target as HTMLInputElement
@@ -398,18 +398,18 @@ const handleAdvancedColorChange = (e: Event) => {
 }
 
 /**
- * 处理高级颜色选择器的文本输入
+ * Handle text input in the advanced color picker
  */
 const handleAdvancedColorInput = (e: Event) => {
   const target = e.target as HTMLInputElement
   let color = target.value.trim()
   
-  // 如果输入的值不是以 # 开头，自动添加
+  // Automatically prepend # if the input value does not start with it
   if (color && !color.startsWith('#')) {
     color = '#' + color
   }
   
-  // 验证颜色格式
+  // Validate the color format
   if (/^#[0-9A-Fa-f]{6}$/.test(color) || /^#[0-9A-Fa-f]{3}$/.test(color)) {
     const normalized = normalizeColor(color)
     advancedColor.value = normalized
@@ -417,7 +417,7 @@ const handleAdvancedColorInput = (e: Event) => {
   }
 }
 
-// 监听 normalizedColor 变化，同步到 advancedColor
+// Watch normalizedColor changes and sync to advancedColor
 watch(normalizedColor, (newColor) => {
   if (showAdvancedPicker.value) {
     advancedColor.value = newColor
@@ -426,10 +426,10 @@ watch(normalizedColor, (newColor) => {
 </script>
 
 <style lang="scss" scoped>
-// Dark 模式选择器变量（用于统一管理暗色主题样式）
+// Dark mode selector variable (for centrally managing dark theme styles)
 $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *) &';
 
-/* ===== 颜色选择按钮 ===== */
+/* ===== Color selection button ===== */
 .tt-color-current-btn {
   width: 32px;
   height: 32px;
@@ -464,14 +464,14 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* 颜色预览区域（无图标时显示） */
+/* Color preview area (shown when there is no icon) */
 .tt-color-current-preview {
   width: 100%;
   height: 100%;
   border-radius: 2px;
 }
 
-/* 图标样式 */
+/* Icon style */
 .tt-color-icon {
   font-size: 18px;
   color: #262626;
@@ -483,10 +483,10 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* ===== Popover 内容区域 ===== */
+/* ===== Popover content area ===== */
 .tt-color-picker-content {
   padding: 10px 12px;
-  min-width: 280px;  /* 适配 10 列布局（10 × 20px + 9 × 6px + padding） */
+  min-width: 280px;  /* Fits the 10-column layout (10 x 20px + 9 x 6px + padding) */
   max-width: 320px;
   background: #fff;
   border-radius: 8px;
@@ -496,7 +496,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* 头部区域：颜色预览、标题、清空按钮 */
+/* Header area: color preview, title, clear button */
 .tt-color-picker-header {
   display: flex;
   align-items: center;
@@ -504,7 +504,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   margin-bottom: 10px;
 }
 
-/* 当前颜色预览方块容器 */
+/* Current color preview swatch container */
 .tt-color-picker-preview {
   width: 40px;
   height: 24px;
@@ -519,13 +519,13 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* 当前颜色预览方块 */
+/* Current color preview swatch */
 .tt-color-picker-preview-color {
   width: 100%;
   height: 100%;
 }
 
-/* 分隔线 */
+/* Separator */
 .tt-color-picker-separator {
   width: 1px;
   height: 20px;
@@ -536,7 +536,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* 标题文字 */
+/* Title text */
 .tt-color-picker-title {
   font-size: 14px;
   font-weight: 500;
@@ -548,7 +548,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* 预览文字（显示文字颜色或背景颜色效果） */
+/* Preview text (shows text color or background color effects) */
 .tt-color-picker-preview-text {
   display: flex;
   align-items: center;
@@ -562,21 +562,21 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   border-radius: 4px;
   background: #fff;
   transition: all 0.2s;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);  /* 文字阴影增强可读性 */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);  /* Text shadow improves readability */
 
   #{$dark-selector} {
     border-color: rgba(255, 255, 255, 0.25);
     background: #1f1f1f;
   }
 
-  /* 背景颜色模式：确保文字清晰可见 */
+  /* Background color mode: ensure the text is clearly visible */
   &.is-background {
     border-width: 2px;
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
   }
 }
 
-/* 清空颜色按钮 */
+/* Clear color button */
 .tt-color-clear-btn {
   padding: 0;
   margin: 0 0 0 4px;
@@ -627,7 +627,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* ===== 颜色区域 ===== */
+/* ===== Color sections ===== */
 .tt-color-picker-section {
   margin-bottom: 12px;
 
@@ -636,7 +636,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* 区域标题 */
+/* Section title */
 .tt-color-picker-section-title {
   font-size: 12px;
   font-weight: 500;
@@ -649,21 +649,21 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* ===== 颜色网格 ===== */
+/* ===== Color grid ===== */
 .tt-color-picker-grid {
   display: grid;
   width: 100%;
   justify-content: start;
   margin-bottom: 0;
-  gap: 6px;  /* 统一颜色块间距为 6px */
+  gap: 6px;  /* Uniform color swatch spacing of 6px */
 }
 
-/* 颜色块样式 */
+/* Color swatch style */
 .tt-color-picker__item {
   padding: 0;
   cursor: pointer;
   border: 1px solid #ddd;
-  border-radius: 50%;  /* 圆形 */
+  border-radius: 50%;  /* Circular */
   transition: transform 0.2s;
   position: relative;
 
@@ -671,7 +671,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
     border-color: #434343;
   }
 
-  /* 选中状态：蓝色边框和阴影，轻微放大 */
+  /* Selected state: blue border and shadow, slightly enlarged */
   &.is-selected {
     box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.4), 0 2px 8px rgba(0, 0, 0, 0.15);
     border-color: rgba(22, 119, 255, 0.8);
@@ -683,7 +683,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
     }
   }
 
-  /* 悬停状态：放大效果，阴影 */
+  /* Hover state: enlarge effect, shadow */
   &:hover:not(.is-selected) {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     transform: scale(1.2);
@@ -694,7 +694,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* 预览方块按钮（可点击） */
+/* Preview swatch button (clickable) */
 .tt-color-picker-preview-btn {
   padding: 0;
   border: none;
@@ -720,7 +720,7 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* 高级颜色选择器 */
+/* Advanced color picker */
 .tt-color-picker-advanced {
   margin-top: 12px;
   padding-top: 12px;
@@ -863,10 +863,10 @@ $dark-selector: ':where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"]
   }
 }
 
-/* 覆盖 Ant Design Popover 的默认内边距 */
+/* Override Ant Design Popover default padding */
 :deep(.tt-color-picker-popover) {
   .ant-popover-inner {
-    padding: 0;  /* 移除 Popover 默认内边距，使用组件内部 padding */
+    padding: 0;  /* Remove the Popover default padding, use the component's internal padding */
   }
 }
 </style>

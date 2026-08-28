@@ -1,6 +1,6 @@
 /**
  * Editor State Utilities
- * @description 编辑器状态检查工具函数
+ * @description Editor state checking utility functions
  */
 
 import { onBeforeUnmount, shallowRef, triggerRef, watch } from 'vue'
@@ -11,24 +11,24 @@ import type { Editor } from '@tiptap/core'
 type AttributeValue = string | number | boolean | null | undefined
 
 /**
- * 让编辑器实例变成"事务响应式"
- * @description Tiptap 的事务不会触发 Vue 响应式更新（editor 实例身份不变），
- * 导致依赖 editor 的 computed（isActive/getAttributes 等）不跟随光标移动重新求值。
- * 本组合式函数内部订阅 editor 的 transaction 事件并 triggerRef 强制通知依赖方。
- * 注意：不能用「computed 依赖 tick」实现——computed 重新求值后返回的仍是同一个
- * Editor 实例，Vue 会因值相等（===）跳过下游 effect，必须用 triggerRef 绕过该截断。
- * 自动处理实例更换与卸载清理。必须在组件 setup 中调用。
+ * Make the editor instance "transaction-reactive"
+ * @description Tiptap transactions do not trigger Vue reactive updates (the editor instance identity stays the same),
+ * so computeds that depend on the editor (isActive/getAttributes, etc.) are not re-evaluated as the cursor moves.
+ * This composable subscribes to the editor's transaction event internally and uses triggerRef to force-notify dependent parties.
+ * Note: you cannot use "a computed depending on a tick" here - after the computed re-evaluates it still returns the same
+ * Editor instance, and Vue skips downstream effects because of value equality (===); you must use triggerRef to bypass that cutoff.
+ * Automatically handles instance replacement and unmount cleanup. Must be called in the component setup.
  *
  * @example
  * ```typescript
  * const editor = useReactiveEditor(() => props.editor)
- * const { isActive } = createStateCheckers(editor) // isActive 现在跟随光标变化
+ * const { isActive } = createStateCheckers(editor) // isActive now follows cursor changes
  * ```
  */
 export function useReactiveEditor<T extends Editor>(
   getEditor: () => T | null | undefined
 ): Ref<T | null> {
-  // watch 的 immediate 回调会立即写入当前值，这里只需 null 初始化
+  // watch's immediate callback writes the current value immediately, so only null initialization is needed here
   const editorRef = shallowRef(null) as Ref<T | null>
   let current: Editor | null = null
   const onTransaction = () => {
@@ -54,49 +54,49 @@ export function useReactiveEditor<T extends Editor>(
 }
 
 /**
- * 状态检查器接口
+ * State checker interface
  */
 export interface StateCheckers {
-  /** 检查节点/标记是否激活 */
+  /** Check whether a node/mark is active */
   isActive: (name: string, attributes?: Record<string, AttributeValue>) => boolean
-  /** 检查标题级别是否激活 */
+  /** Check whether a heading level is active */
   isHeadingActive: (level: number) => boolean
-  /** 检查对齐方式是否激活 */
+  /** Check whether an alignment is active */
   isActiveAlign: (value: 'left' | 'center' | 'right' | 'justify') => boolean
-  /** 检查命令是否可执行 */
+  /** Check whether a command is executable */
   canExecute: (command: string) => boolean
 }
 
 /**
- * 创建状态检查器
- * @description 创建一组用于检查编辑器状态的函数
- * @param editor - 编辑器实例引用
- * @returns 状态检查函数集合
+ * Create state checkers
+ * @description Create a set of functions for checking editor state
+ * @param editor - editor instance reference
+ * @returns set of state checking functions
  *
  * @example
  * ```typescript
  * const { isActive, isHeadingActive, canExecute } = createStateCheckers(editor)
  *
  * if (isActive('bold')) {
- *   console.log('当前文本是粗体')
+ *   console.log('Text is bold')
  * }
  *
  * if (isHeadingActive(1)) {
- *   console.log('当前是标题 1')
+ *   console.log('This is heading 1')
  * }
  *
  * if (canExecute('toggleBold')) {
- *   console.log('可以切换粗体')
+ *   console.log('Can toggle bold')
  * }
  * ```
  */
 export function createStateCheckers(editor: Ref<Editor | null | undefined>): StateCheckers {
   return {
     /**
-     * 检查节点/标记是否激活
-     * @param name - 节点或标记名称
-     * @param attributes - 可选的属性对象
-     * @returns 是否激活
+     * Check whether a node/mark is active
+     * @param name - node or mark name
+     * @param attributes - optional attribute object
+     * @returns whether active
      */
     isActive: (name: string, attributes?: Record<string, AttributeValue>) => {
       const e = editor.value
@@ -105,9 +105,9 @@ export function createStateCheckers(editor: Ref<Editor | null | undefined>): Sta
     },
 
     /**
-     * 检查标题级别是否激活
-     * @param level - 标题级别 (1-6)
-     * @returns 是否激活
+     * Check whether a heading level is active
+     * @param level - heading level (1-6)
+     * @returns whether active
      */
     isHeadingActive: (level: number) => {
       const e = editor.value
@@ -116,9 +116,9 @@ export function createStateCheckers(editor: Ref<Editor | null | undefined>): Sta
     },
 
     /**
-     * 检查对齐方式是否激活
-     * @param value - 对齐方式
-     * @returns 是否激活
+     * Check whether alignment is active
+     * @param value - alignment
+     * @returns whether active
      */
     isActiveAlign: (value: 'left' | 'center' | 'right' | 'justify') => {
       const e = editor.value
@@ -127,9 +127,9 @@ export function createStateCheckers(editor: Ref<Editor | null | undefined>): Sta
     },
 
     /**
-     * 检查命令是否可执行
-     * @param command - 命令名称
-     * @returns 是否可执行
+     * Check whether a command is executable
+     * @param command - command name
+     * @returns whether executable
      */
     canExecute: (command: string) => {
       const e = editor.value
@@ -143,17 +143,17 @@ export function createStateCheckers(editor: Ref<Editor | null | undefined>): Sta
 }
 
 /**
- * 检查节点/标记是否激活
- * @description 直接检查，无需创建检查器对象
- * @param editor - 编辑器实例引用
- * @param name - 节点或标记名称
- * @param attributes - 可选的属性对象
- * @returns 是否激活
+ * Check whether a node/mark is active
+ * @description direct check, no need to create a checker object
+ * @param editor - editor instance reference
+ * @param name - node or mark name
+ * @param attributes - optional attribute object
+ * @returns whether active
  *
  * @example
  * ```typescript
  * if (isActive(editor, 'bold')) {
- *   console.log('粗体已激活')
+ *   console.log('Bold is active')
  * }
  * ```
  */
@@ -168,10 +168,10 @@ export function isActive(
 }
 
 /**
- * 检查标题级别是否激活
- * @param editor - 编辑器实例引用
- * @param level - 标题级别 (1-6)
- * @returns 是否激活
+ * Check whether a heading level is active
+ * @param editor - editor instance reference
+ * @param level - heading level (1-6)
+ * @returns whether active
  */
 export function isHeadingActive(
   editor: Ref<Editor | null | undefined>,
@@ -183,10 +183,10 @@ export function isHeadingActive(
 }
 
 /**
- * 检查对齐方式是否激活
- * @param editor - 编辑器实例引用
- * @param value - 对齐方式
- * @returns 是否激活
+ * Check whether alignment is active
+ * @param editor - editor instance reference
+ * @param value - alignment
+ * @returns whether active
  */
 export function isActiveAlign(
   editor: Ref<Editor | null | undefined>,
@@ -198,10 +198,10 @@ export function isActiveAlign(
 }
 
 /**
- * 检查命令是否可执行
- * @param editor - 编辑器实例引用
- * @param command - 命令名称
- * @returns 是否可执行
+ * Check whether a command is executable
+ * @param editor - editor instance reference
+ * @param command - command name
+ * @returns whether executable
  */
 export function canExecute(
   editor: Ref<Editor | null | undefined>,
@@ -215,10 +215,10 @@ export function canExecute(
 }
 
 /**
- * 获取当前段落样式
- * @description 获取当前光标位置的段落样式（正文或标题级别）
- * @param editor - 编辑器实例引用
- * @returns 段落样式标识 ('paragraph' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6')
+ * Get current paragraph style
+ * @description Get the paragraph style at the current cursor position (body text or heading level)
+ * @param editor - editor instance reference
+ * @returns paragraph style identifier ('paragraph' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6')
  */
 export function getCurrentParagraphStyle(
   editor: Ref<Editor | null | undefined>
@@ -236,10 +236,10 @@ export function getCurrentParagraphStyle(
 }
 
 /**
- * 获取当前文本对齐方式
- * @description 获取当前光标位置的文本对齐方式
- * @param editor - 编辑器实例引用
- * @returns 对齐方式 ('left' | 'center' | 'right' | 'justify')
+ * Get current text alignment
+ * @description Get the text alignment at the current cursor position
+ * @param editor - editor instance reference
+ * @returns alignment ('left' | 'center' | 'right' | 'justify')
  */
 export function getCurrentTextAlign(
   editor: Ref<Editor | null | undefined>

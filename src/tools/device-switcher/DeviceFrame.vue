@@ -16,7 +16,7 @@
       <div class="device-frame__ipad-button"></div>
     </div>
     
-    <!-- iPhone Frame (仅 PC 浏览器预览时显示外框) -->
+    <!-- iPhone Frame (only show outer frame in PC browser preview) -->
     <div v-else-if="device === 'mobile' && !isMobileBrowser" class="device-frame__iphone">
       <div class="device-frame__iphone-notch">
         <div class="device-frame__iphone-speaker"></div>
@@ -37,8 +37,8 @@
 
 <script setup lang="ts">
 /**
- * DeviceFrame - 设备外框组件
- * @description 为编辑器添加 iPad/iPhone 设备外框
+ * DeviceFrame - Device frame component
+ * @description Adds iPad/iPhone device frame around the editor
  */
 import { computed } from 'vue'
 import type { DeviceView } from './DeviceSwitcher.vue'
@@ -46,7 +46,7 @@ import type { DeviceView } from './DeviceSwitcher.vue'
 export type Orientation = 'portrait' | 'landscape'
 
 /**
- * 检测当前是否为手机浏览器
+ * Detect if current browser is a mobile browser
  */
 function detectMobileBrowser(): boolean {
   if (typeof window === 'undefined' || typeof navigator === 'undefined') return false
@@ -55,9 +55,9 @@ function detectMobileBrowser(): boolean {
 }
 
 interface Props {
-  /** 设备类型 */
+  /** Device type */
   device: DeviceView
-  /** 屏幕方向 */
+  /** Screen orientation */
   orientation?: Orientation
 }
 
@@ -65,10 +65,10 @@ const props = withDefaults(defineProps<Props>(), {
   orientation: 'portrait',
 })
 
-/** 手机浏览器下跳过设备外框，直接展示内容 */
+/** On mobile browsers, skip device frame and show content directly */
 const isMobileBrowser = detectMobileBrowser()
 
-// 设备尺寸配置 - 使用最大高度，让内容自适应
+// Device size configuration - use max height to let content adapt
 const deviceSizes = {
   pc: { width: '100%', height: 'auto', maxHeight: 'none' },
   pad: {
@@ -82,7 +82,7 @@ const deviceSizes = {
 }
 
 const frameStyle = computed(() => {
-  // 手机浏览器下不限制尺寸，全屏展示
+  // On mobile browsers, no size restriction, full screen display
   if (props.device === 'pc' || (props.device === 'mobile' && isMobileBrowser)) {
     return { width: '100%', height: 'auto' }
   }
@@ -106,7 +106,7 @@ const frameStyle = computed(() => {
   flex-direction: column;
 }
 
-/* ===== PC 模式 - 无外框 ===== */
+/* ===== PC mode - No frame ===== */
 .device-frame--pc {
   width: 100%;
   height: 100%;
@@ -120,7 +120,7 @@ const frameStyle = computed(() => {
   overflow: hidden;
 }
 
-/* ===== iPad 外框 ===== */
+/* ===== iPad frame ===== */
 .device-frame__ipad {
   position: relative;
   display: flex;
@@ -161,7 +161,7 @@ const frameStyle = computed(() => {
   display: none; /* Hide home button for modern iPads */
 }
 
-/* iPad 横屏调整 */
+/* iPad landscape adjustment */
 .device-frame--pad.device-frame--landscape .device-frame__ipad {
   flex-direction: row;
   padding: 24px 40px 24px 24px;
@@ -181,7 +181,7 @@ const frameStyle = computed(() => {
   height: 100%;
 }
 
-/* ===== iPhone 外框 ===== */
+/* ===== iPhone frame ===== */
 .device-frame__iphone {
   position: relative;
   display: flex;
@@ -250,7 +250,7 @@ const frameStyle = computed(() => {
   opacity: 0.8;
 }
 
-/* iPhone 横屏调整 */
+/* iPhone landscape adjustment */
 .device-frame--mobile.device-frame--landscape .device-frame__iphone {
   flex-direction: row;
   padding: 12px 32px 12px 48px;
@@ -286,7 +286,7 @@ const frameStyle = computed(() => {
   height: 100px;
 }
 
-/* ===== 深色模式 ===== */
+/* ===== Dark mode ===== */
 [data-theme="dark"] .device-frame__ipad {
   background: linear-gradient(145deg, #3a3a3a 0%, #2a2a2a 100%);
   box-shadow: 
@@ -300,7 +300,7 @@ const frameStyle = computed(() => {
   background: #1e1e1e;
 }
 
-/* ===== 内部编辑器适配 ===== */
+/* ===== Internal editor adaptation ===== */
 .device-frame__pc :deep(.demo-card),
 .device-frame__ipad-screen :deep(.demo-card),
 .device-frame__iphone-screen :deep(.demo-card) {
@@ -320,7 +320,7 @@ const frameStyle = computed(() => {
   overflow: hidden;
 }
 
-/* 工具栏固定在顶部 */
+/* Toolbar fixed at top */
 .device-frame__pc :deep(.word-toolbar),
 .device-frame__ipad-screen :deep(.word-toolbar),
 .device-frame__iphone-screen :deep(.word-toolbar) {
@@ -330,7 +330,7 @@ const frameStyle = computed(() => {
   flex-shrink: 0;
 }
 
-/* 文档内容区域可滚动 */
+/* Document content area scrollable */
 .device-frame__pc :deep(.word-document-container),
 .device-frame__ipad-screen :deep(.word-document-container),
 .device-frame__iphone-screen :deep(.word-document-container) {

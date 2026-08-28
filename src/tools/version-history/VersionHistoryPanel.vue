@@ -7,7 +7,7 @@
     @close="emit('close')"
     class="version-history-panel"
   >
-    <!-- 操作按钮 -->
+    <!-- Action buttons -->
     <div class="version-actions">
       <a-button type="primary" size="small" @click="handleSaveVersion">
         <template #icon><SaveOutlined /></template>
@@ -15,7 +15,7 @@
       </a-button>
     </div>
 
-    <!-- 版本列表 -->
+    <!-- Version list -->
     <div class="version-list">
       <div v-if="versions.length === 0" class="version-empty">
         {{ t('versionHistory.noVersions') }}
@@ -80,7 +80,7 @@
       </div>
     </div>
 
-    <!-- 对比视图 -->
+    <!-- Diff view -->
     <div v-if="selectedVersionId && compareVersionId" class="version-diff">
       <div class="version-diff__header">
         <span>{{ t('versionHistory.comparing') }}</span>
@@ -91,7 +91,7 @@
       <VersionDiffView :changes="diffChanges" />
     </div>
 
-    <!-- 重命名对话框 -->
+    <!-- Rename dialog -->
     <a-modal
       v-model:open="renameModalOpen"
       :title="t('versionHistory.rename')"
@@ -146,12 +146,12 @@ const emit = defineEmits<{
   delete: [versionId: string]
 }>()
 
-// 重命名相关状态
+// Rename related state
 const renameModalOpen = ref(false)
 const renameName = ref('')
 const renameVersionId = ref<string | null>(null)
 
-// 时间格式化
+// Time formatting
 function formatTime(timestamp: number): string {
   const date = new Date(timestamp)
   return date.toLocaleString('zh-CN', {
@@ -175,7 +175,7 @@ function formatRelativeTime(timestamp: number): string {
   return `${days} ${t('versionHistory.daysAgo')}`
 }
 
-// 事件处理
+// Event handlers
 function handleSaveVersion() {
   emit('save')
   message.success(t('versionHistory.saved'))
@@ -313,7 +313,7 @@ function handleRenameConfirm() {
   font-size: 13px;
 }
 
-/* 深色模式 */
+/* Dark mode */
 [data-theme="dark"] .version-item:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }

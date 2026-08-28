@@ -13,8 +13,8 @@
 
 <script setup lang="ts">
 /**
- * ListTools - 列表工具组
- * @description 可复用的列表工具组件（无序列表、有序列表、任务列表）
+ * ListTools - list tool group
+ * @description A reusable list tool component (bullet list, ordered list, task list)
  */
 import { computed } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -31,7 +31,7 @@ import {
 // ===== Props =====
 interface Props {
   editor: Editor | null | undefined
-  /** 是否显示任务列表按钮，默认 false */
+  /** Whether to show the task list button, defaults to false */
   showTaskList?: boolean
 }
 
@@ -39,14 +39,14 @@ const props = withDefaults(defineProps<Props>(), {
   showTaskList: false,
 })
 
-// 事务响应式 editor：isActive 等状态跟随光标/内容变化重新求值
+// Transaction-driven reactive editor: states like isActive are re-evaluated on cursor/content changes
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const runCommand = createCommandRunner(editor)
 const { isActive } = createStateCheckers(editor)
 
-// ===== 列表工具配置 =====
+// ===== List tool configuration =====
 const listItems = computed(() => {
   const items = [
     {
@@ -63,7 +63,7 @@ const listItems = computed(() => {
     },
   ]
 
-  // 可选的任务列表按钮
+  // Optional task list button
   if (props.showTaskList) {
     items.push({
       name: 'taskList',

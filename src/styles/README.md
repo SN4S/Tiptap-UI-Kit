@@ -1,103 +1,103 @@
-# TiptapPro 样式文件
+# TiptapPro Styles
 
-## 文件结构
+## File Structure
 
 ```
 styles/
-├── base.css                    # 🆕 公共基础样式（变量、混入、动画）
-├── word-mode.css               # Word 模式编辑器样式
-├── toolbar.css                 # 主工具栏样式
-├── bubble-menu.css             # 悬浮气泡菜单
-├── floating-menu-toolbar.css   # 浮动菜单
-├── table-bubble-menu.css       # 表格工具栏
-├── table-insert-plus.css       # 表格插入功能
-├── image-toolbar.css           # 图片工具栏
-├── drag-handle-with-menu.css   # 拖拽手柄菜单
-├── zoom-toolbar.css            # 缩放工具栏
-└── collaboration.css           # 协作编辑光标
+├── base.css                    # Shared base styles (variables, mixins, animations)
+├── word-mode.css               # Word mode editor styles
+├── toolbar.css                 # Main toolbar styles
+├── bubble-menu.css             # Floating bubble menu
+├── floating-menu-toolbar.css   # Floating menu
+├── table-bubble-menu.css       # Table toolbar
+├── table-insert-plus.css       # Table insert functionality
+├── image-toolbar.css           # Image toolbar
+├── drag-handle-with-menu.css   # Drag handle menu
+├── zoom-toolbar.css            # Zoom toolbar
+└── collaboration.css           # Collaboration editing cursor
 ```
 
-## 公共样式 (base.css)
+## Shared Styles (base.css)
 
-### CSS 变量
+### CSS Variables
 
 ```css
-/* 基础色彩 */
---tp-color-text         /* 主文字颜色 */
---tp-color-text-secondary  /* 次要文字 */
---tp-color-bg           /* 背景色 */
---tp-color-bg-hover     /* 悬停背景 */
---tp-color-border       /* 边框色 */
+/* Base Colors */
+--tp-color-text         /* Primary text color */
+--tp-color-text-secondary  /* Secondary text */
+--tp-color-bg           /* Background color */
+--tp-color-bg-hover     /* Hover background */
+--tp-color-border       /* Border color */
 
-/* 主题色 */
---tp-color-primary      /* 主色调 */
---tp-color-primary-bg   /* 主色背景 */
---tp-color-danger       /* 危险色 */
---tp-color-danger-bg    /* 危险背景 */
+/* Theme Colors */
+--tp-color-primary      /* Primary color */
+--tp-color-primary-bg   /* Primary background */
+--tp-color-danger       /* Danger color */
+--tp-color-danger-bg    /* Danger background */
 
-/* 菜单样式 */
---tp-menu-bg            /* 菜单背景 */
---tp-menu-shadow        /* 菜单阴影 */
---tp-menu-radius        /* 菜单圆角 */
+/* Menu Styles */
+--tp-menu-bg            /* Menu background */
+--tp-menu-shadow        /* Menu shadow */
+--tp-menu-radius        /* Menu border radius */
 
-/* 按钮尺寸 */
---tp-btn-size           /* 按钮大小 */
---tp-btn-size-sm        /* 小按钮 */
---tp-btn-icon-size      /* 图标大小 */
+/* Button Sizes */
+--tp-btn-size           /* Button size */
+--tp-btn-size-sm        /* Small button */
+--tp-btn-icon-size      /* Icon size */
 
-/* 动画时长 */
---tp-transition-fast    /* 快速过渡 */
---tp-transition-normal  /* 正常过渡 */
+/* Animation Duration */
+--tp-transition-fast    /* Fast transition */
+--tp-transition-normal  /* Normal transition */
 ```
 
-### 公共类
+### Shared Classes
 
-| 类名 | 说明 |
+| Class Name | Description |
 |------|------|
-| `.tp-menu` | 菜单容器 |
-| `.tp-menu-content` | 菜单内容 |
-| `.tp-menu-group` | 菜单分组 |
-| `.tp-btn` | 公共按钮 |
-| `.tp-btn.active` | 激活状态 |
-| `.tp-btn--danger` | 危险按钮 |
-| `.tp-color-panel` | 颜色选择面板 |
-| `.tp-color-item` | 颜色项 |
-| `.tp-dropdown-menu` | 下拉菜单 |
-| `.tp-dropdown-item` | 下拉菜单项 |
+| `.tp-menu` | Menu container |
+| `.tp-menu-content` | Menu content |
+| `.tp-menu-group` | Menu group |
+| `.tp-btn` | Shared button |
+| `.tp-btn.active` | Active state |
+| `.tp-btn--danger` | Danger button |
+| `.tp-color-panel` | Color picker panel |
+| `.tp-color-item` | Color item |
+| `.tp-dropdown-menu` | Dropdown menu |
+| `.tp-dropdown-item` | Dropdown menu item |
 
-### 公共动画
+### Shared Animations
 
 ```css
-@keyframes tp-fade-in    /* 淡入 */
-@keyframes tp-slide-in   /* 滑入 */
-@keyframes tp-blink      /* 闪烁 */
+@keyframes tp-fade-in    /* Fade in */
+@keyframes tp-slide-in   /* Slide in */
+@keyframes tp-blink      /* Blink */
 ```
 
-### 工具类
+### Utility Classes
 
-| 类名 | 说明 |
+| Class Name | Description |
 |------|------|
-| `.tp-flex-center` | Flex 居中 |
-| `.tp-hidden` | 隐藏元素 |
-| `.tp-visible` | 显示元素 |
+| `.tp-flex-center` | Flex center |
+| `.tp-hidden` | Hide element |
+| `.tp-visible` | Show element |
 
-## 使用方式
+## Usage
 
-1. **在组件中引入**：
+1. **Import in components**:
 
 ```typescript
-// 引入公共基础样式
+// Import shared base styles
 import '../shared/styles/base.css'
 
-// 引入特定模块样式
+// Import module-specific styles
 import '../shared/styles/bubble-menu.css'
 ```
 
-2. **在 word-mode.css 中已包含完整主题变量**，其他模块样式通过 CSS 变量复用。
+2. **word-mode.css includes complete theme variables**, and other module styles reuse them via CSS variables.
 
-## 深色模式
+## Dark Mode
 
-所有样式均支持深色模式，通过 `:where(.dark, .dark *)` 选择器实现：
+All styles support dark mode through the `:where(.dark, .dark *)` selector:
 
 ```css
 :where(.dark, .dark *) .my-component {
@@ -106,27 +106,27 @@ import '../shared/styles/bubble-menu.css'
 }
 ```
 
-## 响应式断点
+## Responsive Breakpoints
 
-- `768px` - 移动端断点
-- `480px` - 小屏手机断点
+- `768px` - Mobile breakpoint
+- `480px` - Small screen phone breakpoint
 
-## 优化记录
+## Optimization Log
 
-### 2024-12 重构
+### 2024-12 Refactoring
 
-- ✅ 新增 `base.css` 统一管理公共样式
-- ✅ 提取公共 CSS 变量（`--tp-*` 前缀）
-- ✅ 统一菜单、按钮、颜色面板样式
-- ✅ 合并重复的深色模式样式
-- ✅ 合并重复的响应式断点
+- ✅ Added `base.css` for unified shared styles management
+- ✅ Extracted shared CSS variables (`--tp-*` prefix)
+- ✅ Unified menu, button, and color panel styles
+- ✅ Merged duplicate dark mode styles
+- ✅ Merged duplicate responsive breakpoints
 
-**文件行数对比**：
+**File line count comparison**:
 
-| 文件 | 优化前 | 优化后 | 减少 |
+| File | Before | After | Reduction |
 |------|--------|--------|------|
 | bubble-menu.css | 77 | 52 | 32% |
 | floating-menu-toolbar.css | 205 | 110 | 46% |
 | table-bubble-menu.css | 190 | 130 | 32% |
 | drag-handle-with-menu.css | 527 | 320 | 39% |
-| **新增 base.css** | - | 180 | - |
+| **Added base.css** | - | 180 | - |

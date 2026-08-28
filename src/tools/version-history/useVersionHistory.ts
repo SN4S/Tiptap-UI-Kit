@@ -1,6 +1,6 @@
 /**
  * Version History Composable
- * @description 版本历史 Vue Composable
+ * @description Version history Vue composable
  */
 
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
@@ -11,20 +11,20 @@ import { DEFAULT_VERSION_HISTORY_CONFIG } from './types'
 import { VersionManager } from './versionManager'
 
 export interface UseVersionHistoryOptions {
-  /** 编辑器实例 */
+  /** Editor instance */
   editor: Ref<Editor | null | undefined>
-  /** 文档 ID */
+  /** Document ID */
   documentId: string
-  /** 最大版本数 */
+  /** Maximum version count */
   maxVersions?: number
-  /** 自动保存间隔（毫秒） */
+  /** Auto-save interval (ms) */
   autoSaveInterval?: number
-  /** 是否启用 */
+  /** Whether enabled */
   enabled?: boolean
 }
 
 export interface UseVersionHistoryReturn {
-  // 状态
+  // State
   versions: Ref<Version[]>
   selectedVersion: Ref<Version | null>
   compareVersion: Ref<Version | null>
@@ -32,7 +32,7 @@ export interface UseVersionHistoryReturn {
   panelOpen: Ref<boolean>
   loading: Ref<boolean>
 
-  // 方法
+  // Methods
   saveVersion: (name?: string) => Version | null
   deleteVersion: (versionId: string) => boolean
   renameVersion: (versionId: string, name: string) => boolean
@@ -46,7 +46,7 @@ export interface UseVersionHistoryReturn {
 }
 
 /**
- * 版本历史 Composable
+ * Version History composable
  */
 export function useVersionHistory(options: UseVersionHistoryOptions): UseVersionHistoryReturn {
   const {
@@ -57,18 +57,18 @@ export function useVersionHistory(options: UseVersionHistoryOptions): UseVersion
     enabled = DEFAULT_VERSION_HISTORY_CONFIG.enabled,
   } = options
 
-  // 状态
+  // State
   const versions = ref<Version[]>([])
   const selectedVersionId = ref<string | null>(null)
   const compareVersionId = ref<string | null>(null)
   const panelOpen = ref(false)
   const loading = ref(false)
 
-  // 管理器实例
+  // Manager instance
   let manager: VersionManager | null = null
   let autoSaveTimer: ReturnType<typeof setInterval> | null = null
 
-  // 计算属性
+  // Computed properties
   const selectedVersion = computed(() => {
     if (!selectedVersionId.value) return null
     return versions.value.find(v => v.id === selectedVersionId.value) || null
@@ -86,7 +86,7 @@ export function useVersionHistory(options: UseVersionHistoryOptions): UseVersion
     return manager.compareVersions(compareVersionId.value, selectedVersionId.value)
   })
 
-  // 初始化
+  // Initialize
   function init() {
     if (!enabled || !documentId) return
 
@@ -101,13 +101,13 @@ export function useVersionHistory(options: UseVersionHistoryOptions): UseVersion
     startAutoSave()
   }
 
-  // 刷新版本列表
+  // Refresh version list
   function refreshVersions() {
     if (!manager) return
     versions.value = manager.getVersions()
   }
 
-  // 保存版本
+  // Save version
   function saveVersion(name?: string): Version | null {
     if (!manager || !editor.value) return null
 
@@ -117,14 +117,14 @@ export function useVersionHistory(options: UseVersionHistoryOptions): UseVersion
     return version
   }
 
-  // 删除版本
+  // Delete version
   function deleteVersion(versionId: string): boolean {
     if (!manager) return false
 
     const result = manager.deleteVersion(versionId)
     if (result) {
       refreshVersions()
-      // 如果删除的是当前选中的版本，清除选中状态
+      // If deleted version is currently selected, clear selection
       if (selectedVersionId.value === versionId) {
         selectedVersionId.value = null
       }
@@ -135,7 +135,7 @@ export function useVersionHistory(options: UseVersionHistoryOptions): UseVersion
     return result
   }
 
-  // 重命名版本
+  // Rename version
   function renameVersion(versionId: string, name: string): boolean {
     if (!manager) return false
 
@@ -146,37 +146,37 @@ export function useVersionHistory(options: UseVersionHistoryOptions): UseVersion
     return result
   }
 
-  // 恢复版本
+  // Restore version
   function restoreVersion(versionId: string): boolean {
     if (!manager || !editor.value) return false
 
     const version = manager.getVersion(versionId)
     if (!version) return false
 
-    // 先保存当前版本
+    // Save current version first
     const content = editor.value.getJSON()
     if (manager.shouldAutoSave(content)) {
       manager.saveVersion(content, undefined, true)
     }
 
-    // 恢复内容
+    // Restore content
     editor.value.commands.setContent(version.content)
     refreshVersions()
 
     return true
   }
 
-  // 选择版本（预览）
+  // Select version (preview)
   function selectVersion(versionId: string | null) {
     selectedVersionId.value = versionId
   }
 
-  // 设置对比版本
+  // Set compare version
   function setCompareVersion(versionId: string | null) {
     compareVersionId.value = versionId
   }
 
-  // 面板控制
+  // Panel control
   function openPanel() {
     panelOpen.value = true
     refreshVersions()
@@ -196,7 +196,7 @@ export function useVersionHistory(options: UseVersionHistoryOptions): UseVersion
     }
   }
 
-  // 自动保存
+  // Auto-save
   function startAutoSave() {
     if (!enabled || autoSaveInterval <= 0) return
 
@@ -220,7 +220,7 @@ export function useVersionHistory(options: UseVersionHistoryOptions): UseVersion
     }
   }
 
-  // 生命周期
+  // Lifecycle
   onMounted(() => {
     init()
   })
@@ -229,7 +229,7 @@ export function useVersionHistory(options: UseVersionHistoryOptions): UseVersion
     stopAutoSave()
   })
 
-  // 监听 documentId 变化
+  // Watch documentId changes
   watch(() => documentId, (newId, oldId) => {
     if (newId !== oldId) {
       stopAutoSave()
@@ -240,7 +240,7 @@ export function useVersionHistory(options: UseVersionHistoryOptions): UseVersion
   })
 
   return {
-    // 状态
+    // State
     versions,
     selectedVersion,
     compareVersion,
@@ -248,7 +248,7 @@ export function useVersionHistory(options: UseVersionHistoryOptions): UseVersion
     panelOpen,
     loading,
 
-    // 方法
+    // Methods
     saveVersion,
     deleteVersion,
     renameVersion,

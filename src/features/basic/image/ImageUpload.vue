@@ -8,12 +8,12 @@
     />
   </ToolbarGroup>
 
-  <!-- 网络上传图片模态框 -->
+  <!-- Network image upload modal -->
   <a-modal v-model:open="imageModalOpen" :title="t('editor.insertImage')" @ok="applyImage">
     <a-input v-model:value="imageUrl" :placeholder="t('editor.imagePlaceholder')" />
   </a-modal>
 
-  <!-- 本地上传图片（拖拽上传，支持批量） -->
+  <!-- Local image upload (drag-and-drop upload, supports batch) -->
   <a-modal v-model:open="localUploadOpen" :title="t('editor.localUploadImage')" :footer="null">
     <a-upload-dragger :show-upload-list="false" :custom-request="handleLocalUpload" accept="image/*" multiple>
       <p class="ant-upload-drag-icon">
@@ -24,7 +24,7 @@
     </a-upload-dragger>
   </a-modal>
 
-  <!-- 本地上传视频（拖拽上传，支持批量） -->
+  <!-- Local video upload (drag-and-drop upload, supports batch) -->
   <a-modal v-model:open="videoUploadOpen" :title="t('editor.localUploadVideo')" :footer="null">
     <a-upload-dragger :show-upload-list="false" :custom-request="handleVideoUpload" accept="video/*" multiple>
       <p class="ant-upload-drag-icon">
@@ -38,8 +38,8 @@
 
 <script setup lang="ts">
 /**
- * ImageUpload - 媒体上传组件
- * @description 支持本地上传和网络上传图片，支持本地上传视频
+ * ImageUpload - media upload component
+ * @description Supports local and network image upload, and local video upload
  */
 import { computed, ref } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -52,9 +52,9 @@ import type { MenuItemConfig } from '@/configs/toolbar'
 // ===== Props =====
 interface Props {
   editor: Editor | null | undefined
-  /** 图片上传函数（可选） */
+  /** Image upload function (optional) */
   uploadImage?: (file: File) => Promise<string>
-  /** 视频上传函数（可选） */
+  /** Video upload function (optional) */
   uploadVideo?: (file: File) => Promise<string>
 }
 
@@ -66,13 +66,13 @@ const props = withDefaults(defineProps<Props>(), {
 const editor = computed(() => props.editor ?? null)
 const runCommand = createCommandRunner(editor)
 
-// ===== 状态 =====
+// ===== State =====
 const imageModalOpen = ref(false)
 const imageUrl = ref('')
 const localUploadOpen = ref(false)
 const videoUploadOpen = ref(false)
 
-// ===== 媒体上传菜单项 =====
+// ===== Media upload menu items =====
 const imageMenuItems = computed<MenuItemConfig[]>(() => [
   {
     key: 'upload-local',
@@ -95,7 +95,7 @@ const imageMenuItems = computed<MenuItemConfig[]>(() => [
 ])
 
 /**
- * 插入图片（网络上传）
+ * Insert an image (network upload)
  */
 function applyImage() {
   if (imageUrl.value) {
@@ -106,9 +106,9 @@ function applyImage() {
 }
 
 /**
- * 处理本地图片上传（自定义上传逻辑）
- * - 若父组件提供 uploadImage(file) 回调则使用其返回的 URL
- * - 否则回退为本地 DataURL 直接插入
+ * Handle local image upload (custom upload logic)
+ * - If the parent component provides an uploadImage(file) callback, use the URL it returns
+ * - Otherwise, fall back to inserting a local DataURL directly
  */
 async function handleLocalUpload(options: any) {
   const { file, onSuccess, onError } = options || {}
@@ -117,7 +117,7 @@ async function handleLocalUpload(options: any) {
     if (props.uploadImage) {
       url = await props.uploadImage(file as File)
     } else {
-      // 使用 Base64 编码
+      // Use Base64 encoding
       url = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader()
         reader.onload = () => resolve(String(reader.result))
@@ -125,7 +125,7 @@ async function handleLocalUpload(options: any) {
         reader.readAsDataURL(file as File)
       })
     }
-    // 插入图片
+    // Insert the image
     runCommand((chain) => chain.insertContent({ type: 'image', attrs: { src: url } }))()
     localUploadOpen.value = false
     onSuccess && onSuccess({ url })
@@ -135,9 +135,9 @@ async function handleLocalUpload(options: any) {
 }
 
 /**
- * 处理本地视频上传（自定义上传逻辑）
- * - 若父组件提供 uploadVideo(file) 回调则使用其返回的 URL
- * - 否则回退为本地 DataURL 直接插入
+ * Handle local video upload (custom upload logic)
+ * - If the parent component provides an uploadVideo(file) callback, use the URL it returns
+ * - Otherwise, fall back to inserting a local DataURL directly
  */
 async function handleVideoUpload(options: any) {
   const { file, onSuccess, onError } = options || {}
@@ -146,7 +146,7 @@ async function handleVideoUpload(options: any) {
     if (props.uploadVideo) {
       url = await props.uploadVideo(file as File)
     } else {
-      // 使用 Base64 编码
+      // Use Base64 encoding
       url = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader()
         reader.onload = () => resolve(String(reader.result))
@@ -154,7 +154,7 @@ async function handleVideoUpload(options: any) {
         reader.readAsDataURL(file as File)
       })
     }
-    // 插入视频
+    // Insert the video
     runCommand((chain) => chain.insertContent({ type: 'video', attrs: { src: url } }))()
     videoUploadOpen.value = false
     onSuccess && onSuccess({ url })

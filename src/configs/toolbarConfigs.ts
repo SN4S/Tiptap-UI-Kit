@@ -1,6 +1,6 @@
 /**
  * Toolbar Config Factories
- * 提供创建工具栏按钮与菜单项的工厂函数
+ * Provides factory functions for creating toolbar buttons and menu items
  */
 import { computed } from 'vue'
 import type { Editor } from '@tiptap/core'
@@ -23,7 +23,7 @@ import {
 
 import { createCommandRunner } from '@/utils/editorCommands'
 // import { currentTranslateLang, setTranslateLang } from '../stores/translate'
-// 暂时注释掉，后续迁移
+// temporarily commented out, to be migrated later
 const currentTranslateLang = { value: '' }
 const setTranslateLang = (_label: string) => {}
 import type {
@@ -34,7 +34,7 @@ import type {
 } from './toolbar'
 
 /**
- * 创建文本格式工具配置
+ * Create text format tool configs
  */
 export function createTextFormatTools(editor: Editor): ToolbarButtonConfig[] {
   const runCommand = createCommandRunner(computed(() => editor))
@@ -74,7 +74,7 @@ export function createTextFormatTools(editor: Editor): ToolbarButtonConfig[] {
 }
 
 /**
- * 创建标题工具配置
+ * Create heading tool configs
  */
 export function createHeadingTools(editor: Editor): HeadingConfig[] {
   const runCommand = createCommandRunner(computed(() => editor))
@@ -88,7 +88,7 @@ export function createHeadingTools(editor: Editor): HeadingConfig[] {
 }
 
 /**
- * 创建列表工具配置
+ * Create list tool configs
  */
 export function createListTools(editor: Editor): ListToolConfig[] {
   const runCommand = createCommandRunner(computed(() => editor))
@@ -116,14 +116,14 @@ export function createListTools(editor: Editor): ListToolConfig[] {
 }
 
 /**
- * 创建 AI 工具菜单项配置
- * @param editor 编辑器实例
- * @param t 翻译函数，用于国际化
+ * Create AI tool menu items config
+ * @param editor editor instance
+ * @param t translation function, for internationalization
  */
 export function createAiToolMenuItems(editor: Editor, t: (key: string, params?: Record<string, any>) => string = (key) => key): MenuItemConfig[] {
   const defaultLang = currentTranslateLang.value || ''
   
-  // 语言代码映射
+  // Language code mapping
   const LANGUAGE_CODES = [
     { code: 'zh-CN', key: 'zh-CN' },
     { code: 'zh-TW', key: 'zh-TW' },

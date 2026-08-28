@@ -1,56 +1,56 @@
-# 翻译功能 (Translation Feature)
+# Translation Feature
 
-AI 驱动的文本翻译功能，支持多语言选择和持久化。
+AI-driven text translation with multi-language selection and persistence.
 
-## 功能特性
+## Features
 
-- ✅ 支持 14 种语言的翻译
-- ✅ 语言选择状态持久化（localStorage）
-- ✅ 下拉菜单式语言选择界面
-- ✅ 与续写功能类似的交互体验
-- ✅ 实时流式翻译结果展示
+- ✅ Supports translation into 14 languages
+- ✅ Persists the language selection (localStorage)
+- ✅ Dropdown-menu style language selection UI
+- ✅ Interaction experience similar to the continue-writing feature
+- ✅ Real-time streaming translation result display
 
-## 文件结构
+## File structure
 
 ```
 translation/
-├── TranslationExtension.ts    # Tiptap 扩展，提供翻译命令
-├── languageCodes.ts           # 语言代码配置
-├── translateStore.ts          # 翻译语言状态管理
-├── index.ts                   # 导出文件
-└── README.md                  # 本文档
+├── TranslationExtension.ts    # Tiptap extension, provides the translate command
+├── languageCodes.ts           # Language code configuration
+├── translateStore.ts          # Translation language state management
+├── index.ts                   # Export file
+└── README.md                  # This document
 ```
 
-## 使用方法
+## Usage
 
-### 1. 在编辑器中使用翻译扩展
+### 1. Use the translation extension in the editor
 
 ```typescript
 import { TranslationExtension } from '@/components/tiptapPro-tenant/ai/translation';
 
-// 在编辑器配置中添加扩展
+// Add the extension to the editor configuration
 editor = new Editor({
   extensions: [
-    // ... 其他扩展
+    // ... other extensions
     TranslationExtension.configure({
-      defaultTargetLang: '英文', // 可选：设置默认目标语言
+      defaultTargetLang: '英文', // Optional: set the default target language
     }),
   ],
 });
 ```
 
-### 2. 编程式调用翻译命令
+### 2. Invoke the translate command programmatically
 
 ```typescript
-// 使用保存的语言
+// Use the saved language
 editor.commands.translate();
 
-// 或指定目标语言
+// Or specify a target language
 editor.commands.translate('英文');
 editor.commands.translate('中文');
 ```
 
-### 3. 管理翻译语言状态
+### 3. Manage the translation language state
 
 ```typescript
 import {
@@ -59,75 +59,75 @@ import {
   clearTranslateLang,
 } from '@/components/tiptapPro-tenant/ai/translation';
 
-// 获取当前选择的语言
+// Get the currently selected language
 const lang = currentTranslateLang.value;
 
-// 设置目标语言
+// Set the target language
 setTranslateLang('英文');
 
-// 清除保存的语言
+// Clear the saved language
 clearTranslateLang();
 ```
 
-### 4. 使用语言代码配置
+### 4. Use the language code configuration
 
 ```typescript
 import { LANGUAGE_CODES } from '@/components/tiptapPro-tenant/ai/translation';
 
-// 获取所有支持的语言
+// Get all supported languages
 LANGUAGE_CODES.forEach(({ code, key }) => {
   console.log(`Code: ${code}, Key: ${key}`);
 });
 ```
 
-## 支持的语言
+## Supported languages
 
-| 代码 | 键值 | 说明 |
+| Code | Key | Description |
 |------|------|------|
-| zh-CN | zh-CN | 简体中文 |
-| zh-TW | zh-TW | 繁体中文 |
-| en | en | 英文 |
-| ja | ja | 日文 |
-| th | th | 泰文 |
-| fr | fr | 法文 |
-| es | es | 西班牙文 |
-| pt | pt | 葡萄牙文 |
-| ko | ko | 韩文 |
-| vi | vi | 越南文 |
-| ru | ru | 俄文 |
-| de | de | 德文 |
-| hi | hi | 印地文 |
-| id | id | 印尼文 |
+| zh-CN | zh-CN | Simplified Chinese |
+| zh-TW | zh-TW | Traditional Chinese |
+| en | en | English |
+| ja | ja | Japanese |
+| th | th | Thai |
+| fr | fr | French |
+| es | es | Spanish |
+| pt | pt | Portuguese |
+| ko | ko | Korean |
+| vi | vi | Vietnamese |
+| ru | ru | Russian |
+| de | de | German |
+| hi | hi | Hindi |
+| id | id | Indonesian |
 
-## 状态持久化
+## State persistence
 
-翻译语言选择会自动保存到 `localStorage`，键名为 `tiptap_translate_target_lang`。
+The translation language selection is automatically saved to `localStorage` under the key `tiptap_translate_target_lang`.
 
-- 用户选择语言后，下次打开编辑器时会自动恢复
-- 可以通过 `clearTranslateLang()` 清除保存的语言
+- After a user selects a language, it is automatically restored the next time the editor opens
+- The saved language can be cleared with `clearTranslateLang()`
 
-## 与续写功能的对比
+## Comparison with the continue-writing feature
 
-本翻译功能参考了续写功能的实现方式：
+This translation feature follows the implementation approach of the continue-writing feature:
 
-| 特性 | 续写功能 | 翻译功能 |
+| Feature | Continue-writing | Translation |
 |------|---------|---------|
-| 扩展文件 | ContinueWritingExtension.ts | TranslationExtension.ts |
-| 按钮组件 | ContinueWritingButton.vue | 无（使用 AiMenuButton） |
-| 状态管理 | 无 | translateStore.ts |
-| 配置管理 | 无 | languageCodes.ts |
-| 交互方式 | 直接点击 | 通过 AiMenuButton 下拉菜单选择语言 |
+| Extension file | ContinueWritingExtension.ts | TranslationExtension.ts |
+| Button component | ContinueWritingButton.vue | None (uses AiMenuButton) |
+| State management | None | translateStore.ts |
+| Configuration management | None | languageCodes.ts |
+| Interaction | Direct click | Select language via the AiMenuButton dropdown |
 
-## 注意事项
+## Notes
 
-1. **文本选择**：翻译功能需要先选中要翻译的文本
-2. **语言标签**：使用语言标签（如 "英文"、"中文"）而非语言代码（如 "en"、"zh"）
-3. **国际化**：语言标签通过 `t('editor.lang.${key}')` 获取，确保 locales 文件中有对应的翻译
-4. **API 依赖**：需要 `aiApiService.translate()` 方法支持
+1. **Text selection**: the translate feature requires selecting the text to translate first
+2. **Language labels**: uses language labels (e.g. "英文", "中文") rather than language codes (e.g. "en", "zh")
+3. **Internationalization**: language labels are obtained via `t('editor.lang.${key}')`; make sure there is a corresponding translation in the locales files
+4. **API dependency**: requires the `aiApiService.translate()` method support
 
-## 相关文件
+## Related files
 
-- `../shared/aiSuggestionManager.ts` - AI 建议管理器
-- `../shared/AiSuggestionPopover.vue` - AI 建议弹窗组件
-- `../../locales.ts` - 国际化文件
+- `../shared/aiSuggestionManager.ts` - AI suggestion manager
+- `../shared/AiSuggestionPopover.vue` - AI suggestion popover component
+- `../../locales.ts` - Internationalization file
 

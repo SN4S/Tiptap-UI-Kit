@@ -57,7 +57,7 @@ export const PolishExtension = Extension.create<PolishOptions>({
 
           if (!selectedText.trim()) {
             console.warn('[Polish] No text selected');
-            // 显示用户友好的提示
+            // Show a user-friendly prompt
             notification.warning({
               message: t('editor.pleaseSelectText'),
               description: t('editor.polishRequiresSelection'),
@@ -113,7 +113,7 @@ function performPolish(
   sysPrompt: string,
   originalSelection: { from: number; to: number },
 ) {
-  // 先清理所有现有的 AI 高亮，避免与其他 AI 功能冲突
+  // First clear all existing AI highlights to avoid conflicts with other AI features
   removeAiHighlight(editor);
 
   currentEditor = editor;
@@ -158,7 +158,7 @@ function performPolish(
         // Update the suggestion in popover
         suggestedTextRef.value = accumulatedContent;
 
-        // Update the mark data (验证 selection 是否仍然有效)
+        // Update the mark data (validate whether the selection is still valid)
         if (currentSelection && currentEditor) {
           const { state } = currentEditor;
           const { doc } = state;
@@ -188,7 +188,7 @@ function performPolish(
         // Stop streaming indicator
         isStreamingRef.value = false;
 
-        // Update the mark data (验证 selection 是否仍然有效)
+        // Update the mark data (validate whether the selection is still valid)
         if (currentSelection && currentEditor) {
           const { state } = currentEditor;
           const { doc } = state;
@@ -257,7 +257,7 @@ function mountPolishPopover(editor: Editor): void {
       document.body.append(polishContainer);
     }
   } else {
-    // 如果容器已存在，清空其内容，避免重复显示
+    // If the container already exists, clear its contents to avoid duplicates
     polishContainer.innerHTML = '';
   }
 
@@ -345,7 +345,7 @@ function handleAccept(): void {
   const { state } = currentEditor;
   const { doc } = state;
 
-  // 验证 selection 是否仍然有效
+  // Validate whether the selection is still valid
   const docSize = doc.content.size;
   if (!isValidSelection(currentSelection, docSize)) {
     console.warn('[Polish] Invalid selection range, cannot accept');

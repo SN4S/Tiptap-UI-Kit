@@ -1,5 +1,5 @@
 /**
- * Color Components - 颜色组件统一导出
+ * Color Components - unified export of color components
  */
 export { default as ColorPicker } from './ColorPicker.vue'
 

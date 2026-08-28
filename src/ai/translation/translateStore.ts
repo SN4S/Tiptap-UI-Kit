@@ -1,18 +1,18 @@
 /**
- * 翻译语言状态管理
- * @description 管理翻译目标语言的选择和持久化
+ * Translation language state management
+ * @description Manages the selection and persistence of the translation target language
  */
 import { ref } from 'vue';
 
 const STORAGE_KEY = 'tiptap_translate_target_lang';
 
-// 全局共享的翻译目标语言（初始为空，需用户先选择）
+// Globally shared translation target language (initially empty; the user must choose one first)
 const saved = typeof window !== 'undefined' ? window.localStorage?.getItem(STORAGE_KEY) : null;
 export const currentTranslateLang = ref<string>(saved || '');
 
 /**
- * 设置语言并持久化到 localStorage
- * @param label 语言标签（如 "英文"、"中文" 等）
+ * Sets the language and persists it to localStorage
+ * @param label The language label (e.g. "英文", "中文", etc.)
  */
 export function setTranslateLang(label: string) {
   try {
@@ -26,7 +26,7 @@ export function setTranslateLang(label: string) {
 }
 
 /**
- * 清除已保存的语言选择
+ * Clears the saved language selection
  */
 export function clearTranslateLang() {
   try {
@@ -39,6 +39,6 @@ export function clearTranslateLang() {
   }
 }
 
-// 允许外部读取存储键（如需要）
+// Allow external code to access the storage key (if needed)
 export { STORAGE_KEY };
 

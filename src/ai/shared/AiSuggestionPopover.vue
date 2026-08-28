@@ -15,7 +15,7 @@
         </div>
 
         <div class="ai-suggestion-body">
-          <!-- 只在有原文时显示原文框 -->
+          <!-- Only show the original-text box when original text exists -->
           <template v-if="originalText">
             <div class="original-text">
               <div class="text-label">{{ t('editor.originalText') }}</div>
@@ -56,7 +56,7 @@
       </div>
     </template>
 
-    <!-- 用一个隐藏的元素来定位 Popover -->
+    <!-- Use a hidden element to position the Popover -->
     <span ref="anchorRef" :style="anchorStyle as any"></span>
   </Popover>
 </template>
@@ -231,7 +231,7 @@ const handleVisibleChange = (val: boolean) => {
     0 9px 28px 8px rgb(0 0 0 / 5%);
 }
 
-/* 暗黑模式 */
+/* Dark mode */
 :where([data-theme="dark"], [data-theme="dark"] *) .ai-suggestion-popover .ant-popover-inner {
   background: #1f1f1f;
   box-shadow:

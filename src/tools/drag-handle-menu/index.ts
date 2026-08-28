@@ -1,6 +1,6 @@
 /**
  * Drag Handle Menu Feature Module
- * @description 六个点功能模块统一导出
+ * @description Drag handle (six dots) feature module unified exports
  */
 export { DragHandleWithMenuExtension, dragHandleWithMenuKey } from './DragHandleWithMenuExtension'
 export type { DragHandleClickEvent, DragHandleWithMenuOptions } from './DragHandleWithMenuExtension'

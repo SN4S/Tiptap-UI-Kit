@@ -33,7 +33,7 @@ export const SummarizeExtension = Extension.create<SummarizeOptions>({
 
           if (!selectedText.trim()) {
             console.warn('[Summarize] No text selected');
-            // 显示用户友好的提示
+            // Show a user-friendly prompt
             notification.warning({
               message: t('editor.pleaseSelectText'),
               description: t('editor.summarizeRequiresSelection'),

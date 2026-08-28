@@ -1,6 +1,6 @@
 /**
- * Core Extensions - 核心扩展配置
- * @description 根据版本动态加载编辑器扩展
+ * Core Extensions - core extension configuration
+ * @description Dynamically load editor extensions based on version
  */
 
 import type { AnyExtension } from '@tiptap/core'
@@ -43,10 +43,10 @@ import {
 } from '@/ai'
 
 /**
- * 编辑器版本类型
- * - 'minimal' / 1：最小集（基础文本格式 + 列表 + 撤销重做）
- * - 'basic' / 2：基础集（颜色、对齐、图片、链接等，不含表格 / 数学公式 / 格式刷 / AI）
- * - 'advanced' / 'premium' / 'all' / 'full' / 3 / 4：完整集（与历史行为一致，全量加载）
+ * Editor version type
+ * - 'minimal' / 1: minimal set (basic text format + lists + undo/redo)
+ * - 'basic' / 2: basic set (colors, alignment, images, links, etc., without tables / math formulas / format painter / AI)
+ * - 'advanced' / 'premium' / 'all' / 'full' / 3 / 4: full set (consistent with historical behavior, loaded in full)
  */
 export type EditorVersion =
   | 'minimal'
@@ -60,7 +60,7 @@ export type EditorVersion =
   | 3
   | 4
 
-/** 内部功能等级：1=minimal 2=basic 3=full（advanced/premium/all 均为全量，保持向后兼容） */
+/** internal feature tier: 1=minimal 2=basic 3=full (advanced/premium/all are all full, kept backward compatible) */
 type ExtensionTier = 1 | 2 | 3
 
 function resolveTier(version: EditorVersion): ExtensionTier {
@@ -71,7 +71,7 @@ function resolveTier(version: EditorVersion): ExtensionTier {
     case 'basic':
     case 2:
       return 2
-    // advanced/premium/all/full 保持与历史行为一致：全量加载
+    // advanced/premium/all/full remain consistent with historical behavior: loaded in full
     case 'advanced':
     case 'premium':
     case 'all':
@@ -84,27 +84,27 @@ function resolveTier(version: EditorVersion): ExtensionTier {
 }
 
 /**
- * 扩展配置选项
+ * Extension config options
  */
 export interface ExtensionsOptions {
-  /** 是否启用图片增强功能（拖拽大小调整），默认 true */
+  /** whether to enable image enhancement (drag resize), default true */
   enableImageResize?: boolean
-  /** 是否禁用历史记录扩展（协作模式下需要禁用），默认 false */
+  /** whether to disable the history extension (needed in collaboration mode), default false */
   disableHistory?: boolean
 }
 
 /**
- * 根据版本获取扩展配置
- * @param version 编辑器版本。不传时默认全量加载（与历史行为一致）；
- *                'minimal' / 'basic' 只加载对应子集（表格、数学公式、格式刷、AI 等重扩展被剔除）
- * @param optionsOrEnableImageResize 配置选项或是否启用图片增强功能（兼容旧 API）
- * @returns 扩展配置数组
+ * Get extension config based on version
+ * @param version editor version. When not passed, defaults to full loading (consistent with historical behavior);
+ *                'minimal' / 'basic' load only the corresponding subset (heavy extensions like tables, math formulas, format painter, AI are excluded)
+ * @param optionsOrEnableImageResize config options or whether to enable image enhancement (backward-compatible old API)
+ * @returns array of extension configs
  */
 export function getExtensionsByVersion(
   version: EditorVersion = 'all',
   optionsOrEnableImageResize: boolean | ExtensionsOptions = true
 ): AnyExtension[] {
-  // 兼容旧 API：如果传入 boolean，转换为配置对象
+  // Backward-compatible old API: if a boolean is passed, convert it to a config object
   const options: ExtensionsOptions = typeof optionsOrEnableImageResize === 'boolean'
     ? { enableImageResize: optionsOrEnableImageResize }
     : optionsOrEnableImageResize
@@ -114,36 +114,36 @@ export function getExtensionsByVersion(
   const tier = resolveTier(version)
   const extensions: AnyExtension[] = []
 
-  // ===== 最小集（所有版本都包含）：基础文本格式、列表、撤销重做 =====
-  // 协作模式下禁用 history，因为 @tiptap/extension-collaboration 自带历史管理
+  // ===== Minimal set (included in all versions): basic text format, lists, undo/redo =====
+  // Disable history in collaboration mode, because @tiptap/extension-collaboration has its own history management
   const starterKitConfig: Record<string, unknown> = {
-    // 禁用一些高级功能，在基础版中通过其他扩展提供
+    // Disable some advanced features; provided by other extensions in the basic version
     heading: {
       levels: [1, 2, 3, 4, 5, 6],
     },
-    // 禁用 link 和 underline，因为后面会单独添加配置版本
+    // Disable link and underline, because they are added separately with configured versions later
     link: false,
     underline: false,
   }
 
-  // 协作模式下禁用 history
+  // Disable history in collaboration mode
   if (disableHistory) {
     starterKitConfig.history = false
   }
 
   extensions.push(StarterKit.configure(starterKitConfig))
 
-  // 占位符扩展（函数形式：语言切换后能取到新文案）
+  // Placeholder extension (function form: gets the new copy after language switch)
   extensions.push(
     Placeholder.configure({
       placeholder: () => t('placeholder.default'),
     })
   )
 
-  // 下划线扩展
+  // Underline extension
   extensions.push(Underline)
 
-  // 任务列表扩展
+  // Task list extension
   extensions.push(TaskList)
   extensions.push(
     TaskItem.configure({
@@ -151,7 +151,7 @@ export function getExtensionsByVersion(
     })
   )
 
-  // 列表快捷键、字数统计（轻量，所有版本都包含）
+  // List shortcuts, character count (lightweight, included in all versions)
   extensions.push(ListShortcuts)
   extensions.push(CharacterCount)
 
@@ -159,35 +159,35 @@ export function getExtensionsByVersion(
     return extensions
   }
 
-  // ===== 基础集（basic 及以上）：颜色、对齐、图片、链接、字体等 =====
+  // ===== Basic set (basic and above): colors, alignment, images, links, fonts, etc. =====
 
-  // 文本对齐扩展
+  // Text alignment extension
   extensions.push(
     TextAlign.configure({
       types: ['heading', 'paragraph'],
     })
   )
 
-  // 颜色和文本样式扩展
+  // Color and text style extensions
   extensions.push(Color)
   extensions.push(TextStyle)
   extensions.push(Highlight.configure({
     multicolor: true,
   }))
 
-  // 图片扩展（使用可调整大小的图片扩展，支持拖拽大小调整）
+  // Image extension (uses a resizable image extension, supports drag resize)
   extensions.push(
     ResizableImage.configure({
       inline: true,
       allowBase64: true,
-      enableResize: enableImageResize, // 根据配置决定是否启用图片增强功能
+      enableResize: enableImageResize, // decide whether to enable image enhancement based on config
     })
   )
 
-  // 链接扩展
+  // Link extension
   extensions.push(
     Link.configure({
-      openOnClick: true, // 允许点击链接跳转
+      openOnClick: true, // allow clicking links to navigate
       HTMLAttributes: {
         target: '_blank',
         rel: 'noopener noreferrer',
@@ -195,18 +195,18 @@ export function getExtensionsByVersion(
     })
   )
 
-  // 字体扩展
+  // Font extensions
   extensions.push(FontFamily)
   extensions.push(FontSize)
 
-  // 上标下标扩展
+  // Subscript/superscript extensions
   extensions.push(Subscript)
   extensions.push(Superscript)
 
-  // 行间距扩展
+  // Line height extension
   extensions.push(LineHeight)
 
-  // 视频扩展
+  // Video extension
   extensions.push(
     Video.configure({
       inline: false,
@@ -214,7 +214,7 @@ export function getExtensionsByVersion(
     })
   )
 
-  // 粘贴扩展
+  // Paste extensions
   extensions.push(PasteImage)
   extensions.push(PasteWord)
 
@@ -222,9 +222,9 @@ export function getExtensionsByVersion(
     return extensions
   }
 
-  // ===== 完整集（advanced / premium / all）：表格、格式刷、数学公式、AI =====
+  // ===== Full set (advanced / premium / all): tables, format painter, math formulas, AI =====
 
-  // 表格扩展
+  // Table extensions
   extensions.push(
     Table.configure({
       resizable: true,
@@ -234,13 +234,13 @@ export function getExtensionsByVersion(
   extensions.push(TableCell)
   extensions.push(TableHeader)
 
-  // 格式刷扩展
+  // Format painter extension
   extensions.push(FormatPainter)
 
-  // 数学公式扩展
+  // Math formula extension
   extensions.push(MathExtension)
 
-  // AI 功能扩展
+  // AI feature extensions
   extensions.push(AiHighlightMark)
   extensions.push(CustomAiExtension)
   extensions.push(ContinueWritingExtension)
@@ -252,11 +252,11 @@ export function getExtensionsByVersion(
 }
 
 /**
- * 获取基础版扩展配置
- * @description 此函数内部调用 getExtensionsByVersion('basic')。
- *              注意：basic 版本现在只加载基础子集（不含表格 / 数学公式 / 格式刷 / AI），
- *              如需全量扩展请使用 getExtensionsByVersion('all')
- * @deprecated 建议直接使用 getExtensionsByVersion('basic') 或 getExtensionsByVersion(2)
+ * Get the basic version extension config
+ * @description this function internally calls getExtensionsByVersion('basic').
+ *              Note: the basic version now loads only the basic subset (without tables / math formulas / format painter / AI);
+ *              for the full set use getExtensionsByVersion('all')
+ * @deprecated recommended to directly use getExtensionsByVersion('basic') or getExtensionsByVersion(2)
  */
 export function getBasicExtensions() {
   return getExtensionsByVersion('basic')

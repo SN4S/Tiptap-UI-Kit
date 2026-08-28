@@ -78,7 +78,7 @@ defineProps<Props>()
   color: var(--tp-color-text-muted, #999);
 }
 
-/* 深色模式 */
+/* Dark mode */
 [data-theme="dark"] .diff-line--add {
   background-color: rgba(82, 196, 26, 0.2);
 }

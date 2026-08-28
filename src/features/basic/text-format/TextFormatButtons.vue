@@ -13,8 +13,8 @@
 
 <script setup lang="ts">
 /**
- * TextFormatButtons - 文本格式按钮组
- * @description 可复用的文本格式按钮组件（粗体、斜体、下划线、删除线、行内代码）
+ * TextFormatButtons - text format button group
+ * @description A reusable text format button component (bold, italic, underline, strike, inline code)
  */
 import { computed } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -33,7 +33,7 @@ import {
 // ===== Props =====
 interface Props {
   editor: Editor | null | undefined
-  /** 是否显示行内代码按钮，默认 false */
+  /** Whether to show the inline code button, defaults to false */
   showCode?: boolean
 }
 
@@ -41,14 +41,14 @@ const props = withDefaults(defineProps<Props>(), {
   showCode: false,
 })
 
-// 事务响应式 editor：isActive 等状态跟随光标/内容变化重新求值
+// Transaction-driven reactive editor: states like isActive are re-evaluated on cursor/content changes
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const runCommand = createCommandRunner(editor)
 const { isActive } = createStateCheckers(editor)
 
-// ===== 文本格式配置 =====
+// ===== Text format configuration =====
 interface TextFormat {
   name: string
   icon: typeof BoldOutlined
@@ -85,7 +85,7 @@ const textFormats = computed(() => {
     },
   ]
 
-  // 可选的行内代码按钮（多行选中时自动切换为代码块）
+  // Optional inline code button (automatically switches to a code block when multiple lines are selected)
   if (props.showCode) {
     formats.push({
       name: 'code',
@@ -96,13 +96,13 @@ const textFormats = computed(() => {
         const e = editor.value
         if (!e) return
 
-        // 如果当前已在代码块中，退出代码块
+        // If already inside a code block, exit the code block
         if (e.isActive('codeBlock')) {
           runCommand((chain) => chain.setParagraph())()
           return
         }
 
-        // 检查选区是否跨越多个文本块
+        // Check whether the selection spans multiple text blocks
         const { from, to } = e.state.selection
         let blockCount = 0
         e.state.doc.nodesBetween(from, to, (node) => {
@@ -112,11 +112,11 @@ const textFormats = computed(() => {
         })
 
         if (blockCount > 1) {
-          // 多行选中：使用代码块
-          // 获取选中的文本内容（保留换行）
+          // Multiple lines selected: use a code block
+          // Get the selected text content (keeping line breaks)
           const selectedText = e.state.doc.textBetween(from, to, '\n')
           
-          // 删除选中内容并插入代码块
+          // Delete the selection and insert a code block
           e.chain()
             .focus()
             .deleteSelection()
@@ -127,7 +127,7 @@ const textFormats = computed(() => {
             })
             .run()
         } else {
-          // 单行选中：使用行内代码
+          // Single line selected: use inline code
           runCommand((chain) => chain.toggleCode())()
         }
       },

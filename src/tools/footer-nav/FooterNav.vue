@@ -18,8 +18,8 @@
 
 <script setup lang="ts">
 /**
- * FooterNav - 底部导航组件
- * @description 底部导航栏，集成缩放控制、页数统计和字数统计功能
+ * FooterNav - Footer navigation component
+ * @description Footer navigation bar with zoom controls, page count, and word count
  * @example
  * ```vue
  * <FooterNav
@@ -27,7 +27,7 @@
  *   :totalPages="totalPages"
  *   :editor="editor"
  * />
- * <FooterNav :enabled="false" /> // 关闭底部导航
+ * <FooterNav :enabled="false" /> // Disable footer navigation
  * ```
  */
 import { ref, watch } from 'vue'
@@ -37,21 +37,21 @@ import './footer-nav.css'
 
 // ===== Props =====
 interface Props {
-  /** 当前缩放比例（双向绑定） */
+  /** Current zoom level (two-way binding) */
   zoomLevel: number
-  /** 文档总页数 */
+  /** Total page count */
   totalPages: number
-  /** Tiptap 编辑器实例 */
+  /** Tiptap editor instance */
   editor?: Editor | null
-  /** 是否显示字数统计 */
+  /** Whether to show word count */
   showCharCount?: boolean
-  /** 最小缩放比例 */
+  /** Minimum zoom level */
   min?: number
-  /** 最大缩放比例 */
+  /** Maximum zoom level */
   max?: number
-  /** 缩放步长 */
+  /** Zoom step */
   step?: number
-  /** 是否启用底部导航，默认为 true */
+  /** Whether to enable footer navigation, default true */
   enabled?: boolean
 }
 
@@ -70,10 +70,10 @@ const emit = defineEmits<{
   (e: 'reset', value: number): void
 }>()
 
-// ===== 响应式状态 =====
+// ===== Reactive state =====
 const localZoomLevel = ref(props.zoomLevel)
 
-// ===== 监听外部 zoomLevel 变化 =====
+// ===== Watch external zoomLevel changes =====
 watch(
   () => props.zoomLevel,
   (newValue) => {
@@ -84,9 +84,9 @@ watch(
   { immediate: true }
 )
 
-// ===== 事件处理 =====
+// ===== Event handlers =====
 /**
- * 处理缩放更新
+ * Handle zoom update
  */
 const handleZoomUpdate = (value: number) => {
   localZoomLevel.value = value
@@ -94,14 +94,14 @@ const handleZoomUpdate = (value: number) => {
 }
 
 /**
- * 处理缩放变化
+ * Handle zoom change
  */
 const handleZoomChange = (value: number) => {
   emit('change', value)
 }
 
 /**
- * 处理缩放重置
+ * Handle zoom reset
  */
 const handleZoomReset = (value: number) => {
   emit('reset', value)
@@ -109,12 +109,12 @@ const handleZoomReset = (value: number) => {
 </script>
 
 <style lang="scss" scoped>
-/* ===== 底部导航容器 ===== */
+/* ===== Footer navigation container ===== */
 .footer-nav-container {
   width: 100%;
   flex-shrink: 0;
-  display: block; /* 确保显示 */
-  position: relative; /* 确保定位上下文 */
+  display: block; /* Ensure display */
+  position: relative; /* Ensure positioning context */
 }
 </style>
 

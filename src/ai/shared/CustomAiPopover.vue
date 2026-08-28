@@ -9,7 +9,7 @@
   >
     <template #content>
       <div class="custom-ai-content">
-        <!-- 输入阶段 -->
+        <!-- Input stage -->
         <div v-if="!isExecuting && !isStreaming" class="custom-ai-input-stage">
           <div class="custom-ai-header">
             <span class="custom-ai-title">{{ t('editor.customAiCommand') }}</span>
@@ -43,7 +43,7 @@
           </div>
         </div>
 
-        <!-- 生成阶段 -->
+        <!-- Generation stage -->
         <div v-else class="custom-ai-result-stage">
           <div class="custom-ai-header">
             <span class="custom-ai-title">{{ t('editor.aiSuggestion') }}</span>
@@ -94,7 +94,7 @@
       </div>
     </template>
 
-    <!-- 用一个隐藏的元素来定位 Popover -->
+    <!-- Use a hidden element to position the Popover -->
     <span :style="anchorStyle as any"></span>
   </Popover>
 </template>
@@ -315,7 +315,7 @@ watch(
     0 9px 28px 8px rgb(0 0 0 / 5%);
 }
 
-/* 暗黑模式 */
+/* Dark mode */
 :where([data-theme="dark"], [data-theme="dark"] *) .custom-ai-popover .ant-popover-inner {
   background: #1f1f1f;
   box-shadow:

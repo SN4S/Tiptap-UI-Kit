@@ -1,282 +1,282 @@
 /**
  * Toolbar Types
- * @description 工具栏相关的类型定义
+ * @description Type definitions related to the toolbar
  */
 
 import type { Component } from 'vue'
 import type { Editor } from '@tiptap/core'
 
 /**
- * 文本格式类型名称
+ * Text format type names
  */
 export type TextFormatType = 'bold' | 'italic' | 'underline' | 'strike' | 'code'
 
 /**
- * 文本格式配置接口
+ * Text format config interface
  */
 export interface TextFormatConfig {
-  /** 格式类型名称 */
+  /** format type name */
   name: TextFormatType
-  /** 图标组件 */
+  /** icon component */
   icon: Component
-  /** 格式标题 */
+  /** format title */
   title: string
-  /** 点击时执行的操作 */
+  /** operation executed on click */
   action: () => void
 }
 
 /**
- * 工具栏按钮配置接口
+ * Toolbar button config interface
  */
 export interface ToolbarButtonConfig {
-  /** 按钮名称/标识 */
+  /** button name/identifier */
   name: string
-  /** 按钮图标组件 */
+  /** button icon component */
   icon?: Component
-  /** 按钮标题（hover 提示） */
+  /** button title (hover tooltip) */
   title: string
-  /** 点击时执行的操作 */
+  /** operation executed on click */
   action: () => void
-  /** 是否禁用 */
+  /** whether disabled */
   disabled?: boolean
 }
 
 /**
- * 标题级别类型
+ * Heading level type
  */
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 
 /**
- * 标题值类型（包含正文）
+ * Heading value type (includes body text)
  */
 export type HeadingValue = 'paragraph' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
 /**
- * 标题配置接口
+ * Heading config interface
  */
 export interface HeadingConfig {
-  /** 标题级别 (1-6) */
+  /** heading level (1-6) */
   level: HeadingLevel
-  /** 标题标题 */
+  /** heading title */
   title: string
-  /** 点击时执行的操作 */
+  /** operation executed on click */
   action: () => void
 }
 
 /**
- * 颜色工具配置接口
+ * Color tool config interface
  */
 export interface ColorToolConfig {
-  /** 颜色类型（文本或背景） */
+  /** color type (text or background) */
   type: 'text' | 'bg' | 'highlight'
-  /** 工具标题 */
+  /** tool title */
   title: string
-  /** 图标组件 */
+  /** icon component */
   icon: Component
-  /** 选择颜色时执行的操作 */
+  /** operation executed when selecting a color */
   action: (color: string) => void
 }
 
 /**
- * 表格操作配置接口
+ * Table operation config interface
  */
 export interface TableOperationConfig {
-  /** 操作名称 */
+  /** operation name */
   name: string
-  /** 图标组件 */
+  /** icon component */
   icon: Component
-  /** 操作标题 */
+  /** operation title */
   title: string
-  /** 对应的编辑器命令名称 */
+  /** corresponding editor command name */
   command: string
-  /** 点击时执行的操作 */
+  /** operation executed on click */
   action: () => void
 }
 
 /**
- * 列表类型名称
+ * List type names
  */
 export type ListType = 'bulletList' | 'orderedList' | 'taskList'
 
 /**
- * 列表工具配置接口
+ * List tool config interface
  */
 export interface ListToolConfig {
-  /** 列表类型名称 */
+  /** list type name */
   name: ListType
-  /** 图标组件 */
+  /** icon component */
   icon: Component
-  /** 工具标题 */
+  /** tool title */
   title: string
-  /** 点击时执行的操作 */
+  /** operation executed on click */
   action: () => void
 }
 
 /**
- * 对齐方式类型
+ * Alignment type
  */
 export type AlignValue = 'left' | 'center' | 'right' | 'justify'
 
 /**
- * 对齐工具配置接口
+ * Alignment tool config interface
  */
 export interface AlignToolConfig {
-  /** 对齐方式 */
+  /** alignment value */
   value: AlignValue
-  /** 图标组件 */
+  /** icon component */
   icon: Component
-  /** 工具标题 */
+  /** tool title */
   title: string
-  /** 点击时执行的操作 */
+  /** operation executed on click */
   action: () => void
 }
 
 /**
- * 插入工具配置接口
+ * Insert tool config interface
  */
 export interface InsertToolConfig {
-  /** 插入内容类型 */
+  /** inserted content type */
   name: 'link' | 'image' | 'table' | 'codeBlock'
-  /** 图标组件 */
+  /** icon component */
   icon: Component
-  /** 工具标题 */
+  /** tool title */
   title: string
-  /** 点击时执行的操作 */
+  /** operation executed on click */
   action: () => void
 }
 
 /**
- * AI 工具配置接口
+ * AI tool config interface
  */
 export interface AiToolConfig {
-  /** AI 功能名称 */
+  /** AI feature name */
   name: 'continueWriting' | 'polish' | 'summarize' | 'translate' | 'customAi'
-  /** 图标组件 */
+  /** icon component */
   icon: Component
-  /** 工具标题 */
+  /** tool title */
   title: string
-  /** 点击时执行的操作 */
+  /** operation executed on click */
   action: () => void
 }
 
 /**
- * 下拉菜单项接口
+ * Dropdown menu item interface
  */
 export interface MenuItemConfig {
-  /** 菜单项 key */
+  /** menu item key */
   key: string
-  /** 菜单项标签 */
+  /** menu item label */
   label: string
-  /** 图标组件（可选） */
+  /** icon component (optional) */
   icon?: Component
-  /** 点击时执行的操作 */
+  /** operation executed on click */
   action: () => void
-  /** 是否禁用 */
+  /** whether disabled */
   disabled?: boolean
-  /** 是否为危险操作（红色） */
+  /** whether a danger operation (red) */
   danger?: boolean
-  /** 是否激活（用于显示激活状态） */
+  /** whether active (used to show active state) */
   active?: boolean
-  /** 子菜单项（可选） */
+  /** sub menu items (optional) */
   children?: MenuItemConfig[]
 }
 
 /**
- * 菜单分组接口
+ * Menu group interface
  */
 export interface MenuGroupConfig {
-  /** 分组标题 */
+  /** group title */
   title: string
-  /** 分组内的菜单项 */
+  /** menu items in the group */
   items: MenuItemConfig[]
 }
 
 /**
- * 工具栏配置工厂函数类型
+ * Toolbar config factory function type
  */
 export type ToolbarConfigFactory<T> = (editor: Editor) => T[]
 
 /**
- * 编辑操作配置接口
+ * Edit action config interface
  */
 export interface EditActionConfig {
-  /** 图标组件 */
+  /** icon component */
   icon: Component
-  /** 操作标题 */
+  /** action title */
   title: string
-  /** 点击时执行的操作 */
+  /** operation executed on click */
   action: () => void | Promise<void>
-  /** 是否为危险操作 */
+  /** whether a danger operation */
   danger?: boolean
 }
 
 /**
- * 选择器选项接口
+ * Selector option interface
  */
 export interface SelectOption<T = string> {
-  /** 显示标签 */
+  /** display label */
   label: string
-  /** 选项值 */
+  /** option value */
   value: T
 }
 
 /**
- * 工具栏分组配置接口
+ * Toolbar group config interface
  */
 export interface ToolbarGroupConfig {
-  /** 分组名称 */
+  /** group name */
   name: string
-  /** 分组内的按钮配置 */
+  /** button configs in the group */
   buttons: ToolbarButtonConfig[]
-  /** 是否显示分隔线 */
+  /** whether to show a divider line */
   showDivider?: boolean
 }
 
 /**
- * 完整工具栏配置接口
+ * Full toolbar config interface
  */
 export interface FullToolbarConfig {
-  /** 文本格式工具 */
+  /** text format tools */
   textFormats: ToolbarButtonConfig[]
-  /** 标题工具 */
+  /** heading tools */
   headings: HeadingConfig[]
-  /** 颜色工具 */
+  /** color tools */
   colorTools: ColorToolConfig[]
-  /** 列表工具 */
+  /** list tools */
   listTools: ListToolConfig[]
-  /** 对齐工具 */
+  /** alignment tools */
   alignTools: AlignToolConfig[]
-  /** 插入工具 */
+  /** insert tools */
   insertTools: InsertToolConfig[]
-  /** 表格工具 */
+  /** table tools */
   tableTools?: {
     rowTools: TableOperationConfig[]
     colTools: TableOperationConfig[]
     cellTools: TableOperationConfig[]
   }
-  /** AI 工具 */
+  /** AI tools */
   aiTools: AiToolConfig[]
 }
 
 /**
- * 浮动菜单配置接口
+ * Bubble menu config interface
  */
 export interface BubbleMenuConfig {
-  /** 是否显示菜单 */
+  /** whether to show the menu */
   shouldShow: (props: {
     editor: Editor
     from: number
     to: number
     state: any
   }) => boolean
-  /** 菜单位置 */
+  /** menu position */
   placement?: 'top' | 'bottom' | 'left' | 'right'
-  /** Tippy.js 配置选项 */
+  /** Tippy.js config options */
   tippyOptions?: Record<string, any>
 }
 
 /**
- * 命令参数类型映射
+ * Command parameter type mapping
  */
 export interface CommandParams {
   toggleBold: []
@@ -317,73 +317,73 @@ export interface CommandParams {
 }
 
 /**
- * 编辑器状态类型
+ * Editor state type
  */
 export interface EditorStateInfo {
-  /** 是否可撤销 */
+  /** whether undo is possible */
   canUndo: boolean
-  /** 是否可重做 */
+  /** whether redo is possible */
   canRedo: boolean
-  /** 当前激活的标记 */
+  /** currently active marks */
   activeMarks: string[]
-  /** 当前激活的节点 */
+  /** currently active nodes */
   activeNodes: string[]
-  /** 当前段落样式 */
+  /** current paragraph style */
   paragraphStyle: string
-  /** 当前文本对齐方式 */
+  /** current text alignment */
   textAlign: string
-  /** 是否在表格中 */
+  /** whether in a table */
   isInTable: boolean
-  /** 是否有选区 */
+  /** whether there is a selection */
   hasSelection: boolean
-  /** 选区是否为空 */
+  /** whether the selection is empty */
   isEmptySelection: boolean
 }
 
-// ===== 从 editorConstants 迁移的类型定义 =====
-// 这些类型基于 editorConstants.ts 中的常量数组推导而来
-// 常量定义保留在 editorConstants.ts 中，类型定义统一在此管理
-// 注意：这些类型需要从 editorConstants.ts 导入常量来推导精确类型
+// ===== Type definitions migrated from editorConstants =====
+// These types are derived from the constant arrays in editorConstants.ts
+// The constant definitions remain in editorConstants.ts, type definitions are managed uniformly here
+// Note: these types need to import constants from editorConstants.ts to derive precise types
 
 /**
- * 文本颜色类型
- * @note 实际类型从 TEXT_COLORS 常量推导，见 editorConstants.ts
+ * Text color type
+ * @note the actual type is derived from the TEXT_COLORS constant, see editorConstants.ts
  */
 export type TextColor = string
 
 /**
- * 背景颜色类型
- * @note 实际类型从 BACKGROUND_COLORS 常量推导，见 editorConstants.ts
+ * Background color type
+ * @note the actual type is derived from the BACKGROUND_COLORS constant, see editorConstants.ts
  */
 export type BackgroundColor = string
 
 /**
- * 字体系列类型
- * @note 实际类型从 FONT_FAMILIES 常量推导，见 editorConstants.ts
+ * Font family type
+ * @note the actual type is derived from the FONT_FAMILIES constant, see editorConstants.ts
  */
 export type FontFamily = string
 
 /**
- * 字号类型
- * @note 实际类型从 FONT_SIZES 常量推导，见 editorConstants.ts
+ * Font size type
+ * @note the actual type is derived from the FONT_SIZES constant, see editorConstants.ts
  */
 export type FontSize = string
 
 /**
- * 行间距类型
- * @note 实际类型从 LINE_HEIGHTS 常量推导，见 editorConstants.ts
+ * Line height type
+ * @note the actual type is derived from the LINE_HEIGHTS constant, see editorConstants.ts
  */
 export type LineHeight = string
 
 /**
- * 代码语言类型
- * @note 实际类型从 CODE_LANGUAGES 常量推导，见 shared/configs/editorConstants.ts
+ * Code language type
+ * @note the actual type is derived from the CODE_LANGUAGES constant, see shared/configs/editorConstants.ts
  */
 export type CodeLanguage = string
 
 /**
- * 表格边框样式类型
- * @note 实际类型从 TABLE_BORDER_STYLES 常量推导，见 editorConstants.ts
+ * Table border style type
+ * @note the actual type is derived from the TABLE_BORDER_STYLES constant, see editorConstants.ts
  */
 export type TableBorderStyle = string
 

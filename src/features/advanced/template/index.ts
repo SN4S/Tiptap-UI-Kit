@@ -1,6 +1,6 @@
 /**
- * Template Feature - 模板插入功能模块
- * @description 支持从内置/自定义模板中选择并插入到编辑器
+ * Template Feature - template insertion feature module
+ * @description Supports selecting from built-in/custom templates and inserting them into the editor
  */
 
 export { default as TemplateButton } from './TemplateButton.vue'

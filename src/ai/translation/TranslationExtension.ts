@@ -42,7 +42,7 @@ export const TranslationExtension = Extension.create<TranslationOptions>({
 
           if (!selectedText.trim()) {
             console.warn('[Translation] No text selected');
-            // 显示用户友好的提示
+            // Show a user-friendly prompt
             notification.warning({
               message: t('editor.pleaseSelectText'),
               description: t('editor.translateRequiresSelection'),
@@ -52,7 +52,7 @@ export const TranslationExtension = Extension.create<TranslationOptions>({
             return false;
           }
 
-          // 优先使用传入的语言，其次使用保存的语言，最后使用默认语言
+          // Prefer the passed-in language, then the saved language, and finally the default language
           const lang =
             targetLang ||
             currentTranslateLang.value ||

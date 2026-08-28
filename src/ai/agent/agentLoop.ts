@@ -1,9 +1,9 @@
 /**
- * Document Agent Loop - 文档编辑 AI Agent 循环
- * @description 基于 OpenAI function-calling 格式的 tool-use 循环：
- * 模型收到用户的自然语言指令 → 调用 documentTools 修改文档 → 直到给出最终答复。
- * 所有已支持的 provider（OpenAI/Anthropic/DeepSeek/阿里云/Ollama/自定义）都走
- * OpenAI 兼容的 /chat/completions（Anthropic 官方提供 OpenAI 兼容层）。
+ * Document Agent Loop - document editing AI agent loop
+ * @description A tool-use loop based on the OpenAI function-calling format:
+ * the model receives the user's natural-language instruction -> calls documentTools to modify the document -> until it produces a final reply.
+ * All supported providers (OpenAI/Anthropic/DeepSeek/Aliyun/Ollama/custom) go through the
+ * OpenAI-compatible /chat/completions (Anthropic officially provides an OpenAI-compatible layer).
  */
 
 import type { Editor } from '@tiptap/core'
@@ -12,10 +12,10 @@ import { getProviderInfo, type AiProvider } from '@/ai/config/types'
 import { documentTools, toOpenAiTools, type DocumentTool } from './documentTools'
 
 // ============================================================================
-// 类型
+// Types
 // ============================================================================
 
-/** 对话消息（OpenAI chat 格式的子集） */
+/** Conversation message (a subset of the OpenAI chat format) */
 export interface AgentChatMessage {
   role: 'system' | 'user' | 'assistant' | 'tool'
   content: string | null
@@ -27,41 +27,41 @@ export interface AgentChatMessage {
   tool_call_id?: string
 }
 
-/** agent 过程事件回调（驱动 UI 展示步骤） */
+/** Agent process event callbacks (drive the UI to display steps) */
 export interface AgentCallbacks {
-  /** 模型请求执行某个工具（执行前触发） */
+  /** The model requests execution of a tool (triggered before execution) */
   onToolCall?: (name: string, args: Record<string, unknown>) => void
-  /** 工具执行完成（成功或失败） */
+  /** Tool execution completed (success or failure) */
   onToolResult?: (name: string, result: string, isError: boolean) => void
-  /** 模型输出了最终文本答复 */
+  /** The model produced the final text reply */
   onAssistantMessage?: (text: string) => void
 }
 
 export interface RunDocumentAgentOptions {
   editor: Editor
-  /** 用户的自然语言指令 */
+  /** The user's natural-language instruction */
   instruction: string
-  /** 既往对话（仅 user/assistant 文本轮次，用于多轮上下文） */
+  /** Prior conversation (only user/assistant text turns, used for multi-turn context) */
   history?: Array<{ role: 'user' | 'assistant'; content: string }>
-  /** 中断信号（停止按钮） */
+  /** Abort signal (stop button) */
   signal?: AbortSignal
-  /** 最大工具调用轮数，默认 12 */
+  /** Maximum number of tool-call turns, default 12 */
   maxTurns?: number
-  /** 界面语言，用于提示模型用同语言答复 */
+  /** UI language, used to prompt the model to reply in the same language */
   locale?: string
-  /** 自定义工具集（默认 documentTools 全集） */
+  /** Custom toolset (defaults to the full set of documentTools) */
   tools?: DocumentTool[]
   callbacks?: AgentCallbacks
 }
 
 export interface DocumentAgentResult {
-  /** 模型的最终文字答复 */
+  /** The model's final text reply */
   finalText: string
-  /** 执行过的工具调用数 */
+  /** The number of tool calls executed */
   toolCallCount: number
 }
 
-/** AI 未配置（无 API Key）时抛出，UI 捕获后引导用户去配置 */
+/** Thrown when AI is not configured (no API key); the UI catches it and guides the user to configure */
 export class AgentNotConfiguredError extends Error {
   constructor() {
     super('AI is not configured: missing API key.')
@@ -70,7 +70,7 @@ export class AgentNotConfiguredError extends Error {
 }
 
 // ============================================================================
-// 系统提示词
+// System prompt
 // ============================================================================
 
 function buildSystemPrompt(locale?: string): string {
@@ -93,15 +93,15 @@ function buildSystemPrompt(locale?: string): string {
 }
 
 // ============================================================================
-// 主循环
+// Main loop
 // ============================================================================
 
 const DEFAULT_MAX_TURNS = 12
 
-/** 工具结果里文档概要的起始标记（与 documentTools 的 okWithOutline 对齐） */
+/** The start marker of the document outline in a tool result (aligned with documentTools' okWithOutline) */
 const OUTLINE_MARKER = '\nDocument now:\n'
 
-/** 把历史 tool 消息中已过期的文档概要截断，避免每轮重复携带旧概要导致上下文膨胀 */
+/** Truncates stale document outlines in historical tool messages, to avoid repeatedly carrying old outlines and inflating the context */
 function supersedeOldOutlines(messages: AgentChatMessage[]): void {
   for (const m of messages) {
     if (m.role !== 'tool' || typeof m.content !== 'string') continue
@@ -112,9 +112,9 @@ function supersedeOldOutlines(messages: AgentChatMessage[]): void {
 }
 
 /**
- * 运行文档编辑 agent
- * @description 阻塞直到模型给出最终答复、达到轮数上限或被 signal 中断。
- * 编辑通过 editor 事务实时生效（用户可随时 Cmd+Z 撤销）。
+ * Runs the document editing agent
+ * @description Blocks until the model gives a final reply, reaches the turn limit, or is interrupted by a signal.
+ * Edits take effect in real time through editor transactions (the user can undo at any time with Cmd+Z).
  */
 export async function runDocumentAgent(options: RunDocumentAgentOptions): Promise<DocumentAgentResult> {
   const {
@@ -129,7 +129,7 @@ export async function runDocumentAgent(options: RunDocumentAgentOptions): Promis
   } = options
 
   const config = getAiConfig()
-  // 仅当 provider 必需 API Key 而用户未配置时才算「未配置」（如 Ollama 本地无需 key）
+  // Only consider it "not configured" when the provider requires an API key and the user hasn't set one (e.g. local Ollama needs no key)
   const providerInfo = getProviderInfo(config.provider as AiProvider)
   if ((providerInfo?.requiresApiKey ?? true) && !config.apiKey) {
     throw new AgentNotConfiguredError()
@@ -139,7 +139,7 @@ export async function runDocumentAgent(options: RunDocumentAgentOptions): Promis
   const timeout = config.timeout || 60000
   const openAiTools = toOpenAiTools(tools)
 
-  // apiKey 为空（如 Ollama）时省略 Authorization header
+  // Omit the Authorization header when apiKey is empty (e.g. Ollama)
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (config.apiKey) headers.Authorization = `Bearer ${config.apiKey}`
 
@@ -154,7 +154,7 @@ export async function runDocumentAgent(options: RunDocumentAgentOptions): Promis
   for (let turn = 0; turn < maxTurns; turn++) {
     if (editor.isDestroyed) throw new Error('Editor was destroyed while the agent was running.')
 
-    // 超时兜底：手动组合外部 signal 与超时信号（AbortSignal.any 的兼容写法）
+    // Timeout fallback: manually combine the external signal with a timeout signal (a compatible alternative to AbortSignal.any)
     const timeoutController = new AbortController()
     const timer = setTimeout(() => timeoutController.abort(), timeout)
     const onExternalAbort = () => timeoutController.abort()
@@ -182,7 +182,7 @@ export async function runDocumentAgent(options: RunDocumentAgentOptions): Promis
 
       data = await response.json()
     } catch (error) {
-      // 用户主动停止：让 AbortError 冒泡；否则 abort 只可能来自超时
+      // User intentionally stopped: let AbortError propagate; otherwise abort could only come from a timeout
       if ((error as Error | null)?.name === 'AbortError' && !signal?.aborted) {
         throw new Error('AI request timeout')
       }
@@ -200,20 +200,20 @@ export async function runDocumentAgent(options: RunDocumentAgentOptions): Promis
     const toolCalls = message.tool_calls
 
     if (!toolCalls || toolCalls.length === 0) {
-      // 最终答复
+      // Final reply
       const finalText = typeof message.content === 'string' ? message.content : ''
       if (finalText) callbacks.onAssistantMessage?.(finalText)
       return { finalText, toolCallCount }
     }
 
-    // 记录 assistant 的工具调用消息
+    // Record the assistant's tool-call message
     messages.push({
       role: 'assistant',
       content: typeof message.content === 'string' ? message.content : null,
       tool_calls: toolCalls,
     })
 
-    // 逐个执行工具
+    // Execute each tool
     for (const call of toolCalls) {
       if (signal?.aborted) throw new DOMException('Aborted', 'AbortError')
       if (editor.isDestroyed) throw new Error('Editor was destroyed while the agent was running.')
@@ -223,7 +223,7 @@ export async function runDocumentAgent(options: RunDocumentAgentOptions): Promis
       try {
         args = call.function?.arguments ? JSON.parse(call.function.arguments) : {}
       } catch {
-        // 参数解析失败也要回传给模型让它重试
+        // Parameter parse failures are still passed back to the model so it can retry
       }
 
       callbacks.onToolCall?.(name, args)
@@ -245,14 +245,14 @@ export async function runDocumentAgent(options: RunDocumentAgentOptions): Promis
       }
 
       callbacks.onToolResult?.(name, result, isError)
-      // 控制历史膨胀：旧工具结果里的文档概要已过期，截断为占位说明，
-      // 每轮请求只携带最新一份概要
+      // Control history growth: the document outline in old tool results is stale, truncate to a placeholder note,
+      // so each request only carries the latest outline
       supersedeOldOutlines(messages)
       messages.push({ role: 'tool', tool_call_id: call.id, content: result })
     }
   }
 
-  // 达到轮数上限：让模型知道并收尾会更好，但为控制成本直接返回
+  // Reached the turn limit: it would be better to let the model know and wrap up, but we return directly to control cost
   return {
     finalText: '',
     toolCallCount,

@@ -1,6 +1,6 @@
 <template>
   <div class="device-switcher">
-    <!-- 设备选择按钮 -->
+    <!-- Device selection buttons -->
     <button
       v-for="device in devices"
       :key="device.value"
@@ -12,13 +12,13 @@
       <component :is="device.icon" class="device-switcher__icon" />
     </button>
     
-    <!-- 横竖屏切换按钮 (仅 Pad/Mobile 显示) -->
+    <!-- Portrait/landscape toggle (only shown on Pad/Mobile) -->
     <template v-if="currentDevice !== 'pc'">
       <div class="device-switcher__divider"></div>
       <button
         class="device-switcher__btn device-switcher__btn--orientation"
         :class="{ 'device-switcher__btn--landscape': currentOrientation === 'landscape' }"
-        :title="currentOrientation === 'portrait' ? '切换横屏' : '切换竖屏'"
+        :title="currentOrientation === 'portrait' ? 'Switch to landscape' : 'Switch to portrait'"
         @click="handleOrientationToggle"
       >
         <component :is="OrientationIcon" class="device-switcher__icon" />
@@ -29,8 +29,8 @@
 
 <script setup lang="ts">
 /**
- * DeviceSwitcher - 设备视图切换组件
- * @description 在 PC、Pad、Mobile 三种设备视图之间切换，支持横竖屏
+ * DeviceSwitcher - Device view switcher component
+ * @description Switches between PC, Pad, and Mobile device views with portrait/landscape support
  */
 import { computed, h, onMounted, ref, type FunctionalComponent } from 'vue'
 
@@ -38,19 +38,19 @@ export type DeviceView = 'pc' | 'pad' | 'mobile'
 export type Orientation = 'portrait' | 'landscape'
 
 /**
- * 检测当前是否为手机浏览器
+ * Detect if current browser is a mobile browser
  */
 function detectMobileBrowser(): boolean {
   if (typeof window === 'undefined' || typeof navigator === 'undefined') return false
   const ua = navigator.userAgent || ''
-  // 匹配常见手机 UA 标识
+  // Match common mobile UA strings
   return /Android.*Mobile|iPhone|iPod|Windows Phone|BlackBerry|Opera Mini|IEMobile/i.test(ua)
 }
 
 interface Props {
-  /** 当前设备视图 */
+  /** Current device view */
   modelValue?: DeviceView
-  /** 当前屏幕方向 */
+  /** Current screen orientation */
   orientation?: Orientation
 }
 
@@ -59,7 +59,7 @@ const props = withDefaults(defineProps<Props>(), {
   orientation: 'portrait',
 })
 
-/** 是否为手机浏览器 */
+/** Whether it's a mobile browser */
 const isMobileBrowser = ref(detectMobileBrowser())
 
 const emit = defineEmits<{
@@ -72,7 +72,7 @@ const emit = defineEmits<{
 const currentDevice = computed(() => props.modelValue)
 const currentOrientation = computed(() => props.orientation)
 
-// 设备图标组件
+// Device icon components
 const DesktopIcon: FunctionalComponent = () => h('svg', {
   xmlns: 'http://www.w3.org/2000/svg',
   viewBox: '0 0 24 24',
@@ -113,7 +113,7 @@ const MobileIcon: FunctionalComponent = () => h('svg', {
   h('line', { x1: '12', y1: '18', x2: '12', y2: '18' }),
 ])
 
-// 横竖屏切换图标
+// Portrait/landscape toggle icon
 const OrientationIcon: FunctionalComponent = () => h('svg', {
   xmlns: 'http://www.w3.org/2000/svg',
   viewBox: '0 0 24 24',
@@ -133,7 +133,7 @@ const allDevices = [
   { value: 'mobile' as DeviceView, label: 'Mobile (iPhone)', icon: MobileIcon },
 ]
 
-// 手机浏览器下只保留 Mobile 选项
+// On mobile browsers, only keep Mobile option
 const devices = computed(() => {
   if (isMobileBrowser.value) {
     return allDevices.filter(d => d.value === 'mobile')
@@ -146,7 +146,7 @@ const handleDeviceChange = (device: DeviceView) => {
   emit('change', device)
 }
 
-// 手机浏览器下自动切换到 mobile 视图
+// On mobile browsers, auto-switch to mobile view
 onMounted(() => {
   if (isMobileBrowser.value && props.modelValue !== 'mobile') {
     emit('update:modelValue', 'mobile')

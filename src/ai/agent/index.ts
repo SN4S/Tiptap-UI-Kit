@@ -1,7 +1,7 @@
 /**
- * AI Document Agent - 文字指令编辑文档
- * @description 把编辑器基本操作封装为结构化工具集，AI 通过 tool-use 循环
- * 按用户的自然语言指令编写和修改文档。
+ * AI Document Agent - edit documents with text instructions
+ * @description Wraps the editor's basic operations into a structured toolset; the AI uses a tool-use loop
+ * to write and modify the document according to the user's natural-language instructions.
  */
 
 export {

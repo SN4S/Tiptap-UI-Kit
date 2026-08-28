@@ -1,8 +1,8 @@
 /**
- * Zoom - 缩放功能模块
- * @description 提供文档缩放、页数统计和字数统计功能
+ * Zoom - zoom feature module
+ * @description Provides document zoom, page count, and character/word count features
  */
 
-// 组件导出
+// Component exports
 export { default as ZoomBar } from './ZoomBar.vue'
 

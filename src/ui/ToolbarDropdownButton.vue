@@ -81,13 +81,13 @@ import { t } from '@/locales'
 import { DownOutlined, RightOutlined } from '@ant-design/icons-vue'
 import type { MenuItemConfig } from '@/configs/toolbar'
 // import { currentTranslateLang, setTranslateLang } from '../stores/translate'
-// 暂时注释掉，后续迁移
+// temporarily commented out, to be migrated later
 const currentTranslateLang = { value: '' }
 const setTranslateLang = (_label: string) => {
-  // TODO: 实现翻译语言设置功能
+  // TODO: implement translation language setting functionality
 }
 
-// 下拉菜单打开状态（用于控制 Tooltip 显示）
+// Dropdown menu open state (used to control Tooltip display)
 const dropdownOpen = ref(false)
 
 interface Props {
@@ -194,7 +194,7 @@ function onTranslateLangClick(info: { key: string }) {
 </script>
 
 <style>
-/* 使用全局样式以支持深色模式 */
+/* Using global styles to support dark mode */
 @media (max-width: 768px) {
   .tt-dropdown-btn {
     height: 28px;
@@ -286,7 +286,7 @@ function onTranslateLangClick(info: { key: string }) {
   opacity: 1;
 }
 
-/* 下拉展开时箭头旋转（ant-design-vue 在触发器上添加 ant-dropdown-open） */
+/* Rotate arrow when dropdown is expanded (ant-design-vue adds ant-dropdown-open on the trigger) */
 .tt-dropdown-btn.ant-dropdown-open .tt-dropdown-btn__arrow {
   transform: rotate(180deg);
 }

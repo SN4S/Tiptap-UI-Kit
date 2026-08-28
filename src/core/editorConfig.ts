@@ -11,7 +11,7 @@ export type ThemePreset = 'default' | 'notion' | 'typora' | 'word' | 'github' | 
 
 /** Feature flags */
 export interface FeatureFlags {
-  // 基础功能
+  // Basic features
   heading?: boolean
   textFormat?: boolean
   list?: boolean
@@ -19,7 +19,7 @@ export interface FeatureFlags {
   color?: boolean
   image?: boolean
   
-  // 高级功能
+  // Advanced features
   font?: boolean
   link?: boolean
   table?: boolean
@@ -30,7 +30,7 @@ export interface FeatureFlags {
   subscriptSuperscript?: boolean
   clearFormat?: boolean
   
-  // 工具
+  // Tools
   headerNav?: boolean
   footerNav?: boolean
   dragHandleMenu?: boolean
@@ -42,7 +42,7 @@ export interface FeatureFlags {
   
   // AI
   ai?: boolean
-  /** 「AI 设置」入口（终端用户自填 API Key）。公众站点建议关闭 */
+  /** "AI Settings" entry (end users fill in their own API Key). Recommended to disable on public-facing sites */
   aiSettings?: boolean
 }
 
@@ -82,7 +82,7 @@ export interface EditorConfig {
 
 /** Preset configurations */
 export const PRESET_CONFIGS = {
-  /** 最小配置 */
+  /** Minimal config */
   minimal: {
     features: {
       textFormat: true,
@@ -91,7 +91,7 @@ export const PRESET_CONFIGS = {
     },
   } satisfies Partial<EditorConfig>,
   
-  /** 基础配置 */
+  /** Basic config */
   basic: {
     features: {
       heading: true,
@@ -104,7 +104,7 @@ export const PRESET_CONFIGS = {
     },
   } satisfies Partial<EditorConfig>,
   
-  /** 高级配置 */
+  /** Advanced config */
   advanced: {
     features: {
       heading: true,
@@ -130,7 +130,7 @@ export const PRESET_CONFIGS = {
     },
   } satisfies Partial<EditorConfig>,
   
-  /** 完整配置（含 AI） */
+  /** Full config (includes AI) */
   full: {
     features: {
       heading: true,
@@ -160,24 +160,24 @@ export const PRESET_CONFIGS = {
     },
   } satisfies Partial<EditorConfig>,
   
-  /** Notion 风格配置 - 极简工具栏 + 浮动格式化 */
+  /** Notion-style config - minimal toolbar + floating formatting */
   notion: {
     themePreset: 'notion' as ThemePreset,
     features: {
-      // 固定工具栏只保留撤消/重做
+      // Fixed toolbar only keeps undo/redo
       undoRedo: true,
       
-      // 浮动工具栏（选中文字时显示）
+      // Floating toolbar (shown when text is selected)
       floatingMenu: true,
       linkBubbleMenu: true,
 
-      // 斜杠命令菜单（输入 / 唤起）
+      // Slash command menu (type / to invoke)
       slashCommand: true,
 
-      // 拖拽排序（六个点菜单）
+      // Drag ordering (six-dot menu)
       dragHandleMenu: true,
       
-      // 隐藏固定工具栏中的其他按钮
+      // Hide other buttons in the fixed toolbar
       heading: false,
       textFormat: false,
       list: false,
@@ -198,7 +198,7 @@ export const PRESET_CONFIGS = {
 
 export type PresetName = keyof typeof PRESET_CONFIGS
 
-/** 合并配置 */
+/** Merge configs */
 export function mergeConfig(
   preset: PresetName | Partial<EditorConfig>,
   overrides?: Partial<EditorConfig>

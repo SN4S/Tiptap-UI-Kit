@@ -1,6 +1,6 @@
 /**
- * 翻译语言代码配置
- * @description 定义支持的语言代码及其映射关系
+ * Translation language code configuration
+ * @description Defines the supported language codes and their mapping relationships
  */
 
 export interface LanguageCode {
@@ -9,8 +9,8 @@ export interface LanguageCode {
 }
 
 /**
- * 支持的语言代码列表
- * 用于翻译功能的语言选择
+ * The list of supported language codes
+ * Used for the translate feature's language selection
  */
 export const LANGUAGE_CODES: LanguageCode[] = [
   { code: 'zh-CN', key: 'zh-CN' },

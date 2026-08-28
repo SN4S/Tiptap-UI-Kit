@@ -9,7 +9,7 @@
   >
     <slot />
 
-    <!-- 分隔线 -->
+    <!-- Divider -->
     <ToolbarDivider
       v-if="divider"
       :direction="dividerDirection"
@@ -69,6 +69,6 @@ const computedDividerColor = computed(() => {
   flex-direction: column;
 }
 
-/* .toolbar-group--with-divider - 分隔线已经包含在组内，不需要额外样式 */
+/* .toolbar-group--with-divider - the divider is already included in the group, no extra styling needed */
 </style>
 

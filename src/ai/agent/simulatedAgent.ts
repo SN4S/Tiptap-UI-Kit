@@ -1,9 +1,9 @@
 /**
- * Simulated Document Agent - AI 文档助手演示模式
- * @description 未配置真实 AI 时的本地模拟：轻量关键词匹配用户指令，
- * 调用真实的 documentTools 编辑文档并逐步回调步骤，让访客先体验「文字指令改文档」。
- * 与其他 AI 功能未配置时的 simulateAiStream 演示惯例保持一致；
- * 真实 API Key 应由集成方在工程中配置（VITE_AI_* 或 AI 设置弹窗）。
+ * Simulated Document Agent - AI document assistant demo mode
+ * @description Local simulation used when no real AI is configured: lightweight keyword matching of the user's instruction,
+ * calls the real documentTools to edit the document and callbacks each step, letting visitors experience "edit the document with text instructions".
+ * Consistent with the simulateAiStream demo convention used by other AI features when not configured;
+ * a real API Key should be configured by the integrator in the project (VITE_AI_* or the AI settings modal).
  */
 
 import type { Editor } from '@tiptap/core'
@@ -23,7 +23,7 @@ interface SimulatedStep {
   args: Record<string, unknown>
 }
 
-/** 可中断的延时（模拟网络节奏，让步骤展示有真实感） */
+/** Interruptible delay (simulates network pacing so the steps feel realistic) */
 function sleep(ms: number, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {
     if (signal?.aborted) {
@@ -42,7 +42,7 @@ function sleep(ms: number, signal?: AbortSignal): Promise<void> {
   })
 }
 
-/** 取文档第一个有文本的顶层块的前若干字符（用于加粗演示的查找目标） */
+/** Take the leading characters of the document's first top-level block that has text (as the search target for the bold demo) */
 function firstTextSnippet(editor: Editor, maxLen: number): string {
   let snippet = ''
   editor.state.doc.forEach((node) => {
@@ -54,7 +54,7 @@ function firstTextSnippet(editor: Editor, maxLen: number): string {
   return snippet
 }
 
-/** 取文档前两个有文本块的内容拼一段「像总结」的文本 */
+/** Combine the content of the document's first two blocks with text into a "summary-like" passage */
 function summarySource(editor: Editor, maxLen: number): string {
   const parts: string[] = []
   editor.state.doc.forEach((node) => {
@@ -66,7 +66,7 @@ function summarySource(editor: Editor, maxLen: number): string {
   return parts.join(' · ').slice(0, maxLen)
 }
 
-/** 关键词匹配用户指令 → 演示编辑脚本（真实修改文档） */
+/** Keyword-matching of user instructions -> demo editing script (actually modifies the document) */
 function planSteps(editor: Editor, instruction: string): SimulatedStep[] {
   const zhTable = t('aiChat.demo.tableCaption')
   const demoParagraph = t('aiChat.demo.paragraph')
@@ -75,7 +75,7 @@ function planSteps(editor: Editor, instruction: string): SimulatedStep[] {
     args: { position: 'documentEnd', html },
   })
 
-  // 每类指令拆成 2-3 步编辑：光标多次飞行、高亮多次闪烁，接管过程看得清楚
+  // Split each instruction type into 2-3 edit steps: cursor flies multiple times, highlight blinks multiple times, making the takeover visible
   if (/表格|table/i.test(instruction)) {
     return [
       end(`<h3>${t('aiChat.demo.sectionTitle')}</h3>`),
@@ -125,7 +125,7 @@ function planSteps(editor: Editor, instruction: string): SimulatedStep[] {
     ]
   }
 
-  // 默认：标题 + 段落 + 列表 三步演示
+  // Default: heading + paragraph + list, a three-step demo
   return [
     end(`<h3>${t('aiChat.demo.sectionTitle')}</h3>`),
     end(`<p>${demoParagraph}</p>`),
@@ -134,15 +134,15 @@ function planSteps(editor: Editor, instruction: string): SimulatedStep[] {
 }
 
 /**
- * 运行演示模式 agent：真实编辑文档（可 Cmd/Ctrl+Z 撤销），
- * 步骤经 callbacks 回调渲染，最终返回带「如何接入真实 AI」说明的答复。
+ * Run the demo-mode agent: truly edits the document (undoable with Cmd/Ctrl+Z),
+ * renders each step via callbacks, and finally returns a reply with "how to integrate real AI" instructions.
  */
 export async function runSimulatedDocumentAgent(
   options: RunSimulatedAgentOptions
 ): Promise<DocumentAgentResult> {
   const { editor, instruction, signal, callbacks = {} } = options
 
-  // 先「读取文档」一步，观感与真实 agent 一致
+  // First "read the document" step, matching the feel of the real agent
   await sleep(900, signal)
   const read = getDocumentTool('read_document')!
   callbacks.onToolCall?.('read_document', {})
@@ -163,7 +163,7 @@ export async function runSimulatedDocumentAgent(
       const result = tool.execute(editor, step.args)
       callbacks.onToolResult?.(step.tool, result, false)
     } catch (error) {
-      // 演示模式尽量不失败：任何脚本失败都回退为插入演示段落
+      // Demo mode should avoid failing: fall back to inserting a demo paragraph on any script failure
       callbacks.onToolResult?.(step.tool, String(error), true)
       const fallback = getDocumentTool('insert_blocks')!
       const result = fallback.execute(editor, {
@@ -176,7 +176,7 @@ export async function runSimulatedDocumentAgent(
     }
   }
 
-  // 编辑完成后稍作停留，让接管遮罩/光标的收尾观感自然
+  // Pause briefly after editing so the takeover overlay/cursor finishes naturally
   await sleep(1200, signal)
   const finalText = t('aiChat.demo.done')
   callbacks.onAssistantMessage?.(finalText)

@@ -1,6 +1,6 @@
 /**
  * Typora Theme Preset
- * 类似 Typora 的极简写作风格
+ * Minimalist writing style similar to Typora
  */
 
 .theme-typora {
@@ -37,7 +37,7 @@
   --tiptap-line-height: 1.8;
 }
 
-/* Typora 风格 - 隐藏/极简工具栏 */
+/* Typora Style - Hidden/Minimal Toolbar */
 .theme-typora .word-toolbar {
   background: transparent !important;
   border-bottom: none !important;
@@ -49,14 +49,14 @@
   opacity: 1;
 }
 
-/* Typora 风格 - 无边框纸张 */
+/* Typora Style - Borderless Paper */
 .theme-typora .continuous-pages {
   max-width: 860px;
   box-shadow: none;
   border-radius: 0;
 }
 
-/* Typora 风格 - 衬线标题 */
+/* Typora Style - Serif Headings */
 .theme-typora .ProseMirror h1 {
   font-size: 36px;
   font-weight: 400;
@@ -84,13 +84,13 @@
   margin-bottom: 12px;
 }
 
-/* Typora 风格 - 高行高舒适阅读 */
+/* Typora Style - High Line Height Comfortable Reading */
 .theme-typora .ProseMirror p {
   margin-bottom: 16px;
   line-height: 1.8;
 }
 
-/* Typora 风格 - 优雅引用 */
+/* Typora Style - Elegant Blockquote */
 .theme-typora .ProseMirror blockquote {
   border-left: 4px solid #dfe2e5;
   margin: 16px 0;
@@ -99,7 +99,7 @@
   font-style: italic;
 }
 
-/* Typora 深色模式 */
+/* Typora Dark Mode */
 .theme-typora[data-theme="dark"] {
   --tiptap-bg: #1a1a1a;
   --tiptap-bg-secondary: #222222;

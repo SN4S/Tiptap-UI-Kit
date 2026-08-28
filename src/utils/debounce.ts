@@ -1,13 +1,13 @@
 /**
- * Debounce - 防抖工具
- * @description 全仓唯一的防抖实现，带 cancel（丢弃待执行调用）与 flush（立即执行待执行调用）。
- * 组件卸载前若不想丢失最后一次调用（如 update 事件派发），用 flush 而不是 cancel。
+ * Debounce utility
+ * @description The sole debounce implementation in the entire repository, with cancel (discard pending calls) and flush (execute pending calls immediately).
+ * Use flush instead of cancel if you don't want to lose the last call before component unmount (e.g. update event dispatch).
  */
 
 export type DebouncedFn<T extends (...args: unknown[]) => void> = ((...args: Parameters<T>) => void) & {
-  /** 丢弃待执行的调用 */
+  /** discard the pending call */
   cancel: () => void
-  /** 立即执行待执行的调用（若有） */
+  /** execute the pending call immediately (if any) */
   flush: () => void
 }
 

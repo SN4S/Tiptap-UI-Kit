@@ -5,12 +5,12 @@
 
 /* ===== Device View Container Styles ===== */
 
-/* PC 视图 - 全宽 */
+/* PC view - full width */
 [data-device="pc"] .tiptap-pro-editor {
   max-width: 100%;
 }
 
-/* Pad 视图 - 平板宽度 */
+/* Pad view - tablet width */
 [data-device="pad"] .tiptap-pro-editor {
   max-width: 768px;
   margin-left: auto;
@@ -25,7 +25,7 @@
   max-width: 100%;
 }
 
-/* Mobile 视图 - 手机宽度 */
+/* Mobile view - phone width */
 [data-device="mobile"] .tiptap-pro-editor {
   max-width: 375px;
   margin-left: auto;
@@ -43,12 +43,12 @@
 
 /* ===== Toolbar Adaptations ===== */
 
-/* Pad 视图 - 工具栏调整 */
+/* Pad view - toolbar adjustments */
 [data-device="pad"] .word-toolbar {
   padding: 4px 8px;
 }
 
-/* Mobile 视图 - 工具栏紧凑布局 */
+/* Mobile view - compact toolbar layout */
 [data-device="mobile"] .word-toolbar {
   padding: 2px 4px;
   flex-wrap: wrap;
@@ -64,13 +64,13 @@
 
 /* ===== Content Adaptations ===== */
 
-/* Pad 视图 - 内容区域 */
+/* Pad view - content area */
 [data-device="pad"] .word-content-multi .ProseMirror {
   padding: 60px 48px;
   font-size: 15px;
 }
 
-/* Mobile 视图 - 内容区域紧凑 */
+/* Mobile view - compact content area */
 [data-device="mobile"] .word-content-multi .ProseMirror {
   padding: 32px 16px;
   font-size: 14px;
@@ -108,7 +108,7 @@
   gap: 4px;
 }
 
-/* ===== 过渡动画 ===== */
+/* ===== Transition Animations ===== */
 
 .tiptap-pro-editor {
   transition: max-width 0.3s ease;

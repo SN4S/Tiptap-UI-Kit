@@ -1,6 +1,6 @@
 <template>
   <div class="tiptap-pro-editor word-mode" :class="{ 'is-preview-mode': isPreviewMode }">
-    <!-- 工具栏（预览模式下隐藏） -->
+    <!-- Toolbar (hidden in preview mode) -->
     <ToolbarNav
       v-if="editorInstance && !isPreviewMode"
       :editor="editorInstance"
@@ -8,7 +8,7 @@
       :enabled="shouldShowHeaderNav"
       class="word-toolbar"
     >
-      <!-- 协作编辑状态显示（在工具栏右侧） -->
+      <!-- Collaboration status display (on the right side of toolbar) -->
       <template v-if="shouldShowCollaboration" #right>
         <CollaborationToggle
           v-model="collaborationEnabled"
@@ -20,7 +20,7 @@
       </template>
     </ToolbarNav>
 
-    <!-- 功能模块：链接悬浮框（预览模式下禁用） -->
+    <!-- Feature: Link bubble menu (disabled in preview mode) -->
     <LinkBubbleMenu
       v-if="editorInstance && !isPreviewMode && (props.features?.linkBubbleMenu ?? false)"
       :editor="editorInstance"
@@ -28,7 +28,7 @@
       :enabled="props.features?.linkBubbleMenu ?? false"
     />
 
-    <!-- 功能模块：表格工具栏（预览模式下禁用） -->
+    <!-- Feature: Table toolbar (disabled in preview mode) -->
     <TableToolbar
       v-if="editorInstance && !isPreviewMode"
       :editor="editorInstance"
@@ -37,7 +37,7 @@
       :enabled="props.features?.tableToolbar ?? false"
     />
 
-    <!-- 功能模块：图片工具栏（预览模式下禁用） -->
+    <!-- Feature: Image toolbar (disabled in preview mode) -->
     <ImageToolbar
       v-if="editorInstance && !isPreviewMode && (props.features?.image ?? false)"
       :editor="editorInstance"
@@ -45,7 +45,7 @@
       :enabled="props.features?.image ?? false"
     />
 
-    <!-- 功能模块：悬浮菜单（预览模式下禁用） -->
+    <!-- Feature: Floating menu (disabled in preview mode) -->
     <FloatingMenu
       v-if="editorInstance && !isPreviewMode && (props.features?.floatingMenu ?? false)"
       :editor="editorInstance"
@@ -53,14 +53,14 @@
       :enabled="props.features?.floatingMenu ?? false"
     />
 
-    <!-- 功能模块：斜杠命令菜单（预览模式下禁用） -->
+    <!-- Feature: Slash command menu (disabled in preview mode) -->
     <SlashCommandMenu
       v-if="editorInstance && !isPreviewMode && (props.features?.slashCommand ?? false)"
       ref="slashCommandMenuRef"
       :editor="editorInstance"
     />
 
-    <!-- 功能模块：六个点菜单（预览模式下禁用） -->
+    <!-- Feature: Drag handle menu (disabled in preview mode) -->
     <DragHandleMenu
       v-if="editorInstance && !isPreviewMode && (props.features?.dragHandleMenu ?? false)"
       ref="dragHandleMenuRef"
@@ -68,7 +68,7 @@
       :readonly="readonly"
     />
 
-    <!-- Word 文档区域容器 -->
+    <!-- Word document area container -->
     <div class="word-document-container" ref="containerRef">
       <div class="document-pages" :style="{ transform: `scale(${zoomLevel / 100})` }">
         <div class="continuous-pages">
@@ -78,7 +78,7 @@
       </div>
     </div>
 
-    <!-- 底部导航（预览模式下隐藏） -->
+    <!-- Footer navigation (hidden in preview mode) -->
     <FooterNav
       v-if="editorInstance && !isPreviewMode && shouldShowFooterNav"
       v-model:zoomLevel="zoomLevel"
@@ -87,7 +87,7 @@
       :showCharCount="true"
     />
 
-    <!-- AI 文档助手（文字指令编辑文档，跟随 AI 功能开启） -->
+    <!-- AI document assistant (text-command editing, enabled with AI feature) -->
     <AiChatPanel
       v-if="aiChatEnabled"
       :editor="editorInstance"
@@ -98,8 +98,8 @@
 
 <script setup lang="ts">
 /**
- * TiptapProEditor - 基础版富文本编辑器
- * @description 支持基础版功能的 Tiptap 编辑器
+ * TiptapProEditor - basic rich text editor
+ * @description Tiptap editor supporting basic features
  */
 import { computed, getCurrentInstance, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 import { debounce } from '@/utils/debounce'
@@ -110,10 +110,10 @@ import { A4_WIDTH_PX, A4_HEIGHT_PX, PAGE_PADDING_TOP_PX, PAGE_PADDING_BOTTOM_PX,
 // @vben/locales removed - using built-in i18n
 import { createI18n, detectDefaultLocale, t, useI18n as useTiptapI18n, type LocaleCode } from '@/locales'
 
-// 公共工具栏
+// Shared toolbar
 import { ToolbarNav, BASIC_TOOLBAR_CONFIG, ADVANCED_TOOLBAR_CONFIG, type ToolbarToolsConfig } from '@/tools/header-nav'
 
-// 功能模块组件
+// Feature module components
 import { LinkBubbleMenu } from '@/tools/link-bubble'
 import { AiChatPanel } from '@/ai/agent'
 import { TableToolbar } from '@/tools/table-toolbar'
@@ -124,21 +124,21 @@ import { DragHandleMenu } from '@/tools/drag-handle-menu'
 import { SlashCommandMenu, SlashCommandExtension } from '@/tools/slash-command'
 import type { SlashCommandState } from '@/tools/slash-command'
 
-// 协作编辑模块（统一从 collaboration 模块导入）
+// Collaboration module (unified imports from collaboration module)
 import {
   CollaborationToggle,
   useCollaboration,
   normalizeContent,
 } from '@/tools/collaboration'
 
-// 用户信息获取
+// User info retrieval
 import { useUserStore } from '@/adapters'
 
-// 扩展配置（根据版本动态加载）
+// Extension configuration (dynamically loaded based on version)
 import { getExtensionsByVersion } from '@/extensions/coreExtensions'
 import { DragHandleWithMenuExtension } from '@/tools/drag-handle-menu'
 
-// 样式（variables.css 需最先加载以定义 CSS 变量，base.css 需在其他样式之前加载）
+// Styles (variables.css must load first to define CSS variables; base.css must load before other styles)
 import '@/styles/variables.css'
 import '@/styles/base.css'
 import '@/styles/word-mode.css'
@@ -150,7 +150,7 @@ import '@/styles/image-resize.css'
 import '@/styles/collaboration.css'
 import '@/styles/slash-command.css'
 
-// 主题预设（类名作用域隔离：.theme-word / .theme-notion / ...，随包发布，使用者无需单独引入）
+// Theme presets (class-name scoped isolation: .theme-word / .theme-notion / ..., shipped with the package, no need for users to import separately)
 import '@/themes/presets/word.css'
 import '@/themes/presets/notion.css'
 import '@/themes/presets/github.css'
@@ -161,12 +161,12 @@ const props = withDefaults(defineProps<TiptapProEditorProps>(), {
   readonly: false,
   previewMode: false,
   initialContent: '',
-  // 默认全功能：与 0.1.x 行为一致（旧文档含表格/公式可正常打开，AI 入口有对应扩展支撑）；
-  // 追求更小运行时的使用者显式传 'basic' / 'minimal'
+  // Full features by default: consistent with 0.1.x behavior (old documents with tables/formulas open normally, AI entry has corresponding extension support);
+  // Users who want a smaller runtime should explicitly pass 'basic' / 'minimal'
   version: 'premium',
 })
 
-// ===== 预览模式 =====
+// ===== Preview Mode =====
 const isPreviewMode = computed(() => props.previewMode)
 
 const emit = defineEmits<{
@@ -176,7 +176,7 @@ const emit = defineEmits<{
   collaboratorsListChange: [users: Array<{ id: string | number; name: string; color: string }>]
 }>()
 
-// ===== 基础状态 =====
+// ===== Basic State =====
 const editor = shallowRef<Editor | null>(null)
 const editorError = ref<string | null>(null)
 const containerRef = ref<HTMLElement | null>(null)
@@ -189,11 +189,11 @@ const isInitializing = ref(false)
 
 const editorInstance = computed(() => editor.value as Editor)
 
-// ===== 用户信息获取 =====
+// ===== User Info Retrieval =====
 const userStore = useUserStore()
 
 /**
- * 获取用户信息
+ * Get user info
  */
 const getUserInfo = (): { id: string | number; name: string } => {
   try {
@@ -207,19 +207,19 @@ const getUserInfo = (): { id: string | number; name: string } => {
   return { id: 'anonymous', name: t('editor.anonymousUser') }
 }
 
-// ===== 协作编辑（使用 Composable） =====
+// ===== Collaboration (using Composable) =====
 const collaboration = useCollaboration({
   getUserInfo,
   onCollaboratorsChange: (count) => emit('collaboratorsChange', count),
   onCollaboratorsListChange: (users) => emit('collaboratorsListChange', users),
 })
 
-// 协作功能开关状态（用于 UI 绑定）
+// Collaboration toggle state (for UI binding)
 const collaborationEnabled = ref(false)
 
 /**
- * 同步协作人数到 editor.storage（供扩展读取）
- * - `FormatPainter` 扩展会读取 `editor.storage.__collaborationUsersCount` 来判断是否需要在多人时禁用
+ * Sync collaborator count to editor.storage (for extension reading)
+ * - `FormatPainter` extension reads `editor.storage.__collaborationUsersCount` to decide whether to disable with multiple users
  */
 watch(
   () => [editor.value, collaboration.collaboratorsCount.value] as const,
@@ -233,7 +233,7 @@ watch(
 )
 
 /**
- * 获取功能配置值
+ * Get feature config value
  */
 const getFeatureConfig = (featureName: 'headerNav' | 'footerNav' | 'collaboration'): boolean => {
   if (props.features?.[featureName] !== undefined) {
@@ -245,17 +245,17 @@ const getFeatureConfig = (featureName: 'headerNav' | 'footerNav' | 'collaboratio
   return false
 }
 
-// ===== 功能显示控制 =====
+// ===== Feature Display Control =====
 const shouldShowHeaderNav = computed(() => getFeatureConfig('headerNav'))
 const shouldShowFooterNav = computed(() => getFeatureConfig('footerNav'))
 
-// 协作功能需要环境变量配置 VITE_COLLABORATION_WS_URL
+// Collaboration requires env var VITE_COLLABORATION_WS_URL
 const collaborationWsUrl = computed(() => import.meta.env?.VITE_COLLABORATION_WS_URL || '')
 
-// 组件是否启用协作（features.collaboration）
+// Whether collaboration feature is enabled (features.collaboration)
 const isCollaborationFeatureEnabled = computed(() => getFeatureConfig('collaboration'))
 
-// 检查并提示：如果组件开启了协作但没有配置 WS URL
+// Check and warn: if collaboration is enabled but WS URL is not configured
 const shouldShowCollaboration = computed(() => {
   if (isCollaborationFeatureEnabled.value && !collaborationWsUrl.value) {
     console.warn('[Tiptap UI Kit] Collaboration feature enabled but VITE_COLLABORATION_WS_URL is not configured in .env')
@@ -265,20 +265,20 @@ const shouldShowCollaboration = computed(() => {
 })
 
 /**
- * 检查协作功能是否可用
+ * Check if collaboration feature is available
  */
 const isCollaborationAvailable = computed(() => {
   return collaborationEnabled.value && shouldShowCollaboration.value && !!props.documentId
 })
 
-// ===== 协作功能开关处理 =====
+// ===== Collaboration Toggle Handler =====
 const handleCollaborationChange = async (enabled: boolean) => {
   if (collaborationEnabled.value !== enabled) {
     collaborationEnabled.value = enabled
   }
 }
 
-// 监听 shouldShowCollaboration 变化，同步到 collaborationEnabled
+// Watch shouldShowCollaboration changes, sync to collaborationEnabled
 watch(
   () => shouldShowCollaboration.value,
   (newValue) => {
@@ -289,7 +289,7 @@ watch(
   { immediate: true }
 )
 
-// 监听 collaborationEnabled 变化，重新初始化编辑器
+// Watch collaborationEnabled changes, reinitialize editor
 watch(
   () => collaborationEnabled.value,
   async (newValue, oldValue) => {
@@ -300,10 +300,10 @@ watch(
   }
 )
 
-// ===== 工具栏配置 =====
+// ===== Toolbar Configuration =====
 const toolbarConfig = computed<ToolbarToolsConfig>(() => {
-  // 协作模式下，两人及以上时禁用撤销/重做和格式刷按钮
-  // 单人时不禁用，保持正常使用体验
+  // In collaboration mode, disable undo/redo and format painter buttons when there are two or more users
+  // Not disabled for a single user, keeping a normal experience
   const disableUndoRedo = isCollaborationAvailable.value && collaboration.collaboratorsCount.value > 1
   
   switch (props.version) {
@@ -333,8 +333,8 @@ const toolbarConfig = computed<ToolbarToolsConfig>(() => {
   }
 })
 
-// AI 文档助手：仅在加载了 AI 扩展的档位（advanced/premium）可用；
-// versionConfig.features.ai 与 features.aiChat 均可显式关闭；预览/只读下隐藏
+// AI document assistant: only available in tiers that load AI extensions (advanced/premium);
+// versionConfig.features.ai and features.aiChat can both be explicitly disabled; hidden in preview/readonly mode
 const aiChatEnabled = computed(
   () =>
     (props.version === 'advanced' || props.version === 'premium') &&
@@ -344,9 +344,9 @@ const aiChatEnabled = computed(
     !props.readonly
 )
 
-// ===== 国际化 =====
+// ===== Internationalization =====
 // Use locale from props instead of @vben/locales
-// 不传 locale 时按浏览器语言自动检测（zh → zh-CN/zh-TW，其它 → en-US）
+// When locale is not passed, auto-detect by browser language (zh -> zh-CN/zh-TW, others -> en-US)
 const currentLocale = computed(() => props.locale || detectDefaultLocale())
 
 const mapLocaleToTiptapLocale = (locale: string): LocaleCode => {
@@ -380,7 +380,7 @@ watch(
   { immediate: false }
 )
 
-// ===== 页面计算 =====
+// ===== Page Calculation =====
 const calculatePages = () => {
   nextTick(() => {
     const proseMirrorEl = containerRef.value?.querySelector('.ProseMirror')
@@ -396,8 +396,8 @@ const calculatePages = () => {
   })
 }
 
-// 分页计算：防抖 + requestAnimationFrame 合帧，避免输入时频繁强制重排
-// （编辑器初始化后的首次分页计算仍直接调用 calculatePages，保证首屏不跳动）
+// Pagination calculation: debounce + requestAnimationFrame frame coalescing, avoiding frequent forced reflows while typing
+// (The first pagination calculation after editor initialization still calls calculatePages directly, so the first screen doesn't jump)
 let pagesRafId: number | null = null
 const schedulePageCalculation = debounce(() => {
   if (pagesRafId !== null) cancelAnimationFrame(pagesRafId)
@@ -407,13 +407,13 @@ const schedulePageCalculation = debounce(() => {
   })
 }, 200)
 
-// update 事件防抖派发（getJSON 全文序列化开销较大）
+// update event debounced dispatch (getJSON full-text serialization is expensive)
 const emitUpdateDebounced = debounce((editorInst: CoreEditor) => {
   if (editorInst.isDestroyed) return
   emit('update', editorInst.getJSON())
 }, 200)
 
-// ===== 编辑器内容管理 =====
+// ===== Editor Content Management =====
 const getEditorContent = () => {
   try {
     return editor.value?.getJSON() ?? null
@@ -423,26 +423,26 @@ const getEditorContent = () => {
 }
 
 const getInitialContent = (): any => {
-  // 非首次初始化且未开启协作，保留当前内容
+  // Non-first initialization and collaboration not enabled: keep current content
   if (!isFirstInit.value && editor.value && !isCollaborationAvailable.value) {
     const currentContent = getEditorContent()
     if (currentContent) return currentContent
   }
-  // 使用 collaboration 模块的 normalizeContent（modelValue 优先于 initialContent）
+  // Use collaboration module's normalizeContent (modelValue takes priority over initialContent)
   return normalizeContent(props.modelValue ?? props.initialContent, { silent: true })
 }
 
-// ===== v-model 支持 =====
-// 以「是否绑定了 update:modelValue 监听器」判定 v-model 是否启用：
-// 用 ref<string>()（初值 undefined）绑定 v-model 是常见写法，不能用 modelValue !== undefined 判定
+// ===== v-model support =====
+// Determine whether v-model is enabled by "whether an update:modelValue listener is bound":
+// Using ref<string>() (initial undefined) bound to v-model is a common pattern, and cannot be judged via modelValue !== undefined
 const hasModelValueListener = !!getCurrentInstance()?.vnode.props?.['onUpdate:modelValue']
 
-// 记录最近一次 emit 出去的值：v-model 回环写回时 O(1) 短路，避免每次按键的二次全文序列化
+// Record the most recently emitted value: short-circuit in O(1) on v-model loopback write, avoiding a second full-text serialization per keystroke
 let lastEmittedModelValue: string | object | undefined
 
 /**
- * 同步 v-model（不防抖，v-model 语义要求同步）
- * @description modelValue 当前为 object 时输出 JSON，否则输出 HTML 字符串
+ * Sync v-model (not debounced, v-model semantics require sync)
+ * @description when modelValue is currently an object, output JSON, otherwise output HTML string
  */
 const emitModelValue = (editorInst: CoreEditor) => {
   if (!hasModelValueListener) return
@@ -452,14 +452,14 @@ const emitModelValue = (editorInst: CoreEditor) => {
   emit('update:modelValue', value)
 }
 
-// 外部 modelValue 变化时同步到编辑器（先与当前内容比较，避免 v-model 循环更新）
+// Sync external modelValue changes to editor (first compare with current content to avoid v-model loop updates)
 watch(
   () => props.modelValue,
   (newValue) => {
     if (newValue === undefined || !editor.value) return
-    // 我们刚 emit 出去的值被父组件写回来了（v-model 回环），直接短路
+    // The value we just emitted is written back by the parent component (v-model loopback), short-circuit directly
     if (newValue === lastEmittedModelValue) return
-    // 协作模式下内容由 Yjs 共享文档管理，外部整体 setContent 会覆盖所有协作者的内容
+    // In collaboration mode content is managed by the Yjs shared document; external whole-content setContent would overwrite all collaborators' content
     if (isCollaborationAvailable.value) {
       console.warn('[TiptapProEditor] Ignoring external modelValue write while collaboration is active.')
       return
@@ -475,7 +475,7 @@ watch(
   }
 )
 
-// ===== 协作功能初始化（使用 useCollaboration） =====
+// ===== Collaboration Feature Initialization (using useCollaboration) =====
 const initCollaborationFeature = async (initialContent: any, extensions: any[]) => {
   if (!isCollaborationAvailable.value) {
     collaboration.disable()
@@ -483,14 +483,14 @@ const initCollaborationFeature = async (initialContent: any, extensions: any[]) 
   }
 
   try {
-    // 如果已有协作实例，先销毁
+    // If a collaboration instance already exists, destroy it first
     if (collaboration.instance.value) {
       collaboration.disable()
       await new Promise(resolve => setTimeout(resolve, 100))
     }
 
-    // 使用 useCollaboration 的 initWithExtensions 方法
-    // 这样会自动处理状态更新（collaboratorsCount, collaboratorsList）
+    // Use useCollaboration's initWithExtensions method
+    // This automatically handles state updates (collaboratorsCount, collaboratorsList)
     const collabExtensions = await collaboration.initWithExtensions({
       documentId: props.documentId!,
       readonly: props.readonly,
@@ -502,15 +502,15 @@ const initCollaborationFeature = async (initialContent: any, extensions: any[]) 
       return
     }
 
-    // 添加协作扩展
+    // Add collaboration extensions
     extensions.push(...collabExtensions)
   } catch {}
 }
 
-// 注：工具栏状态的「事务 → 响应式」桥接由各子组件的 useReactiveEditor（src/utils/editorState.ts）
-// 自行订阅完成，本组件无需（也不应）在父级做 triggerRef 广播。
+// Note: the "transaction -> reactive" bridging of toolbar state is done by each subcomponent's useReactiveEditor (src/utils/editorState.ts)
+// subscribing on its own; this component does not need (nor should it) do triggerRef broadcasting at the parent level.
 
-// ===== 编辑器初始化 =====
+// ===== Editor Initialization =====
 const initEditor = async () => {
   if (isInitializing.value) return
 
@@ -523,15 +523,15 @@ const initEditor = async () => {
       isFirstInit.value = false
     }
 
-    // 获取扩展配置
-    // 协作模式下需要禁用 History 扩展，因为 @tiptap/extension-collaboration 自带历史管理
+    // Get extension configuration
+    // History extension must be disabled in collaboration mode, because @tiptap/extension-collaboration has its own history management
     const enableImageResize = props.versionConfig?.features?.advanced !== false
     const extensions = getExtensionsByVersion(props.version, {
       enableImageResize,
       disableHistory: isCollaborationAvailable.value,
     })
 
-    // 添加拖拽手柄扩展
+    // Add drag handle extension
     if (props.features?.dragHandleMenu) {
       extensions.push(
         DragHandleWithMenuExtension.configure({
@@ -540,7 +540,7 @@ const initEditor = async () => {
       )
     }
 
-    // 添加斜杠命令扩展
+    // Add slash command extension
     if (props.features?.slashCommand) {
       extensions.push(
         SlashCommandExtension.configure({
@@ -551,10 +551,10 @@ const initEditor = async () => {
       )
     }
 
-    // 初始化协作功能
+    // Initialize collaboration feature
     await initCollaborationFeature(initialContentToUse, extensions)
 
-    // 销毁旧编辑器（先 flush 待派发的 update，避免丢失最后 200ms 内的输入）
+    // Destroy old editor (flush pending update first, to avoid losing input from the last 200ms)
     if (editor.value) {
       emitUpdateDebounced.flush()
       editor.value.destroy()
@@ -563,10 +563,10 @@ const initEditor = async () => {
 
     await nextTick()
 
-    // 协作模式下不设置初始内容
+    // Don't set initial content in collaboration mode
     const shouldSetContentOnInit = !isCollaborationAvailable.value
 
-    // 创建编辑器（预览模式下也设为不可编辑）
+    // Create editor (also non-editable in preview mode)
     editor.value = new Editor({
       editable: !props.readonly && !isPreviewMode.value,
       extensions,
@@ -576,7 +576,7 @@ const initEditor = async () => {
       },
       onUpdate: ({ editor }) => {
         schedulePageCalculation()
-        // v-model 同步不防抖，update 事件防抖派发
+        // v-model sync is not debounced, update event is dispatched debounced
         emitModelValue(editor)
         emitUpdateDebounced(editor)
       },
@@ -584,12 +584,12 @@ const initEditor = async () => {
 
     await nextTick()
 
-    // 更新协作实例中的 editor 引用
+    // Update editor reference in collaboration instance
     if (collaboration.instance.value && editor.value) {
       collaboration.setEditor(editor.value)
     }
 
-    // 初始化 CSS 变量
+    // Initialize CSS variables
     if (containerRef.value) {
       containerRef.value.style.setProperty('--a4-width-px', `${A4_WIDTH_PX}px`)
       containerRef.value.style.setProperty('--padding-top-px', `${PAGE_PADDING_TOP_PX}px`)
@@ -598,7 +598,7 @@ const initEditor = async () => {
     }
 
     calculatePages()
-    // 观察内容元素尺寸：字体/图片/异步 NodeView 加载完成引起的内容高度变化都会触发页数重算
+    // Observe content element dimensions: height changes caused by fonts/images/async NodeView loading all trigger page recalculation
     observeContentResize()
   } catch (error) {
     console.error('[TiptapProEditor] Editor initialization failed:', error)
@@ -608,21 +608,21 @@ const initEditor = async () => {
   }
 }
 
-// ===== 清理 =====
+// ===== Cleanup =====
 const destroyEditor = async () => {
   collaboration.disable()
   if (editor.value) {
-    // 先 flush 待派发的 update，避免丢失最后 200ms 内的输入（自动保存场景）
+    // Flush pending update first, to avoid losing input from the last 200ms (for autosave scenarios)
     emitUpdateDebounced.flush()
     editor.value.destroy()
     editor.value = null
   }
 }
 
-// ===== 生命周期 =====
-// 观察「内容元素 + 外层容器」的尺寸变化重算页数：
-// 内容元素（.ProseMirror）覆盖字体/图片加载、异步 NodeView 造成的内容高度变化；
-// 外层容器覆盖窗口缩放、编辑器从隐藏容器变为可见等布局场景
+// ===== Lifecycle =====
+// Observe size changes of "content element + outer container" to recompute pages:
+// content element (.ProseMirror) covers font/image loading and height changes from async NodeView;
+// outer container covers layout scenarios like window resize and editor becoming visible from a hidden container
 let containerResizeObserver: ResizeObserver | null = null
 
 const observeContentResize = () => {
@@ -641,7 +641,7 @@ const observeContentResize = () => {
 
 onMounted(async () => {
   await initEditor()
-  // 字体加载完成后内容高度会变化，就绪后再校正一次页数
+  // Content height changes after fonts finish loading; correct the page count once more after ready
   if (typeof document !== 'undefined' && document.fonts?.ready) {
     document.fonts.ready.then(() => schedulePageCalculation()).catch(() => {})
   }
@@ -650,7 +650,7 @@ onMounted(async () => {
 onBeforeUnmount(async () => {
   containerResizeObserver?.disconnect()
   containerResizeObserver = null
-  // 分页计算直接丢弃；update 事件在 destroyEditor 内 flush（不丢最后 200ms 的输入）
+  // Drop pagination calculation directly; update event is flushed in destroyEditor (doesn't lose the last 200ms of input)
   schedulePageCalculation.cancel()
   if (pagesRafId !== null) {
     cancelAnimationFrame(pagesRafId)
@@ -659,7 +659,7 @@ onBeforeUnmount(async () => {
   await destroyEditor()
 })
 
-// ===== 属性监听 =====
+// ===== Prop Watchers =====
 const watchAndReinit = (
   getter: () => any,
   shouldReinit: (newValue: any, oldValue: any) => boolean = (newVal, oldVal) => newVal !== oldVal
@@ -691,7 +691,7 @@ watchAndReinit(
   (newId, oldId) => shouldShowCollaboration.value && newId !== oldId
 )
 
-// ===== 暴露方法 =====
+// ===== Exposed Methods =====
 defineExpose({
   getEditor: () => editor.value,
   getJSON: () => editor.value?.getJSON() || null,

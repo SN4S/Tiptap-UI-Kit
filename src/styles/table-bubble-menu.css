@@ -1,9 +1,9 @@
 /**
- * 表格浮动工具栏样式
- * @description 表格操作菜单（依赖 base.css）
+ * Table Floating Toolbar Styles
+ * @description Table operation menu (depends on base.css)
  */
 
-/* 工具栏容器 */
+/* Toolbar container */
 .table-bubble-menu {
   position: absolute !important;
   top: 50px;
@@ -15,12 +15,12 @@
   box-shadow: var(--tp-menu-shadow, 0 4px 12px rgb(0 0 0 / 15%));
 }
 
-/* 工具栏内容 */
+/* Toolbar content */
 .table-menu-content {
   align-items: center;
 }
 
-/* 工具组 */
+/* Tool group */
 .table-menu-group {
   display: flex;
   align-items: center;
@@ -35,7 +35,7 @@
   border-right: none;
 }
 
-/* 工具按钮 */
+/* Tool button */
 .table-menu-btn {
   display: flex;
   align-items: center;
@@ -77,7 +77,7 @@
   color: #595959;
 }
 
-/* 危险操作按钮 */
+/* Danger action button */
 .table-menu-btn--danger {
   color: var(--tp-color-danger, #ff4d4f);
 }
@@ -87,12 +87,12 @@
   background: var(--tp-color-danger-bg, #fff1f0);
 }
 
-/* 图标样式 */
+/* Icon styles */
 .table-menu-btn .anticon {
   font-size: var(--tp-btn-icon-size, 16px);
 }
 
-/* 表格边框样式类 */
+/* Table border style classes */
 :deep(table.table-border-default) {
   border-collapse: collapse;
 }
@@ -125,7 +125,7 @@
   border: none;
 }
 
-/* 响应式 */
+/* Responsive */
 @media (max-width: 768px) {
   .table-bubble-menu {
     max-width: calc(100vw - 20px);

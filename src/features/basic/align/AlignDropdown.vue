@@ -11,8 +11,8 @@
 
 <script setup lang="ts">
 /**
- * AlignDropdown - 对齐下拉菜单组件
- * @description 可复用的对齐下拉菜单组件（左对齐、居中、右对齐、两端对齐）
+ * AlignDropdown - alignment dropdown menu component
+ * @description A reusable alignment dropdown menu component (left, center, right, justify)
  */
 import { computed } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -34,14 +34,14 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-// 事务响应式 editor：isActiveAlign 等状态跟随光标/内容变化重新求值
+// Transaction-driven reactive editor: states like isActiveAlign are re-evaluated on cursor/content changes
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const runCommand = createCommandRunner(editor)
 const { isActiveAlign } = createStateCheckers(editor)
 
-// ===== 对齐工具菜单项 =====
+// ===== Alignment menu items =====
 const alignMenuItems = computed<MenuItemConfig[]>(() => [
   { key: 'align-left', label: t('editor.alignLeft'), icon: AlignLeftOutlined, action: () => setAlign('left') },
   { key: 'align-center', label: t('editor.alignCenter'), icon: AlignCenterOutlined, action: () => setAlign('center') },
@@ -50,7 +50,7 @@ const alignMenuItems = computed<MenuItemConfig[]>(() => [
 ])
 
 /**
- * 获取当前激活的对齐图标
+ * Get the currently active alignment icon
  */
 const currentAlignIcon = computed(() => {
   if (isActiveAlign('center')) return AlignCenterOutlined
@@ -60,7 +60,7 @@ const currentAlignIcon = computed(() => {
 })
 
 /**
- * 设置文本对齐方式
+ * Set the text alignment
  */
 function setAlign(value: AlignValue) {
   runCommand((chain) => chain.setTextAlign(value))()

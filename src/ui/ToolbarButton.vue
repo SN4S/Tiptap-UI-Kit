@@ -55,7 +55,7 @@ function onDblClick() {
 </script>
 
 <style>
-/* 使用全局样式以支持深色模式（因为需要匹配父级的 data-theme 属性）*/
+/* Using global styles to support dark mode (because it needs to match the parent's data-theme attribute) */
 .tt-toolbar-button {
   display: inline-flex;
   align-items: center;

@@ -1,15 +1,15 @@
 <!--
-  PreviewMode - 预览模式组件
-  @description 纯预览模式，无工具栏，不可编辑，不可点击
+  PreviewMode - Preview mode component
+  @description Pure preview mode, no toolbar, not editable, not clickable
   @features
-    - 隐藏头部工具栏
-    - 隐藏底部导航栏
-    - 禁止编辑和选中文本
-    - 禁止所有点击交互
+    - Hide header toolbar
+    - Hide footer navigation bar
+    - Disable editing and text selection
+    - Disable all click interactions
 -->
 <template>
   <div class="tiptap-preview-mode" :class="{ 'preview-mode--bordered': bordered }">
-    <!-- 预览内容区域 -->
+    <!-- Preview content area -->
     <div class="preview-content" ref="contentRef">
       <div class="preview-document" :style="documentStyle">
         <div
@@ -23,29 +23,29 @@
 
 <script setup lang="ts">
 /**
- * PreviewMode - 预览模式组件
- * @description 提供纯预览功能，不可编辑、不可点击
+ * PreviewMode - Preview mode component
+ * @description Provides pure preview functionality, not editable, not clickable
  */
 import { computed, ref } from 'vue'
 
-// 样式
+// Styles
 import '@/styles/base.css'
 import '@/styles/word-mode.css'
 import './preview-mode.css'
 
 // ===== Props =====
 interface Props {
-  /** HTML 内容 */
+  /** HTML content */
   content?: string
-  /** JSON 内容（优先级低于 content） */
+  /** JSON content (lower priority than content) */
   jsonContent?: any
-  /** 是否显示边框 */
+  /** Whether to show border */
   bordered?: boolean
-  /** 缩放比例（百分比，默认 100） */
+  /** Zoom level (percentage, default 100) */
   zoomLevel?: number
-  /** 最大宽度（默认 100%） */
+  /** Max width (default 100%) */
   maxWidth?: string
-  /** 背景颜色 */
+  /** Background color */
   backgroundColor?: string
 }
 
@@ -61,24 +61,24 @@ const props = withDefaults(defineProps<Props>(), {
 // ===== Refs =====
 const contentRef = ref<HTMLElement | null>(null)
 
-// ===== 计算属性 =====
+// ===== Computed properties =====
 /**
- * HTML 内容
- * @description 优先使用 content，否则将 jsonContent 转换为 HTML
+ * HTML content
+ * @description Uses content first, otherwise converts jsonContent to HTML
  */
 const htmlContent = computed(() => {
   if (props.content) {
     return props.content
   }
   if (props.jsonContent) {
-    // 简单的 JSON 转 HTML（实际项目中可能需要更复杂的转换）
+    // Simple JSON to HTML conversion (may need more complex conversion in production)
     return jsonToHtml(props.jsonContent)
   }
   return ''
 })
 
 /**
- * 文档样式
+ * Document styles
  */
 const documentStyle = computed(() => ({
   transform: `scale(${props.zoomLevel / 100})`,
@@ -88,8 +88,8 @@ const documentStyle = computed(() => ({
 }))
 
 /**
- * 简单的 JSON 转 HTML
- * @description 将 Tiptap JSON 格式转换为 HTML
+ * Simple JSON to HTML conversion
+ * @description Converts Tiptap JSON format to HTML
  */
 function jsonToHtml(json: any): string {
   if (!json || typeof json !== 'object') return ''
@@ -102,17 +102,17 @@ function jsonToHtml(json: any): string {
 }
 
 /**
- * 节点转 HTML
+ * Node to HTML
  */
 function nodeToHtml(node: any): string {
   if (!node || typeof node !== 'object') return ''
   
   const { type, content, text, attrs, marks } = node
   
-  // 文本节点
+  // Text node
   if (type === 'text') {
     let result = text || ''
-    // 应用 marks
+    // Apply marks
     if (marks && Array.isArray(marks)) {
       marks.forEach((mark: any) => {
         switch (mark.type) {
@@ -152,10 +152,10 @@ function nodeToHtml(node: any): string {
     return result
   }
   
-  // 子内容
+  // Child content
   const childrenHtml = content ? content.map((child: any) => nodeToHtml(child)).join('') : ''
   
-  // 根据节点类型生成 HTML
+  // Generate HTML based on node type
   switch (type) {
     case 'paragraph':
       const pStyle = attrs?.textAlign ? `text-align: ${attrs.textAlign}` : ''
@@ -221,9 +221,9 @@ function nodeToHtml(node: any): string {
   }
 }
 
-// ===== 暴露方法 =====
+// ===== Expose methods =====
 defineExpose({
-  /** 获取预览容器元素 */
+  /** Get preview container element */
   getContainer: () => contentRef.value,
 })
 </script>
@@ -272,11 +272,11 @@ defineExpose({
 }
 
 .preview-body {
-  /* 禁止选中文本 */
+  /* Disable text selection */
   user-select: none;
-  /* 禁止所有点击事件 */
+  /* Disable all click events */
   pointer-events: none;
-  /* 继承 Tiptap 编辑器的内容样式 */
+  /* Inherit content styles from Tiptap editor */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
   line-height: 1.75;
@@ -287,7 +287,7 @@ defineExpose({
   color: #f0f0f0;
 }
 
-/* 预览内容样式 */
+/* Preview content styles */
 .preview-body :deep(h1),
 .preview-body :deep(h2),
 .preview-body :deep(h3),

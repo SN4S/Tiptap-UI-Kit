@@ -1,5 +1,5 @@
 /**
- * documentTools 单元测试（无头 Editor）
+ * documentTools unit tests (headless Editor)
  */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { Editor } from '@tiptap/core'
@@ -132,7 +132,7 @@ describe('delete_blocks', () => {
   it('deletes a range (trailing empty paragraph is kept by the editor)', () => {
     run('delete_blocks', { fromBlock: 1, toBlock: 2 })
     const outline = run('read_document')
-    // StarterKit 的 TrailingNode 会在文档尾部保留一个空段落，属编辑器交互设计
+    // StarterKit's TrailingNode keeps an empty paragraph at the end of the document; this is an editor interaction design
     expect(outline).toContain('标题一')
     expect(outline).not.toContain('第二段')
     expect(outline).not.toContain('第一段')
@@ -145,12 +145,12 @@ describe('edit_text', () => {
     const html = editor.getHTML()
     expect(html).toContain('首段')
     expect(html).not.toContain('第一段')
-    // 加粗标记仍存在
+    // The bold mark is still present
     expect(html).toContain('<strong>')
   })
 
   it('matches text spanning mark boundaries', () => {
-    // "这是第一段" 跨越 普通文本("这是") 和 strong("第一段")
+    // "这是第一段" spans plain text ("这是") and strong ("第一段")
     run('edit_text', { find: '这是第一段', replace: '本段' })
     expect(editor.state.doc.textContent).toContain('本段正文')
   })
@@ -171,7 +171,7 @@ describe('edit_text', () => {
   })
 
   it('replaceAll where replacement contains the find replaces each original match exactly once', () => {
-    // 'a' → 'aa'：不能指数膨胀，每个原始匹配只替换一次
+    // 'a' -> 'aa': must not explode exponentially; each original match is replaced exactly once
     editor.commands.setContent('<p>a和a与a</p>')
     const result = run('edit_text', { find: 'a', replace: 'aa', replaceAll: true })
     expect(result).toContain('3 occurrence(s)')
@@ -180,9 +180,9 @@ describe('edit_text', () => {
 
   it('does not match text spanning table cells', () => {
     editor.commands.setContent('<table><tr><td>价格</td><td>100</td></tr></table>')
-    // '格100' 跨两个单元格，不应视为匹配
+    // '格100' spans two cells, so it must not be considered a match
     expect(() => run('edit_text', { find: '格100', replace: 'x' })).toThrow(/not found/i)
-    // 单元格内部的文本仍可正常匹配
+    // Text inside a single cell can still be matched normally
     run('edit_text', { find: '100', replace: '200' })
     expect(editor.state.doc.textContent).toContain('200')
   })
@@ -190,7 +190,7 @@ describe('edit_text', () => {
   it('throws when multiple matches and no occurrence is given', () => {
     editor.commands.setContent('<p>苹果一</p><p>苹果二</p>')
     expect(() => run('edit_text', { find: '苹果', replace: '香蕉' })).toThrow(/occurrence \(1-2\)/i)
-    // 文档未被修改
+    // The document was not modified
     expect(editor.state.doc.textContent).toContain('苹果一')
     expect(editor.state.doc.textContent).toContain('苹果二')
   })
@@ -232,9 +232,9 @@ describe('format_text', () => {
   it('removes textColor by clearing only the color attribute (no throw, color gone)', () => {
     run('format_text', { find: '标题一', formats: ['textColor'], color: '#ff0000' })
     expect(editor.getHTML()).toContain('#ff0000')
-    // remove 走 setMark('textStyle', { color: null })，不 unsetMark 整个 textStyle，
-    // 以免连带清掉 fontSize/fontFamily 等其它 textStyle 属性（本测试环境无 fontSize 扩展，
-    // 仅验证不抛错且颜色被移除）
+    // remove uses setMark('textStyle', { color: null }), not unsetMark on the whole textStyle,
+    // so as not to also clear other textStyle attributes like fontSize/fontFamily (this test environment has no fontSize extension;
+    // it only verifies that no error is thrown and the color is removed)
     run('format_text', { find: '标题一', formats: ['textColor'], action: 'remove' })
     expect(editor.getHTML()).not.toContain('#ff0000')
   })

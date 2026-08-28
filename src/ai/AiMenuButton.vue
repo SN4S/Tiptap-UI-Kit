@@ -13,7 +13,7 @@
     <template #overlay>
       <a-menu @click="onMenuClick" style="max-height: 360px; overflow-y: auto;">
         <template v-for="item in menuItems" :key="item.key">
-          <!-- 带子菜单的菜单项（如总结内容） -->
+          <!-- Menu item with a submenu (e.g. summarize content) -->
           <a-menu-item v-if="item.children && item.children.length > 0" :key="item.key + ':with-children'">
             <div class="ai-menu-translate-split" @mouseenter="onRowEnter" @mouseleave="onRowLeave">
               <span class="ai-menu-translate-split__main" @click.stop="onTranslateDefault(item)">
@@ -49,7 +49,7 @@
             </div>
           </a-menu-item>
 
-          <!-- 普通菜单项 -->
+          <!-- Regular menu item -->
           <a-menu-item v-else :key="item.key" :disabled="(item as any).disabled" :danger="(item as any).danger">
             <span class="ai-menu-item">
               <component v-if="item.icon" :is="item.icon" class="ai-menu-item__icon" />
@@ -71,7 +71,7 @@ import { DownOutlined, RightOutlined, ThunderboltOutlined, EditOutlined, FileTex
 import { t } from '../locales';
 import { LANGUAGE_CODES, currentTranslateLang, setTranslateLang } from './translation';
 
-// 菜单项配置类型
+// Menu item configuration type
 export interface MenuItemConfig {
   key: string;
   label: string;
@@ -82,7 +82,7 @@ export interface MenuItemConfig {
   children?: MenuItemConfig[];
 }
 
-// 下拉菜单打开状态（用于控制 Tooltip 显示）
+// Dropdown menu open state (used to control Tooltip visibility)
 const dropdownOpen = ref(false);
 
 interface Props {
@@ -99,12 +99,12 @@ const props = withDefaults(defineProps<Props>(), {
   placement: 'bottom',
 });
 
-// 子菜单状态管理（用于翻译功能的语言选择）
+// Submenu state management (used for the translate feature's language selection)
 const overlayOpen = ref(false);
 const hasSelectedLang = computed(() => !!currentTranslateLang.value);
 const selectedLangKey = computed(() => {
   if (!currentTranslateLang.value) return '';
-  // 根据当前语言标签找到对应的 key
+  // Find the corresponding key based on the current language label
   const lang = LANGUAGE_CODES.find((l) => t(`editor.lang.${l.key}`) === currentTranslateLang.value);
   return lang ? `translate-${lang.code}` : '';
 });
@@ -152,7 +152,7 @@ function onDropOpenChange(nextOpen: boolean) {
   }
 }
 
-// 使用翻译模块的 setTranslateLang 函数
+// Use the setTranslateLang function from the translation module
 
 function findItemByKey(items: MenuItemConfig[], key: string): MenuItemConfig | undefined {
   for (const item of items) {
@@ -169,8 +169,8 @@ function onMenuClick(info: { key: string }) {
   const item = findItemByKey(menuItems.value, info.key);
   if (!item) return;
   
-  // 延迟执行，确保菜单关闭后再执行命令，避免事务冲突
-  // 使用 requestAnimationFrame 确保在下一个渲染周期执行，避免与菜单关闭动画冲突
+  // Delay execution to ensure the command runs after the menu closes, avoiding transaction conflicts
+  // Use requestAnimationFrame to execute in the next render cycle, avoiding conflicts with the menu close animation
   nextTick(() => {
     requestAnimationFrame(() => {
       setTimeout(() => {
@@ -179,7 +179,7 @@ function onMenuClick(info: { key: string }) {
         } catch (error) {
           console.error('[AI Menu] Error executing command:', error);
         }
-      }, 50); // 短暂延迟，确保菜单完全关闭
+      }, 50); // Short delay to ensure the menu fully closes
     });
   });
 }
@@ -190,7 +190,7 @@ function onTranslateDefault(item: MenuItemConfig) {
     return;
   }
   
-  // 延迟执行，确保菜单关闭后再执行命令，避免事务冲突
+  // Delay execution to ensure the command runs after the menu closes, avoiding transaction conflicts
   nextTick(() => {
     requestAnimationFrame(() => {
       setTimeout(() => {
@@ -208,7 +208,7 @@ function onTranslateLangClick(info: { key: string }) {
   const child = findItemByKey(menuItems.value, info.key);
   if (!child) return;
   
-  // 延迟执行，确保菜单关闭后再执行命令，避免事务冲突
+  // Delay execution to ensure the command runs after the menu closes, avoiding transaction conflicts
   nextTick(() => {
     requestAnimationFrame(() => {
       setTimeout(() => {
@@ -228,7 +228,7 @@ function handleOpenChange(open: boolean) {
   }
 }
 
-// 构建菜单项
+// Build the menu items
 const menuItems = computed(() => {
   const { editor } = props;
 
@@ -241,12 +241,12 @@ const menuItems = computed(() => {
         if (!editor) return;
         
         try {
-          // 验证编辑器状态
+          // Validate the editor state
           const { state } = editor;
           const { selection, doc } = state;
           const docSize = doc.content.size;
           
-          // 验证 selection 是否有效
+          // Validate whether the selection is still valid
           if (
             selection.from < 0 ||
             selection.to < 0 ||
@@ -258,7 +258,7 @@ const menuItems = computed(() => {
             return;
           }
           
-          // 使用 chain 确保命令在同一个事务中执行
+          // Use a chain to ensure the command runs in a single transaction
           if (typeof (editor.commands as any).continueWriting === 'function') {
             const result = editor.chain().focus().continueWriting().run();
             if (!result) {
@@ -283,12 +283,12 @@ const menuItems = computed(() => {
         if (!editor) return;
         
         try {
-          // 验证编辑器状态
+          // Validate the editor state
           const { state } = editor;
           const { selection, doc } = state;
           const docSize = doc.content.size;
           
-          // 验证 selection 是否有效
+          // Validate whether the selection is still valid
           if (
             selection.from < 0 ||
             selection.to < 0 ||
@@ -300,7 +300,7 @@ const menuItems = computed(() => {
             return;
           }
           
-          // 使用 chain 确保命令在同一个事务中执行
+          // Use a chain to ensure the command runs in a single transaction
           if (typeof (editor.commands as any).polish === 'function') {
             const result = editor.chain().focus().polish().run();
             if (!result) {
@@ -325,12 +325,12 @@ const menuItems = computed(() => {
         if (!editor) return;
         
         try {
-          // 验证编辑器状态
+          // Validate the editor state
           const { state } = editor;
           const { selection, doc } = state;
           const docSize = doc.content.size;
           
-          // 验证 selection 是否有效
+          // Validate whether the selection is still valid
           if (
             selection.from < 0 ||
             selection.to < 0 ||
@@ -342,7 +342,7 @@ const menuItems = computed(() => {
             return;
           }
           
-          // 使用 chain 确保命令在同一个事务中执行
+          // Use a chain to ensure the command runs in a single transaction
           if (typeof (editor.commands as any).summarize === 'function') {
             const result = editor.chain().focus().summarize().run();
             if (!result) {
@@ -367,12 +367,12 @@ const menuItems = computed(() => {
         if (!editor) return;
         
         try {
-          // 验证编辑器状态
+          // Validate the editor state
           const { state } = editor;
           const { selection, doc } = state;
           const docSize = doc.content.size;
           
-          // 验证 selection 是否有效
+          // Validate whether the selection is still valid
           if (
             selection.from < 0 ||
             selection.to < 0 ||
@@ -384,7 +384,7 @@ const menuItems = computed(() => {
             return;
           }
           
-          // 使用 chain 确保命令在同一个事务中执行
+          // Use a chain to ensure the command runs in a single transaction
           if (typeof (editor.commands as any).customAi === 'function') {
             const result = editor.chain().focus().customAi().run();
             if (!result) {
@@ -411,12 +411,12 @@ const menuItems = computed(() => {
         if (!editor) return;
         
         try {
-          // 验证编辑器状态
+          // Validate the editor state
           const { state } = editor;
           const { selection, doc } = state;
           const docSize = doc.content.size;
           
-          // 验证 selection 是否有效
+          // Validate whether the selection is still valid
           if (
             selection.from < 0 ||
             selection.to < 0 ||
@@ -428,10 +428,10 @@ const menuItems = computed(() => {
             return;
           }
           
-          // 使用保存的语言或默认语言
+          // Use the saved language or the default language
           const targetLang = currentTranslateLang.value || '英文';
           
-          // 使用 chain 确保命令在同一个事务中执行
+          // Use a chain to ensure the command runs in a single transaction
           if (typeof (editor.commands as any).translate === 'function') {
             const result = editor.chain().focus().translate(targetLang).run();
             if (!result) {
@@ -455,16 +455,16 @@ const menuItems = computed(() => {
           action: () => {
             if (!editor) return;
             
-            // 设置并保存语言选择
+            // Set and save the language selection
             setTranslateLang(langLabel);
             
             try {
-              // 验证编辑器状态
+              // Validate the editor state
               const { state } = editor;
               const { selection, doc } = state;
               const docSize = doc.content.size;
               
-              // 验证 selection 是否有效
+              // Validate whether the selection is still valid
               if (
                 selection.from < 0 ||
                 selection.to < 0 ||
@@ -476,7 +476,7 @@ const menuItems = computed(() => {
                 return;
               }
               
-              // 使用 chain 确保命令在同一个事务中执行
+              // Use a chain to ensure the command runs in a single transaction
               if (typeof (editor.commands as any).translate === 'function') {
                 const result = editor.chain().focus().translate(langLabel).run();
                 if (!result) {

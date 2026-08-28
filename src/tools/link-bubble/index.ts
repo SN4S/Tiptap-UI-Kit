@@ -1,9 +1,9 @@
 /**
- * Link Bubble - 链接悬浮框工具
- * @description 提供链接悬浮框功能，支持链接编辑、打开、删除等操作
- * @description 可通过 features.linkBubbleMenu 配置是否启用
+ * Link Bubble - Link bubble menu tool
+ * @description Provides link bubble menu functionality for link editing, opening, and deletion
+ * @description Can be configured via features.linkBubbleMenu to enable/disable
  */
 
-// 组件导出
+// Component exports
 export { default as LinkBubbleMenu } from './LinkBubbleMenu.vue'
 

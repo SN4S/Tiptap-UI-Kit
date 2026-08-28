@@ -1,6 +1,6 @@
 /**
  * Version History Module
- * @description 版本历史系统
+ * @description Version history system
  */
 
 export * from './types'

@@ -1,52 +1,52 @@
 # Continue Writing Feature
 
-AI 续写功能，基于选中文本进行智能续写。
+AI-powered continuation that intelligently continues the selected text.
 
-## 文件说明
+## Files
 
-- `ContinueWritingButton.vue` - 续写按钮组件
-- `ContinueWritingExtension.ts` - 续写扩展，提供 `continueWriting` 命令
-- `index.ts` - 统一导出
+- `ContinueWritingButton.vue` - Continue-writing button component
+- `ContinueWritingExtension.ts` - The continue-writing extension, providing the `continueWriting` command
+- `index.ts` - Unified exports
 
-## 依赖说明
+## Dependencies
 
-本功能依赖以下共享组件（位于 `tiptapPro/features/ai/`）：
+This feature depends on the following shared components (located in `tiptapPro/features/ai/`):
 
-- `aiSuggestionManager` - AI 建议管理器，用于显示和管理 AI 生成的建议
-- `AiSuggestionPopover.vue` - AI 建议弹窗组件
-- `AiHighlightMark.ts` - AI 高亮标记扩展
+- `aiSuggestionManager` - AI suggestion manager, used to display and manage AI-generated suggestions
+- `AiSuggestionPopover.vue` - AI suggestion popover component
+- `AiHighlightMark.ts` - AI highlight mark extension
 
-## 使用方法
+## Usage
 
 ```typescript
 import { ContinueWritingExtension, ContinueWritingButton } from './ai/continue-writing'
 
-// 在编辑器配置中添加扩展
+// Add the extension to the editor configuration
 editor = useEditor({
   extensions: [
-    // ... 其他扩展
+    // ... other extensions
     ContinueWritingExtension,
   ],
 })
 
-// 使用按钮组件
+// Use the button component
 <ContinueWritingButton
   :title="t('editor.continueWriting')"
   :onClick="() => editor.commands.continueWriting()"
 />
 ```
 
-## 功能说明
+## How it works
 
-1. 用户选中一段文本
-2. 点击续写按钮或调用 `editor.commands.continueWriting()`
-3. 系统会基于选中文本和完整文档上下文进行续写
-4. 续写内容会以 AI 建议的形式显示在弹窗中
-5. 用户可以接受、拒绝或取消建议
+1. The user selects a piece of text
+2. Click the continue-writing button or call `editor.commands.continueWriting()`
+3. The system continues the text based on the selected text and the full document context
+4. The continued content is displayed as an AI suggestion in the popover
+5. The user can accept, reject, or cancel the suggestion
 
-## 注意事项
+## Notes
 
-- 需要确保 `aiSuggestionManager` 已在编辑器中初始化
-- 需要确保 `AiHighlightMark` 扩展已添加到编辑器
-- 需要配置正确的 AI API 服务
+- Make sure the `aiSuggestionManager` is initialized in the editor
+- Make sure the `AiHighlightMark` extension is added to the editor
+- A correctly configured AI API service is required
 

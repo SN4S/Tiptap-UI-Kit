@@ -1,9 +1,9 @@
 /**
- * SlashCommand 样式
- * @description 斜杠命令菜单（依赖 base.css）
+ * SlashCommand Styles
+ * @description Slash command menu (depends on base.css)
  */
 
-/* ========== 菜单容器 ========== */
+/* ========== Menu Container ========== */
 .slash-command-menu {
   position: fixed;
   z-index: 1002;
@@ -40,7 +40,7 @@
   background: transparent;
 }
 
-/* 滚动条样式 */
+/* Scrollbar styles */
 .slash-command-menu::-webkit-scrollbar {
   width: 6px;
 }
@@ -58,7 +58,7 @@
   background: #bfbfbf;
 }
 
-/* ========== 分组标题 ========== */
+/* ========== Group Titles ========== */
 .slash-command-group-title {
   padding: 8px 14px 4px;
   font-size: 11px;
@@ -69,7 +69,7 @@
   user-select: none;
 }
 
-/* ========== 菜单项 ========== */
+/* ========== Menu Items ========== */
 .slash-command-item {
   display: flex;
   gap: 12px;
@@ -133,7 +133,7 @@
   white-space: nowrap;
 }
 
-/* ========== 无结果 ========== */
+/* ========== No Results ========== */
 .slash-command-empty {
   padding: 16px 14px;
   font-size: 13px;
@@ -141,7 +141,7 @@
   text-align: center;
 }
 
-/* ========== 深色模式 ========== */
+/* ========== Dark Mode ========== */
 :where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *) .slash-command-menu {
   background: var(--tp-menu-bg, #1f1f1f);
   box-shadow: 0 4px 16px rgb(0 0 0 / 40%), 0 0 1px rgb(255 255 255 / 10%);
@@ -187,7 +187,7 @@
   background: #595959;
 }
 
-/* ========== 响应式 ========== */
+/* ========== Responsive ========== */
 @media (max-width: 768px) {
   .slash-command-menu {
     min-width: 220px;
@@ -206,7 +206,116 @@
   }
 }
 
-/* ========== 打印隐藏 ========== */
+/* ========== Notion Theme Overrides ========== */
+/* When the root node has .theme-notion enabled, the slash menu uses the Notion minimalist style:
+   - No highlighted icon background, only light gray inline icons
+   - Group titles lowercase and subdued (Basic blocks / Advanced blocks)
+   - Hover / selected state uses a very subtle gray background, no blue */
+
+.theme-notion .slash-command-menu {
+  min-width: 260px;
+  max-width: 320px;
+  padding: 6px;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI Variable Display', 'Segoe UI', Helvetica, 'Apple Color Emoji', Arial, sans-serif;
+  background: var(--tp-menu-bg, #fff);
+  border-radius: 6px;
+  box-shadow: rgb(15 15 15 / 5%) 0 0 0 1px, rgb(15 15 15 / 10%) 0 3px 6px, rgb(15 15 15 / 20%) 0 9px 24px;
+}
+
+/* Group titles: lowercase, very subtle gray */
+.theme-notion .slash-command-group-title {
+  padding: 6px 10px 2px 10px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--tiptap-text-muted, #9b9a97);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* Menu items: inline icon + text, no icon background box */
+.theme-notion .slash-command-item {
+  gap: 8px;
+  padding: 6px 10px;
+  font-size: 14px;
+  color: var(--tiptap-text, #37352f);
+  border-radius: 4px;
+}
+
+/* Icons: small inline, light gray, no color block */
+.theme-notion .slash-command-item-icon {
+  width: auto;
+  height: auto;
+  font-size: 16px;
+  color: var(--tiptap-text-secondary, #787774);
+  background: transparent;
+  border-radius: 0;
+}
+
+/* Hover / selected: very subtle gray background, darker text, no blue */
+.theme-notion .slash-command-item:hover,
+.theme-notion .slash-command-item.active {
+  background: rgba(55, 53, 47, 0.08);
+}
+
+.theme-notion .slash-command-item.active .slash-command-item-icon,
+.theme-notion .slash-command-item:hover .slash-command-item-icon {
+  color: var(--tiptap-text-secondary, #787774);
+  background: transparent;
+}
+
+.theme-notion .slash-command-item-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--tiptap-text, #37352f);
+}
+
+.theme-notion .slash-command-item-desc {
+  font-size: 12px;
+  color: var(--tiptap-text-muted, #9b9a97);
+}
+
+.theme-notion .slash-command-empty {
+  font-size: 13px;
+  color: var(--tiptap-text-muted, #9b9a97);
+}
+
+/* Notion dark mode */
+.theme-notion[data-theme="dark"] .slash-command-menu {
+  background: var(--tp-menu-bg, #191919);
+  box-shadow: rgb(255 255 255 / 6%) 0 0 0 1px, var(--tiptap-shadow-md, 0 4px 6px -1px rgb(0 0 0 / 40%));
+}
+
+.theme-notion[data-theme="dark"] .slash-command-item {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.theme-notion[data-theme="dark"] .slash-command-item:hover,
+.theme-notion[data-theme="dark"] .slash-command-item.active {
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.theme-notion[data-theme="dark"] .slash-command-item-icon {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.theme-notion[data-theme="dark"] .slash-command-item.active .slash-command-item-icon,
+.theme-notion[data-theme="dark"] .slash-command-item:hover .slash-command-item-icon {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.theme-notion[data-theme="dark"] .slash-command-item-title {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.theme-notion[data-theme="dark"] .slash-command-item-desc {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-notion[data-theme="dark"] .slash-command-group-title {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ========== Print Hidden ========== */
 @media print {
   .slash-command-menu,
   .slash-command-backdrop {

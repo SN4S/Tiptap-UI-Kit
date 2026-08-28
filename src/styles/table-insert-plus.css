@@ -1,8 +1,8 @@
 /**
- * TableInsertPlus 样式 - Umo Editor 风格（优化版）
+ * TableInsertPlus Styles - Umo Editor style (optimized)
  */
 
-/* ========== CSS 变量 ========== */
+/* ========== CSS Variables ========== */
 :root {
   --table-border-color: #ddd;
   --table-border-color-active: #1677ff;
@@ -15,7 +15,7 @@
   --handle-bg-hover: #e8e8e8;
   --handle-border: #e0e0e0;
   --handle-border-hover: #d0d0d0;
-  --handle-z-index: 0;  /* 远低于 bubble menu (1000+)，避免遮挡 */
+  --handle-z-index: 0;  /* Much lower than bubble menu (1000+), to avoid occlusion */
 
   --button-primary-bg: #1677ff;
   --button-primary-shadow: rgba(22, 119, 255, 0.3);
@@ -34,7 +34,7 @@
   --transition-smooth: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ========== 基础表格 ========== */
+/* ========== Base Table ========== */
 .ProseMirror table {
   border-collapse: collapse;
   table-layout: fixed;
@@ -65,14 +65,14 @@
   border-color: var(--table-border-color-active);
 }
 
-/* ========== 公共 Mixin 样式 ========== */
+/* ========== Shared Mixin Styles ========== */
 .umo-flex-center {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* ========== 表格操作手柄（公共样式）========== */
+/* ========== Table Operation Handles (shared styles) ========== */
 .umo-table-handle {
   position: absolute;
   display: none;
@@ -95,17 +95,17 @@
   border-color: var(--handle-border-hover);
 }
 
-/* 列手柄特定样式 */
+/* Column handle specific styles */
 .umo-column-handle {
   border-bottom: none;
 }
 
-/* 行手柄特定样式 */
+/* Row handle specific styles */
 .umo-row-handle {
   border-right: none;
 }
 
-/* ========== 操作按钮 ========== */
+/* ========== Action Buttons ========== */
 .umo-table-more-btn {
   display: flex;
   align-items: center;
@@ -129,7 +129,7 @@
   transform: scale(1.1);
 }
 
-/* ========== 顶部加号按钮 ========== */
+/* ========== Top Plus Button ========== */
 .umo-table-plus-btn {
   position: absolute;
   display: none;
@@ -164,7 +164,7 @@
   font-size: 14px;
 }
 
-/* ========== 下拉菜单 ========== */
+/* ========== Dropdown Menu ========== */
 .umo-table-menu {
   position: absolute;
   display: none;
@@ -221,19 +221,19 @@
   background: var(--menu-border);
 }
 
-/* ========== 选中效果 ========== */
+/* ========== Selection Effect ========== */
 .ProseMirror td.selectedCell,
 .ProseMirror th.selectedCell {
   background: var(--table-selected-bg);
   border-color: var(--table-border-color-active);
 }
 
-/* ========== 公共隐藏类 ========== */
+/* ========== Shared Hidden Classes ========== */
 .umo-table-element-hidden {
   display: none !important;
 }
 
-/* ========== 响应式 ========== */
+/* ========== Responsive ========== */
 @media (max-width: 768px) {
   .ProseMirror {
     padding-left: 10px;
@@ -255,7 +255,7 @@
   }
 }
 
-/* ========== 打印隐藏 ========== */
+/* ========== Print Hidden ========== */
 @media print {
   .umo-table-handle,
   .umo-table-plus-btn,
@@ -264,7 +264,7 @@
   }
 }
 
-/* ========== 旧样式清理 ========== */
+/* ========== Legacy Styles Cleanup ========== */
 .table-insert-plus,
 .table-edge-rail,
 .table-handle-item,

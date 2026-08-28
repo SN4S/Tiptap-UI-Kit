@@ -11,8 +11,8 @@
 
 <script setup lang="ts">
 /**
- * HeadingDropdown - 标题下拉菜单组件
- * @description 可复用的标题下拉菜单组件（正文、H1-H6）
+ * HeadingDropdown - heading dropdown menu component
+ * @description A reusable heading dropdown menu component (paragraph, H1-H6)
  */
 import { computed } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -29,10 +29,10 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-// 事务响应式 editor：菜单状态跟随光标/内容变化重新求值
+// Transaction-driven reactive editor: menu state is re-evaluated on cursor/content changes
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 标题菜单项 =====
+// ===== Heading menu items =====
 const headingItems = computed<MenuItemConfig[]>(() => {
   if (!editor.value) return []
   return HEADING_OPTIONS.map((opt) => ({
@@ -43,7 +43,7 @@ const headingItems = computed<MenuItemConfig[]>(() => {
 })
 
 /**
- * 段落样式切换
+ * Switch paragraph style
  */
 function onHeadingChange(val: string): void {
   const e = editor.value

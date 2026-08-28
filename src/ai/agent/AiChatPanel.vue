@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <!-- 悬浮启动按钮 -->
+    <!-- Floating launcher button -->
     <button
       v-if="!open"
       class="ai-chat-launcher"
@@ -13,7 +13,7 @@
       <span class="ai-chat-launcher__label">AI</span>
     </button>
 
-    <!-- 聊天面板 -->
+    <!-- Chat panel -->
     <Transition name="ai-chat-slide">
       <div v-if="open" class="ai-chat-panel" role="dialog" :aria-label="t('aiChat.title')">
         <div class="ai-chat-panel__header">
@@ -120,19 +120,19 @@
       </div>
     </Transition>
 
-    <!-- AI 设置弹窗（复用现有组件；未提供设置入口时不渲染） -->
+    <!-- AI settings modal (reuses the existing component; not rendered when no settings entry is provided) -->
     <AiSettingsModal v-if="showSettingsEntry" v-model:open="showSettings" />
 
-    <!-- AI 接管遮罩 + 编辑光标（agent 运行期间显示） -->
+    <!-- AI takeover overlay + edit cursor (shown while the agent is running) -->
     <AiTakeoverOverlay :editor="editor" :active="running" />
   </Teleport>
 </template>
 
 <script setup lang="ts">
 /**
- * AiChatPanel - AI 文档助手聊天面板
- * @description 用户以自然语言描述需求（「帮我在末尾加一个 3x3 表格」「把第二段润色一下」），
- * AI 通过 tool-use 循环直接编辑当前文档。悬浮于编辑器右下角，自带启动按钮。
+ * AiChatPanel - AI document assistant chat panel
+ * @description The user describes their needs in natural language ("help me add a 3x3 table at the end", "polish the second paragraph"),
+ * and the AI directly edits the current document through a tool-use loop. Floats at the bottom-right of the editor, with its own launcher button.
  */
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import type { Editor } from '@tiptap/core'
@@ -152,7 +152,7 @@ import AiTakeoverOverlay from './AiTakeoverOverlay.vue'
 
 interface Props {
   editor: Editor | null | undefined
-  /** 是否提供「AI 设置」入口（终端用户自填 API Key 弹窗）。公众站点建议关闭 */
+  /** Whether to provide an "AI settings" entry (a modal where end users fill in their own API Key). Recommended to disable on public sites */
   showSettingsEntry?: boolean
 }
 
@@ -163,7 +163,7 @@ const editor = computed(() => props.editor ?? null)
 
 const { locale } = useI18n()
 
-// ===== 面板状态 =====
+// ===== Panel state =====
 const open = ref(false)
 const showSettings = ref(false)
 const running = ref(false)
@@ -182,14 +182,14 @@ const messages = ref<ChatItem[]>([])
 
 let abortController: AbortController | null = null
 
-// ===== 工具名 → 本地化步骤文案 =====
+// ===== Tool name -> localized step label =====
 function toolLabel(name: string): string {
   const key = `aiChat.tools.${name}`
   const label = t(key)
   return label === key ? name : label
 }
 
-// ===== 自动滚动到底部 =====
+// ===== Auto-scroll to bottom =====
 async function scrollToBottom() {
   await nextTick()
   const el = messagesRef.value
@@ -204,8 +204,8 @@ watch(open, async (isOpen) => {
 })
 
 /**
- * 演示模式回退：未配置真实 AI 时本地模拟执行指令
- * （真实编辑文档 + 步骤回放），结尾附「如何接入真实 AI」的指引与配置入口
+ * Demo-mode fallback: when no real AI is configured, simulate the instruction locally
+ * (actually editing the document + replaying steps), appending "how to integrate real AI" guidance and a configuration entry at the end
  */
 async function runDemoFallback(instruction: string) {
   if (!editor.value) {
@@ -228,7 +228,7 @@ async function runDemoFallback(instruction: string) {
         },
       },
     })
-    // 提供设置入口时附加「自填 API Key」一行与按钮；公众站点只保留工程配置指引
+    // When a settings entry is provided, append a "fill in your API Key" line and button; public sites keep only the project-configuration guidance
     const text = props.showSettingsEntry
       ? `${demo.finalText}\n${t('aiChat.demo.configureLine')}`
       : demo.finalText
@@ -246,12 +246,12 @@ async function runDemoFallback(instruction: string) {
   }
 }
 
-// ===== 发送 =====
+// ===== Send =====
 async function send() {
   const instruction = input.value.trim()
   if (!instruction || running.value || !editor.value) return
 
-  // 多轮上下文：只带 user/assistant 文本轮次，最近 8 条（在 push 本次指令前构造，不含本条）
+  // Multi-turn context: only include user/assistant text turns, the most recent 8 (built before pushing the current instruction, so it excludes this one)
   const history = messages.value
     .filter((m) => m.type === 'user' || m.type === 'assistant')
     .slice(-8)
@@ -287,8 +287,8 @@ async function send() {
     }
   } catch (error) {
     if (error instanceof AgentNotConfiguredError) {
-      // 未配置真实 AI：走演示模式（与续写/润色等功能的 simulate 惯例一致）——
-      // 用本地脚本真实编辑文档，让访客先体验效果；真实 Key 由集成方在工程中绑定
+      // No real AI configured: use demo mode (consistent with the simulate convention of continue-writing/polish and other features)——
+      // use local scripts to actually edit the document so visitors can experience it first; the real Key is bound by the integrator in the project
       await runDemoFallback(instruction)
     } else if (error instanceof DOMException && error.name === 'AbortError') {
       messages.value.push({ type: 'error', text: t('aiChat.stopped') })
@@ -308,12 +308,12 @@ function stop() {
   abortController?.abort()
 }
 
-// 面板卸载（编辑器销毁/路由切换）时中止仍在运行的 agent，避免后台继续消耗 API
+// Abort a still-running agent when the panel unmounts (editor destroyed/route change), to avoid continued API consumption in the background
 onBeforeUnmount(() => {
   abortController?.abort()
 })
 
-/** Enter 发送；中文/日文输入法组合期间的回车（选词确认）不触发 */
+/** Enter sends; Enter during Chinese/Japanese IME composition (candidate-word confirmation) does not trigger */
 function onEnterKey(e: KeyboardEvent) {
   if (e.isComposing || e.keyCode === 229) return
   e.preventDefault()
@@ -322,7 +322,7 @@ function onEnterKey(e: KeyboardEvent) {
 </script>
 
 <style scoped>
-/* ===== 启动按钮 ===== */
+/* ===== Launcher button ===== */
 .ai-chat-launcher {
   position: fixed;
   right: 20px;
@@ -348,7 +348,7 @@ function onEnterKey(e: KeyboardEvent) {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.24);
 }
 
-/* ===== 面板 ===== */
+/* ===== Panel ===== */
 .ai-chat-panel {
   position: fixed;
   right: 20px;
@@ -409,7 +409,7 @@ function onEnterKey(e: KeyboardEvent) {
   color: var(--tiptap-text, #1f2937);
 }
 
-/* ===== 消息区 ===== */
+/* ===== Message area ===== */
 .ai-chat-panel__messages {
   flex: 1;
   overflow-y: auto;
@@ -485,7 +485,7 @@ function onEnterKey(e: KeyboardEvent) {
   cursor: pointer;
 }
 
-/* ===== 输入区 ===== */
+/* ===== Input area ===== */
 .ai-chat-panel__input-area {
   display: flex;
   align-items: flex-end;
@@ -535,7 +535,7 @@ function onEnterKey(e: KeyboardEvent) {
   background: #dc2626;
 }
 
-/* ===== 出入场动画 ===== */
+/* ===== Entrance/exit animations ===== */
 .ai-chat-slide-enter-active,
 .ai-chat-slide-leave-active {
   transition: opacity 0.18s ease, transform 0.18s ease;
@@ -547,6 +547,6 @@ function onEnterKey(e: KeyboardEvent) {
   transform: translateY(12px);
 }
 
-/* 暗色模式无需单独覆盖：面板全部取 --tiptap-* 变量，
-   变量在 :root[data-theme="dark"] 上已翻转，Teleport 到 body 后仍继承生效 */
+/* Dark mode needs no separate overrides: the panel uses only --tiptap-* variables,
+   which are flipped on :root[data-theme="dark"], and they still cascade after Teleport to body */
 </style>

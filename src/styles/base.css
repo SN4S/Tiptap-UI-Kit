@@ -1,11 +1,11 @@
 /**
- * TiptapPro 公共基础样式
- * @description 提取的公共变量、混入样式、动画和工具类
+ * TiptapPro Shared Base Styles
+ * @description Shared variables, mixins, animations, and utility classes
  */
 
-/* ========== CSS 变量（亮色/暗色主题） ========== */
+/* ========== CSS Variables (Light/Dark Themes) ========== */
 :root {
-  /* 基础色彩 */
+  /* Base Colors */
   --tp-color-text: #333;
   --tp-color-text-secondary: #666;
   --tp-color-text-muted: #999;
@@ -15,28 +15,28 @@
   --tp-color-border: #e0e0e0;
   --tp-color-border-light: #f0f0f0;
   
-  /* 主题色 */
+  /* Theme Colors */
   --tp-color-primary: #1890ff;
   --tp-color-primary-bg: #e6f7ff;
   --tp-color-danger: #ff4d4f;
   --tp-color-danger-bg: #fff1f0;
   
-  /* 菜单样式 */
+  /* Menu Styles */
   --tp-menu-bg: #fff;
   --tp-menu-shadow: 0 4px 12px rgb(0 0 0 / 15%);
   --tp-menu-radius: 8px;
   
-  /* 按钮尺寸 */
+  /* Button Sizes */
   --tp-btn-size: 32px;
   --tp-btn-size-sm: 28px;
   --tp-btn-icon-size: 16px;
   
-  /* 动画时长 */
+  /* Animation Duration */
   --tp-transition-fast: 0.15s ease;
   --tp-transition-normal: 0.2s ease;
 }
 
-/* 暗色模式变量 */
+/* Dark mode variables */
 :where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *),
 :where([data-theme="dark"], [data-theme="dark"] *) {
   --tp-color-text: #f0f0f0;
@@ -57,7 +57,7 @@
   --tp-menu-shadow: 0 4px 12px rgb(0 0 0 / 40%);
 }
 
-/* ========== 公共菜单容器 ========== */
+/* ========== Shared Menu Container ========== */
 .tp-menu {
   display: flex;
   padding: 4px;
@@ -84,7 +84,7 @@
   border-right: none;
 }
 
-/* ========== 公共按钮样式 ========== */
+/* ========== Shared Button Styles ========== */
 .tp-btn {
   position: relative;
   display: flex;
@@ -136,7 +136,7 @@
   font-size: var(--tp-btn-icon-size);
 }
 
-/* ========== 颜色选择面板 ========== */
+/* ========== Color Selection Panel ========== */
 .tp-color-panel {
   display: grid;
   grid-template-columns: repeat(8, 24px);
@@ -165,7 +165,7 @@
   box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
 }
 
-/* ========== 下拉菜单项 ========== */
+/* ========== Dropdown Menu Items ========== */
 .tp-dropdown-menu {
   min-width: 150px;
   padding: 6px;
@@ -213,7 +213,7 @@
   background: var(--tp-color-border);
 }
 
-/* ========== 公共动画 ========== */
+/* ========== Shared Animations ========== */
 @keyframes tp-fade-in {
   from {
     opacity: 0;
@@ -241,7 +241,7 @@
   50%, 100% { opacity: 0; }
 }
 
-/* ========== 响应式断点 ========== */
+/* ========== Responsive Breakpoints ========== */
 @media (max-width: 768px) {
   :root {
     --tp-btn-size: 28px;
@@ -260,7 +260,7 @@
   }
 }
 
-/* ========== 打印隐藏 ========== */
+/* ========== Print Hidden ========== */
 @media print {
   .tp-menu,
   .tp-dropdown-menu,
@@ -269,7 +269,7 @@
   }
 }
 
-/* ========== 工具类 ========== */
+/* ========== Utility Classes ========== */
 .tp-flex-center {
   display: flex;
   align-items: center;
@@ -284,18 +284,18 @@
   display: flex !important;
 }
 
-/* ========== 编辑器光标与选区（跟随主题） ========== */
+/* ========== Editor Cursor and Selection (Follows Theme) ========== */
 .ProseMirror {
   caret-color: var(--tiptap-caret, var(--tiptap-primary, #3b82f6));
 }
 
-/* 原生文本选区高亮；协作光标/选区由装饰节点内联样式绘制，不受影响 */
+/* Native text selection highlight; collaboration cursor/selection is drawn via decoration inline styles and is unaffected */
 .ProseMirror::selection,
 .ProseMirror ::selection {
   background: var(--tiptap-selection, rgba(59, 130, 246, 0.2));
 }
 
-/* ========== 键盘焦点可见性 ========== */
+/* ========== Keyboard Focus Visibility ========== */
 .tp-btn:focus-visible,
 .tp-dropdown-item:focus-visible,
 .tt-toolbar-button:focus-visible,
@@ -305,7 +305,7 @@
   outline-offset: 2px;
 }
 
-/* ========== 减少动态效果 ========== */
+/* ========== Reduce Motion ========== */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

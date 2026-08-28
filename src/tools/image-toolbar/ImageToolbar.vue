@@ -7,7 +7,7 @@
     class="image-bubble-menu"
   >
     <div class="image-menu-content">
-      <!-- 对齐方式 -->
+      <!-- Alignment -->
       <div class="image-menu-group">
         <button
           v-for="alignOption in alignOptions"
@@ -21,26 +21,26 @@
         </button>
       </div>
 
-      <!-- 预览 -->
+      <!-- Preview -->
       <div class="image-menu-group">
-        <button class="image-menu-btn" @click="previewImage" title="预览">
+        <button class="image-menu-btn" @click="previewImage"           title="Preview">
           <EyeOutlined />
         </button>
       </div>
 
-      <!-- 删除 -->
+      <!-- Delete -->
       <div class="image-menu-group">
         <button
           class="image-menu-btn image-menu-btn--danger"
           @click="deleteImage"
-          title="删除图片"
+          title="Delete image"
         >
           <DeleteOutlined />
         </button>
       </div>
     </div>
 
-    <!-- 图片预览模态框 -->
+    <!-- Image preview modal -->
     <a-modal
       v-model:open="previewVisible"
       :footer="null"
@@ -60,8 +60,8 @@
 
 <script setup lang="ts">
 /**
- * ImageToolbar - 图片工具栏组件
- * @description 提供图片对齐、预览、删除等功能的气泡菜单
+ * ImageToolbar - Image toolbar component
+ * @description Bubble menu for image alignment, preview, and deletion
  */
 import { ref } from 'vue'
 import { BubbleMenu } from '@tiptap/vue-3/menus'
@@ -93,22 +93,22 @@ const props = withDefaults(
 const editor = useReactiveEditor(() => props.editor)
 const runCommand = createCommandRunner(editor)
 
-// ===== 状态 =====
+// ===== State =====
 const previewVisible = ref(false)
 const currentImageSrc = ref('')
 const currentAlign = ref<'left' | 'center' | 'right' | null>(null)
 
-// ===== 对齐选项配置 =====
+// ===== Alignment options config =====
 const alignOptions = [
-  { value: 'left' as const, icon: AlignLeftOutlined, title: '左对齐' },
-  { value: 'center' as const, icon: AlignCenterOutlined, title: '居中' },
-  { value: 'right' as const, icon: AlignRightOutlined, title: '右对齐' },
+  { value: 'left' as const, icon: AlignLeftOutlined, title: 'Align left' },
+  { value: 'center' as const, icon: AlignCenterOutlined, title: 'Align center' },
+  { value: 'right' as const, icon: AlignRightOutlined, title: 'Align right' },
 ]
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 
 /**
- * 获取当前选中的图片节点和位置
+ * Get the currently selected image node and position
  */
 function getCurrentImageInfo() {
   const e = editor.value
@@ -119,14 +119,14 @@ function getCurrentImageInfo() {
   let node = null
   let pos: number | null = null
 
-  // 检查是否是节点选择（NodeSelection）
+  // Check if it's a NodeSelection
   if (selection instanceof NodeSelection && selection.node && selection.node.type.name === 'image') {
     node = selection.node
     pos = selection.from
     return { node, pos }
   }
 
-  // 检查光标前后的节点
+  // Check nodes before and after cursor
   const $anchor = selection.$anchor
   const nodeAfter = $anchor.nodeAfter
   const nodeBefore = $anchor.nodeBefore
@@ -137,7 +137,7 @@ function getCurrentImageInfo() {
     node = nodeBefore
   }
 
-  // 如果找到节点但没找到位置，查找位置
+  // If node found but position not found, search for position
   if (node && pos === null) {
     state.doc.descendants((n, p) => {
       if (n === node) {
@@ -151,19 +151,19 @@ function getCurrentImageInfo() {
 }
 
 /**
- * 获取图片的对齐方式
+ * Get image alignment
  */
 function getImageAlign() {
   const { node, pos } = getCurrentImageInfo()
   if (!node || pos === null) return null
 
-  // 优先检查图片节点本身的对齐属性
+  // Prefer checking the image node's own alignment attribute
   const nodeAlign = node.attrs.align
   if (nodeAlign === 'left' || nodeAlign === 'center' || nodeAlign === 'right') {
     return nodeAlign
   }
 
-  // 检查父节点的对齐方式
+  // Check parent node's alignment
   const e = editor.value
   if (!e) return null
   const $pos = e.state.doc.resolve(pos)
@@ -176,18 +176,18 @@ function getImageAlign() {
   return null
 }
 
-// ===== 事件处理 =====
+// ===== Event handlers =====
 
 /**
- * 检查是否应该显示工具栏
+ * Check if toolbar should be shown
  */
 const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: number }) => {
-  // 如果功能未启用，不显示
+  // If feature is not enabled, don't show
   if (!props.enabled) {
     return false
   }
   
-  // 检查编辑器是否存在
+  // Check if editor exists
   if (!bubbleProps.editor) {
     return false
   }
@@ -196,7 +196,7 @@ const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: nu
     return false
   }
 
-  // 更新当前图片信息
+  // Update current image info
   const { node } = getCurrentImageInfo()
   if (node?.type.name === 'image') {
     currentImageSrc.value = node.attrs.src || ''
@@ -207,7 +207,7 @@ const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: nu
 }
 
 /**
- * 设置图片对齐方式
+ * Set image alignment
  */
 function setAlign(align: 'left' | 'center' | 'right') {
   const e = editor.value
@@ -219,7 +219,7 @@ function setAlign(align: 'left' | 'center' | 'right') {
   const $pos = e.state.doc.resolve(pos)
   const parent = $pos.parent
 
-  // 优先设置父节点对齐（段落或标题）
+  // Prefer setting parent node alignment (paragraph or heading)
   if (parent && (parent.type.name === 'paragraph' || parent.type.name === 'heading')) {
     const parentStart = $pos.start($pos.depth)
     e.chain()
@@ -228,7 +228,7 @@ function setAlign(align: 'left' | 'center' | 'right') {
       .run()
   }
 
-  // 同时设置图片节点的对齐属性
+  // Also set image node's alignment attribute
   e.chain()
     .focus()
     .setNodeSelection(pos)
@@ -239,7 +239,7 @@ function setAlign(align: 'left' | 'center' | 'right') {
 }
 
 /**
- * 预览图片
+ * Preview image
  */
 function previewImage() {
   const { node } = getCurrentImageInfo()
@@ -250,7 +250,7 @@ function previewImage() {
 }
 
 /**
- * 删除图片
+ * Delete image
  */
 function deleteImage() {
   runCommand((chain: EditorChain) => chain.deleteSelection())()

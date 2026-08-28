@@ -1,10 +1,10 @@
 /**
- * ResizableImage Extension - 可调整大小的图片扩展（支持拖拽移动）
- * @description 扩展标准 Image 扩展，支持 width、height 属性用于调整图片大小，并添加可拖拽的调整手柄
+ * ResizableImage Extension - resizable image extension (supports drag to move)
+ * @description Extends the standard Image extension, supports width and height attributes for resizing images, and adds a draggable resize handle
  * @features
- * - 支持图片在文字之间拖拽移动（独立实现，不依赖 drag-handle）
- * - 支持图片大小调整（等比例缩放）
- * - 支持图片对齐（左对齐、居中、右对齐）
+ * - Supports dragging images between text (standalone implementation, does not depend on drag-handle)
+ * - Supports image resizing (proportional scaling)
+ * - Supports image alignment (left, center, right)
  */
 
 import Image from '@tiptap/extension-image'
@@ -13,7 +13,7 @@ export interface ResizableImageOptions {
   HTMLAttributes?: Record<string, any>
   inline?: boolean
   allowBase64?: boolean
-  /** 是否启用图片增强功能（拖拽大小调整），默认 true */
+  /** Whether to enable image enhancement (drag resizing), defaults to true */
   enableResize?: boolean
 }
 
@@ -26,12 +26,12 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
       HTMLAttributes: {},
       inline: true,
       allowBase64: true,
-      enableResize: true, // 默认开启图片增强功能
+      enableResize: true, // image enhancement is enabled by default
     }
   },
 
   addAttributes() {
-    // 创建尺寸属性的通用配置
+    // Create a common configuration for size attributes
     const createSizeAttribute = (name: 'width' | 'height') => ({
       default: null,
       parseHTML: (element: HTMLElement) => {
@@ -66,13 +66,13 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
   addNodeView() {
     return ({ node, HTMLAttributes, getPos, editor }) => {
       const options = this.options
-      const enableResize = options.enableResize !== false // 默认开启
+      const enableResize = options.enableResize !== false // enabled by default
       
       const dom = document.createElement('div')
       dom.className = 'resizable-image-wrapper'
       dom.setAttribute('data-type', 'resizable-image-wrapper')
       
-      // 设置对齐方式
+      // Set the alignment
       if (node.attrs.align) {
         dom.style.textAlign = node.attrs.align
         dom.setAttribute('data-align', node.attrs.align)
@@ -83,13 +83,13 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
       img.alt = node.attrs.alt || ''
       img.title = node.attrs.title || ''
       
-      // 根据配置决定是否启用拖拽功能
+      // Decide whether to enable dragging based on configuration
       if (enableResize) {
         img.draggable = true
         img.style.cursor = 'move'
       }
 
-      // 设置图片大小
+      // Set the image size
       const updateImageSize = () => {
         if (node.attrs.width) {
           img.style.width = `${node.attrs.width}px`
@@ -104,7 +104,7 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
       }
       updateImageSize()
 
-      // 图片加载完成后，如果没有设置宽度，使用自然宽度
+      // After the image loads, use the natural width if no width was set
       img.onload = () => {
         if (!node.attrs.width && !node.attrs.height && img.naturalWidth > 0) {
           img.style.width = `${img.naturalWidth}px`
@@ -112,27 +112,27 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
         }
       }
 
-      // 应用其他 HTML 属性
+      // Apply other HTML attributes
       Object.entries(HTMLAttributes).forEach(([key, value]) => {
         if (key !== 'width' && key !== 'height' && key !== 'src' && key !== 'alt' && key !== 'title') {
           img.setAttribute(key, value)
         }
       })
 
-      // 创建右下角的调整手柄（圆点模式）- 仅在启用增强功能时创建
+      // Create the resize handle in the bottom-right corner (dot mode) - only when enhancement is enabled
       let resizeHandle: HTMLDivElement | null = null
       if (enableResize) {
         resizeHandle = document.createElement('div')
         resizeHandle.className = 'resize-handle'
         resizeHandle.setAttribute('contenteditable', 'false')
-        // 阻止调整手柄触发图片拖拽
+        // Prevent the resize handle from triggering image dragging
         resizeHandle.draggable = false
         dom.appendChild(resizeHandle)
       }
 
       dom.appendChild(img)
 
-      // 图片点击事件，选中图片节点
+      // Image click event, selects the image node
       dom.addEventListener('click', (e) => {
         if (enableResize && resizeHandle && (e.target === resizeHandle || resizeHandle.contains(e.target as HTMLElement))) {
           return
@@ -144,7 +144,7 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
         }
       })
 
-      // 图片拖拽功能：支持在文字之间移动（仅在启用增强功能时）
+      // Image dragging: supports moving between text (only when enhancement is enabled)
       if (enableResize) {
         img.addEventListener('dragstart', (e: DragEvent) => {
           const pos = typeof getPos === 'function' ? getPos() : null
@@ -152,10 +152,10 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
             const { state } = editor
             const nodeAtPos = state.doc.nodeAt(pos)
             if (nodeAtPos && nodeAtPos.type.name === 'image') {
-              // 设置拖拽效果
+              // Set drag effects
               if (e.dataTransfer) {
                 e.dataTransfer.effectAllowed = 'move'
-                // 创建拖拽预览图像（可选，提升用户体验）
+                // Create a drag preview image (optional, improves user experience)
                 const dragImage = img.cloneNode(true) as HTMLImageElement
                 dragImage.style.width = `${img.offsetWidth}px`
                 dragImage.style.height = `${img.offsetHeight}px`
@@ -172,7 +172,7 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
           }
         })
 
-        // 阻止调整手柄触发图片拖拽
+        // Prevent the resize handle from triggering image dragging
         if (resizeHandle) {
           resizeHandle.addEventListener('mousedown', (e) => {
             e.stopPropagation()
@@ -180,7 +180,7 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
         }
       }
 
-      // 拖拽调整大小（等比例缩放）- 仅在启用增强功能时
+      // Drag to resize (proportional scaling) - only when enhancement is enabled
       if (enableResize && resizeHandle) {
         let isResizing = false
         let startX = 0
@@ -190,20 +190,20 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
         let aspectRatio = 1
 
         const handleMouseDown = (e: MouseEvent) => {
-          // 阻止调整手柄触发图片拖拽，但允许调整大小
+          // Prevent the resize handle from triggering image dragging, but allow resizing
           e.preventDefault()
           e.stopPropagation()
-          // 临时禁用拖拽功能
+          // Temporarily disable dragging
           img.draggable = false
           isResizing = true
           startX = e.clientX
           startY = e.clientY
           
-          // 获取当前图片尺寸
+          // Get the current image dimensions
           startWidth = node.attrs.width || img.offsetWidth || img.naturalWidth
           startHeight = node.attrs.height || img.offsetHeight || img.naturalHeight
 
-          // 计算宽高比（优先使用自然尺寸）
+          // Calculate the aspect ratio (preferring natural dimensions)
           if (img.naturalWidth && img.naturalHeight) {
             aspectRatio = img.naturalHeight / img.naturalWidth
           } else if (startWidth && startHeight) {
@@ -220,18 +220,18 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
         const handleMouseMove = (e: MouseEvent) => {
           if (!isResizing) return
 
-          // 计算鼠标移动的距离（使用对角线距离，保持等比例）
+          // Calculate the mouse movement distance (using the diagonal distance to keep proportions)
           const deltaX = e.clientX - startX
           const deltaY = e.clientY - startY
           
-          // 使用较大的变化量来保持等比例
+          // Use the larger delta to keep the proportions
           const delta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY
           
-          // 计算新宽度（保持宽高比）
+          // Calculate the new width (keeping the aspect ratio)
           const newWidth = Math.max(50, Math.min(2000, startWidth + delta))
           const newHeight = newWidth * aspectRatio
 
-          // 实时更新图片尺寸
+          // Update the image size in real time
           img.style.width = `${newWidth}px`
           img.style.height = `${newHeight}px`
         }
@@ -245,7 +245,7 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
           const pos = typeof getPos === 'function' ? getPos() : null
 
           if (pos !== null && pos !== undefined) {
-            // 使用 editor 的链式命令更新图片尺寸
+            // Use the editor's chained command to update the image size
             const { state, view } = editor
             const { tr } = state
             const nodeAtPos = tr.doc.nodeAt(pos)
@@ -263,7 +263,7 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
           document.removeEventListener('mousemove', handleMouseMove)
           document.removeEventListener('mouseup', handleMouseUp)
           dom.classList.remove('resizing')
-          // 恢复拖拽功能
+          // Restore the drag functionality
           img.draggable = true
         }
 
@@ -274,12 +274,12 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
         dom,
         contentDOM: null,
         update: (updatedNode) => {
-          // 更新图片源
+          // Update the image source
           if (updatedNode.attrs.src !== node.attrs.src) {
             img.src = updatedNode.attrs.src
           }
 
-          // 更新图片尺寸
+          // Update the image size
           if (
             updatedNode.attrs.width !== node.attrs.width ||
             updatedNode.attrs.height !== node.attrs.height
@@ -297,7 +297,7 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
             }
           }
 
-          // 更新对齐方式
+          // Update the alignment
           if (updatedNode.attrs.align !== node.attrs.align) {
             if (updatedNode.attrs.align) {
               dom.style.textAlign = updatedNode.attrs.align
@@ -312,7 +312,7 @@ export const ResizableImage = Image.extend<ResizableImageOptions>({
           return true
         },
         destroy: () => {
-          // 清理工作（如果需要）
+          // Cleanup work (if needed)
         },
       }
     }

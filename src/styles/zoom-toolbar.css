@@ -1,6 +1,6 @@
-/* TiptapPro 缩放工具栏样式 */
+/* TiptapPro zoom toolbar styles */
 
-/* 缩放控制条 */
+/* Zoom control bar */
 .zoom-controls {
   display: flex;
   gap: 12px;
@@ -16,7 +16,7 @@
   }
 }
 
-/* 缩放显示数字 */
+/* Zoom level display */
 .zoom-level {
   min-width: 50px;
   font-size: 14px;
@@ -29,7 +29,7 @@
   }
 }
 
-/* 页数信息 */
+/* Page info */
 .page-info {
   margin-left: 8px;
   font-size: 13px;
@@ -40,7 +40,7 @@
   }
 }
 
-/* 字数统计 */
+/* Character count */
 .char-count {
   padding-left: 12px;
   margin-left: 8px;
@@ -54,7 +54,7 @@
   }
 }
 
-/* 变体：底部位置（固定在编辑器容器底部） */
+/* Variant: bottom position (fixed to the bottom of the editor container) */
 .zoom-controls--bottom {
   flex-shrink: 0;
   width: 100%;

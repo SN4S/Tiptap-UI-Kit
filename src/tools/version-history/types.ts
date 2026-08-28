@@ -1,78 +1,78 @@
 /**
  * Version History Types
- * @description 版本历史系统类型定义
+ * @description Type definitions for the version history system
  */
 
 import type { JSONContent } from '@tiptap/core'
 
-/** 版本记录 */
+/** Version record */
 export interface Version {
-  /** 版本 ID */
+  /** Version ID */
   id: string
-  /** 版本名称（可选，用户可手动命名） */
+  /** Version name (optional, user can manually name) */
   name?: string
-  /** 文档内容（JSON 格式） */
+  /** Document content (JSON format) */
   content: JSONContent
-  /** 创建时间戳 */
+  /** Creation timestamp */
   createdAt: number
-  /** 是否为自动保存 */
+  /** Whether it's an auto-save */
   isAutoSave: boolean
-  /** 字数统计 */
+  /** Word count */
   wordCount?: number
 }
 
-/** 版本差异 */
+/** Version diff */
 export interface VersionDiff {
-  /** 旧版本 ID */
+  /** Old version ID */
   oldVersionId: string
-  /** 新版本 ID */
+  /** New version ID */
   newVersionId: string
-  /** 差异内容（行级） */
+  /** Diff content (line-level) */
   changes: DiffChange[]
 }
 
-/** 差异变更项 */
+/** Diff change item */
 export interface DiffChange {
-  /** 变更类型 */
+  /** Change type */
   type: 'add' | 'remove' | 'unchanged'
-  /** 文本内容 */
+  /** Text content */
   text: string
-  /** 行号 */
+  /** Line number */
   lineNumber?: number
 }
 
-/** 版本历史配置 */
+/** Version history config */
 export interface VersionHistoryConfig {
-  /** 文档 ID（用于存储隔离） */
+  /** Document ID (for storage isolation) */
   documentId: string
-  /** 最大保存版本数 */
+  /** Maximum saved version count */
   maxVersions?: number
-  /** 自动保存间隔（毫秒），0 表示禁用 */
+  /** Auto-save interval (ms), 0 means disabled */
   autoSaveInterval?: number
-  /** 是否启用 */
+  /** Whether enabled */
   enabled?: boolean
 }
 
-/** 版本历史状态 */
+/** Version history state */
 export interface VersionHistoryState {
-  /** 所有版本 */
+  /** All versions */
   versions: Version[]
-  /** 当前选中的版本 ID（用于预览） */
+  /** Currently selected version ID (for preview) */
   selectedVersionId: string | null
-  /** 对比的版本 ID（用于对比视图） */
+  /** Comparison version ID (for diff view) */
   compareVersionId: string | null
-  /** 是否正在加载 */
+  /** Whether loading */
   loading: boolean
-  /** 面板是否打开 */
+  /** Whether panel is open */
   panelOpen: boolean
 }
 
-/** 默认配置 */
+/** Default config */
 export const DEFAULT_VERSION_HISTORY_CONFIG: Required<Omit<VersionHistoryConfig, 'documentId'>> = {
   maxVersions: 50,
-  autoSaveInterval: 60000, // 1 分钟
+  autoSaveInterval: 60000, // 1 minute
   enabled: true,
 }
 
-/** 存储键前缀 */
+/** Storage key prefix */
 export const STORAGE_KEY_PREFIX = 'tiptap-version-history'

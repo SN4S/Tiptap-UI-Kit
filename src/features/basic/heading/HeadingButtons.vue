@@ -16,8 +16,8 @@
 
 <script setup lang="ts">
 /**
- * HeadingButtons - 标题按钮组
- * @description 可复用的标题按钮组件（H1、H2、H3等）
+ * HeadingButtons - heading button group
+ * @description A reusable heading button component (H1, H2, H3, etc.)
  */
 import { computed } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -30,7 +30,7 @@ import type { HeadingLevel } from '@/configs/toolbar'
 // ===== Props =====
 interface Props {
   editor: Editor | null | undefined
-  /** 显示的标题级别，默认 [1, 2, 3] */
+  /** Heading levels to display, defaults to [1, 2, 3] */
   levels?: HeadingLevel[]
 }
 
@@ -38,14 +38,14 @@ const props = withDefaults(defineProps<Props>(), {
   levels: () => [1, 2, 3],
 })
 
-// 事务响应式 editor：isActive 高亮跟随光标/内容变化重新求值
+// Transaction-driven reactive editor: the isActive highlight is re-evaluated on cursor/content changes
 const editor = useReactiveEditor(() => props.editor)
 
-// ===== 工具函数 =====
+// ===== Utility functions =====
 const runCommand = createCommandRunner(editor)
 const { isHeadingActive } = createStateCheckers(editor)
 
-// ===== 标题配置 =====
+// ===== Heading configuration =====
 const headings = computed(() =>
   props.levels.map((level) => ({
     level,

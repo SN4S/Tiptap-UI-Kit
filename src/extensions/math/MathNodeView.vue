@@ -3,7 +3,7 @@
     :class="['math-node-wrapper', { 'is-block': node.attrs.block, 'is-editing': isEditing, 'is-selected': selected }]"
     :as="node.attrs.block ? 'div' : 'span'"
   >
-    <!-- 编辑模式 -->
+    <!-- Edit mode -->
     <div v-if="isEditing" class="math-editor">
       <textarea
         ref="textareaRef"
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <!-- 显示模式 -->
+    <!-- Display mode -->
     <span
       v-else
       class="math-display"
@@ -45,11 +45,11 @@ import { ref, computed, watch, nextTick, onMounted, shallowRef } from 'vue'
 import { NodeViewWrapper, nodeViewProps } from '@tiptap/vue-3'
 import { t } from '@/locales'
 
-// KaTeX 按需动态加载：只有当文档中真正渲染数学公式时才会下载 katex。
-// 注意：katex 的 CSS（katex/dist/katex.min.css）需由使用方自行引入。
+// KaTeX loaded on demand: katex is only downloaded when math formulas are actually rendered in the document.
+// Note: katex's CSS (katex/dist/katex.min.css) must be imported by the consumer.
 type KatexModule = typeof import('katex')['default']
 
-// 模块级缓存，多个公式节点共享同一次加载
+// Module-level cache, multiple formula nodes share the same load
 let katexModule: KatexModule | null = null
 let katexLoadPromise: Promise<KatexModule> | null = null
 
@@ -70,7 +70,7 @@ const latexInput = ref('')
 const renderError = ref<string | null>(null)
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
 
-// katex 加载完成后触发重新渲染（已加载过则立即可用）
+// Trigger re-render after katex finishes loading (already loaded -> immediately available)
 const katexRef = shallowRef<KatexModule | null>(katexModule)
 if (!katexModule) {
   loadKatex()
@@ -82,7 +82,7 @@ if (!katexModule) {
     })
 }
 
-// HTML 转义（katex 未加载时以纯文本形式展示原始 LaTeX）
+// HTML escaping (when katex isn't loaded, show the raw LaTeX as plain text)
 function escapeHtml(text: string): string {
   return text
     .replace(/&/g, '&amp;')
@@ -92,13 +92,13 @@ function escapeHtml(text: string): string {
     .replace(/'/g, '&#39;')
 }
 
-// 渲染 LaTeX 为 HTML
+// Render LaTeX as HTML
 function renderLatex(latex: string, displayMode: boolean): string {
   if (!latex.trim()) {
     return `<span class="math-placeholder">${t('editor.mathEmpty')}</span>`
   }
 
-  // katex 尚未加载完成：先显示原始 LaTeX 文本占位
+  // katex hasn't finished loading yet: show the raw LaTeX text as placeholder first
   if (!katexRef.value) {
     return `<span class="math-loading">${escapeHtml(latex)}</span>`
   }
@@ -118,17 +118,17 @@ function renderLatex(latex: string, displayMode: boolean): string {
   }
 }
 
-// 显示模式的 HTML
+// Display mode HTML
 const displayHtml = computed(() => {
   return renderLatex(props.node.attrs.latex, props.node.attrs.block)
 })
 
-// 预览 HTML
+// Preview HTML
 const previewHtml = computed(() => {
   return renderLatex(latexInput.value, props.node.attrs.block)
 })
 
-// 开始编辑
+// Start editing
 function startEdit() {
   if (props.editor?.isEditable === false) return
 
@@ -141,7 +141,7 @@ function startEdit() {
   })
 }
 
-// 保存并关闭
+// Save and close
 function saveAndClose() {
   if (latexInput.value !== props.node.attrs.latex) {
     props.updateAttributes({ latex: latexInput.value })
@@ -149,15 +149,15 @@ function saveAndClose() {
   isEditing.value = false
 }
 
-// 取消编辑
+// Cancel editing
 function cancelEdit() {
   isEditing.value = false
   latexInput.value = props.node.attrs.latex || ''
 }
 
-// 处理失焦
+// Handle blur
 function handleBlur(e: FocusEvent) {
-  // 如果点击的是编辑器内的按钮，不要关闭
+  // If the clicked element is a button inside the editor, don't close
   const relatedTarget = e.relatedTarget as HTMLElement
   if (relatedTarget?.closest('.math-editor')) {
     return
@@ -165,7 +165,7 @@ function handleBlur(e: FocusEvent) {
   saveAndClose()
 }
 
-// 处理点击（选中节点）
+// Handle click (select node)
 function handleClick() {
   const pos = props.getPos()
   if (typeof pos === 'number') {
@@ -173,14 +173,14 @@ function handleClick() {
   }
 }
 
-// 如果是新建的空公式，自动进入编辑模式
+// If it's a newly created empty formula, automatically enter edit mode
 onMounted(() => {
   if (!props.node.attrs.latex && props.editor?.isEditable) {
     startEdit()
   }
 })
 
-// 监听节点变化
+// Watch node changes
 watch(
   () => props.node.attrs.latex,
   (newLatex) => {
@@ -209,7 +209,7 @@ watch(
   border-radius: 4px;
 }
 
-/* 显示模式 */
+/* Display mode */
 .math-display {
   display: inline-block;
   padding: 2px 4px;
@@ -237,7 +237,7 @@ watch(
   font-style: italic;
 }
 
-/* katex 加载中：以等宽字体显示原始 LaTeX */
+/* katex loading: show raw LaTeX in monospace font */
 .math-loading {
   color: var(--tp-color-text-muted, #999);
   font-family: 'Fira Code', 'Monaco', monospace;
@@ -249,7 +249,7 @@ watch(
   font-size: 12px;
 }
 
-/* 编辑模式 */
+/* Edit mode */
 .math-editor {
   display: inline-flex;
   flex-direction: column;
@@ -329,7 +329,7 @@ watch(
   background: #40a9ff;
 }
 
-/* 深色模式 */
+/* Dark mode */
 [data-theme="dark"] .math-editor {
   background: #1f1f1f;
   border-color: #404040;

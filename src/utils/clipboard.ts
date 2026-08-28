@@ -1,12 +1,12 @@
 /**
  * Clipboard Utilities
- * @description 剪贴板操作工具函数
+ * @description Clipboard operation utility functions
  */
 
 import type { Editor } from '@tiptap/core'
 
 /**
- * 复制内容到剪贴板
+ * Copy content to clipboard
  */
 export async function copyToClipboard(
   editor: Editor,
@@ -26,7 +26,7 @@ export async function copyToClipboard(
 }
 
 /**
- * 剪切内容到剪贴板
+ * Cut content to clipboard
  */
 export async function cutToClipboard(
   editor: Editor,
@@ -49,7 +49,7 @@ export async function cutToClipboard(
 }
 
 /**
- * 从剪贴板粘贴内容
+ * Paste content from clipboard
  */
 export async function pasteFromClipboard(
   editor: Editor,
@@ -72,7 +72,7 @@ export async function pasteFromClipboard(
 }
 
 /**
- * 复制块内容
+ * Copy block content
  */
 export async function copyBlock(
   editor: Editor,
@@ -83,7 +83,7 @@ export async function copyBlock(
 }
 
 /**
- * 剪切块内容
+ * Cut block content
  */
 export async function cutBlock(
   editor: Editor,
@@ -94,7 +94,7 @@ export async function cutBlock(
 }
 
 /**
- * 删除块内容
+ * Delete block content
  */
 export function deleteBlock(editor: Editor, from: number, to: number): boolean {
   try {
@@ -107,7 +107,7 @@ export function deleteBlock(editor: Editor, from: number, to: number): boolean {
 }
 
 /**
- * 选中块内容
+ * Select block content
  */
 export function selectBlock(editor: Editor, from: number, to: number): boolean {
   try {
@@ -120,7 +120,7 @@ export function selectBlock(editor: Editor, from: number, to: number): boolean {
 }
 
 /**
- * 选中节点内容
+ * Select node content
  */
 export function selectNodeContent(
   editor: Editor,
@@ -144,7 +144,7 @@ export function selectNodeContent(
 }
 
 /**
- * 检查剪贴板权限
+ * Check clipboard permission
  */
 export async function hasClipboardPermission(): Promise<boolean> {
   try {

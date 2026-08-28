@@ -139,7 +139,7 @@ export function addAiHighlight(
     return;
   }
 
-  // 验证位置是否有效
+  // Validate whether the position is valid
   const docSize = doc.content.size;
   if (from < 0 || to < 0 || from > docSize || to > docSize || from > to) {
     console.warn('[AI Highlight] Invalid range for add:', { from, to, docSize });
@@ -168,7 +168,7 @@ export function updateAiHighlight(
     return;
   }
 
-  // 验证位置是否有效
+  // Validate whether the position is valid
   const docSize = doc.content.size;
   if (from < 0 || to < 0 || from > docSize || to > docSize || from > to) {
     console.warn('[AI Highlight] Invalid range for update:', { from, to, docSize });

@@ -1,46 +1,46 @@
 /**
  * Editor Constants
- * @description 编辑器常量配置（颜色、字体、字号等）
+ * @description Editor constant configuration (colors, fonts, font sizes, etc.)
  */
 
 /**
- * 文本颜色选项
+ * Text color options
  */
 export const TEXT_COLORS = [
-  '#000000', // 黑色
-  '#ff0000', // 红色
-  '#ff9900', // 橙色
-  '#ffff00', // 黄色
-  '#00ff00', // 绿色
-  '#00ffff', // 青色
-  '#0000ff', // 蓝色
-  '#9900ff', // 紫色
+  '#000000', // black
+  '#ff0000', // red
+  '#ff9900', // orange
+  '#ffff00', // yellow
+  '#00ff00', // green
+  '#00ffff', // cyan
+  '#0000ff', // blue
+  '#9900ff', // purple
 ] as const
 
 /**
- * 背景颜色选项
+ * Background color options
  */
 export const BACKGROUND_COLORS = [
-  '#ffffff', // 白色
-  '#f5f5f5', // 浅灰
-  '#e8f5e9', // 浅绿
-  '#e3f2fd', // 浅蓝
-  '#fff3e0', // 浅橙
-  '#fce4ec', // 浅粉
-  '#f3e5f5', // 浅紫
-  '#e0f2f1', // 浅青
+  '#ffffff', // white
+  '#f5f5f5', // light gray
+  '#e8f5e9', // light green
+  '#e3f2fd', // light blue
+  '#fff3e0', // light orange
+  '#fce4ec', // light pink
+  '#f3e5f5', // light purple
+  '#e0f2f1', // light cyan
 ] as const
 
 /**
- * 表格单元格背景颜色选项
+ * Table cell background color options
  */
 export const TABLE_CELL_COLORS = BACKGROUND_COLORS
 
 /**
- * 字体系列选项
+ * Font family options
  */
 export const FONT_FAMILIES = [
-  /** 空值表示不指定字体（跟随主题默认），显示文案由组件用 i18n 渲染 */
+  /** empty value means font follows theme default; display text is rendered by components using i18n */
   { label: 'Default', value: '' },
   { label: 'Arial', value: 'Arial' },
   { label: 'Georgia', value: 'Georgia' },
@@ -54,7 +54,7 @@ export const FONT_FAMILIES = [
 ] as const
 
 /**
- * 字号选项（中文印刷标准）
+ * Font size options (Chinese print standard)
  */
 export const FONT_SIZES = [
   { label: '12', value: '12px' },
@@ -68,7 +68,7 @@ export const FONT_SIZES = [
 ] as const
 
 /**
- * 行间距选项
+ * Line height options
  */
 export const LINE_HEIGHTS = [
   { label: '1.0', value: '1' },
@@ -79,7 +79,7 @@ export const LINE_HEIGHTS = [
 ] as const
 
 /**
- * 段落样式选项
+ * Paragraph style options
  */
 export const HEADING_OPTIONS = [
   { label: '正文', value: 'paragraph' },
@@ -92,7 +92,7 @@ export const HEADING_OPTIONS = [
 ] as const
 
 /**
- * 代码块语言选项
+ * Code block language options
  */
 export const CODE_LANGUAGES = [
   'javascript',
@@ -118,7 +118,7 @@ export const CODE_LANGUAGES = [
 ] as const
 
 /**
- * 对齐方式选项
+ * Alignment options
  */
 export const TEXT_ALIGN_OPTIONS = [
   { label: '左对齐', value: 'left' },
@@ -128,7 +128,7 @@ export const TEXT_ALIGN_OPTIONS = [
 ] as const
 
 /**
- * 表格边框样式选项
+ * Table border style options
  */
 export const TABLE_BORDER_STYLES = [
   { label: '默认边框', value: 'default' },
@@ -137,43 +137,43 @@ export const TABLE_BORDER_STYLES = [
 ] as const
 
 /**
- * 默认配置值
+ * Default config values
  */
 export const DEFAULT_VALUES = {
-  /** 默认字体（空值 = 跟随主题默认，不写入 style） */
+  /** default font (empty = follows theme default, not written into style) */
   fontFamily: '',
-  /** 默认字号 */
+  /** default font size */
   fontSize: '16px',
-  /** 默认行间距 */
+  /** default line height */
   lineHeight: '1.5',
-  /** 默认文本颜色 */
+  /** default text color */
   textColor: '#000000',
-  /** 默认背景颜色 */
+  /** default background color */
   backgroundColor: '#ffffff',
-  /** 默认对齐方式 */
+  /** default alignment */
   textAlign: 'left',
-  /** 默认代码语言 */
+  /** default code language */
   codeLanguage: 'javascript',
 } as const
 
 /**
- * 编辑器限制
+ * Editor limits
  */
 export const EDITOR_LIMITS = {
-  /** 最小缩放比例 */
+  /** minimum zoom */
   minZoom: 50,
-  /** 最大缩放比例 */
+  /** maximum zoom */
   maxZoom: 200,
-  /** 缩放步长 */
+  /** zoom step */
   zoomStep: 10,
-  /** 最大文档长度（字符数） */
+  /** maximum document length (characters) */
   maxDocumentLength: 1000000,
-  /** 最大标题级别 */
+  /** maximum heading level */
   maxHeadingLevel: 6,
 } as const
 
 /**
- * 快捷键配置
+ * Keyboard shortcut config
  */
 export const KEYBOARD_SHORTCUTS = {
   bold: 'Mod-b',
@@ -195,26 +195,26 @@ export const KEYBOARD_SHORTCUTS = {
 } as const
 
 /**
- * UI 配置
+ * UI config
  */
 export const UI_CONFIG = {
-  /** 工具栏按钮尺寸 */
+  /** toolbar button size */
   toolbarButtonSize: 28,
-  /** 工具栏高度 */
+  /** toolbar height */
   toolbarHeight: 56,
-  /** 工具栏间距 */
+  /** toolbar gap */
   toolbarGap: 6,
-  /** 颜色面板列数 */
+  /** color panel column count */
   colorPanelColumns: 8,
-  /** 颜色面板色块大小 */
+  /** color panel swatch size */
   colorItemSize: 24,
-  /** 浮动菜单偏移 */
+  /** bubble menu offset */
   bubbleMenuOffset: 8,
 } as const
 
 /**
- * @note 所有类型定义已统一迁移到 shared/configs/toolbar.ts
- * 如需使用类型，请从 shared/configs/toolbar 导入
- * 此文件仅保留常量配置，类型定义已移除
+ * @note all type definitions have been migrated to shared/configs/toolbar.ts
+ * To use types, import from shared/configs/toolbar
+ * This file only keeps constant configs; type definitions have been removed
  */
 

@@ -1,105 +1,105 @@
 /**
  * TiptapPro Tenant Editor Types
- * @description 编辑器类型定义（支持版本配置）
+ * @description Editor type definitions (supports version configuration)
  */
 import type { JSONContent } from '@tiptap/core'
 import type { Editor } from '@tiptap/vue-3'
 
 /**
- * 版本类型
+ * Version type
  */
 export type EditorVersion = 'minimal' | 'basic' | 'advanced' | 'premium'
 
 /**
- * 编辑器功能配置
+ * Editor feature configuration
  */
 export interface FeatureConfig {
-  /** 是否启用拖拽功能 */
+  /** Whether to enable drag functionality */
   dragHandle?: boolean
-  /** 是否启用六个点（拖拽手柄菜单）功能 */
+  /** Whether to enable the six-dot (drag handle menu) feature */
   dragHandleMenu?: boolean
-  /** 是否启用表格功能 */
+  /** Whether to enable table feature */
   table?: boolean
-  /** 是否启用表格工具栏（默认关闭，需显式开启） */
+  /** Whether to enable the table toolbar (disabled by default, must be explicitly enabled) */
   tableToolbar?: boolean
-  /** 是否启用@提及功能 */
+  /** Whether to enable @mention feature */
   mention?: boolean
-  /** 是否启用斜杠命令菜单（输入 / 弹出块类型选择） */
+  /** Whether to enable slash command menu (type / to show block type selection) */
   slashCommand?: boolean
-  /** 是否启用 AI 文档助手聊天面板（文字指令编辑文档），跟随 AI 功能开启，可显式关闭 */
+  /** Whether to enable the AI document assistant chat panel (text-command editing), follows the AI feature, can be explicitly disabled */
   aiChat?: boolean
-  /** 是否显示「AI 设置」入口（终端用户自填 API Key 的弹窗）。
-   *  面向公众的站点建议关闭——访客不会在陌生网页填自己的 Key，AI 配置应由集成方在工程中完成 */
+  /** Whether to show the "AI Settings" entry (dialog where end users enter their own API Key).
+   *  Recommended to disable for public-facing sites - visitors won't fill in their keys on unfamiliar pages; AI configuration should be done by the integrator in the project */
   aiSettings?: boolean
-  /** 是否启用悬浮框功能 */
+  /** Whether to enable the floating menu feature */
   floatingMenu?: boolean
-  /** 是否启用图片工具栏功能 */
+  /** Whether to enable the image toolbar feature */
   image?: boolean
-  /** 是否启用链接悬浮框功能 */
+  /** Whether to enable the link bubble menu feature */
   linkBubbleMenu?: boolean
-  /** 是否启用协作编辑功能 */
+  /** Whether to enable collaboration editing */
   collaboration?: boolean
-  /** 是否启用头部导航 */
+  /** Whether to enable the header navigation */
   headerNav?: boolean
-  /** 是否启用底部导航 */
+  /** Whether to enable the footer navigation */
   footerNav?: boolean
 }
 
 /**
- * 版本配置接口
+ * Version configuration interface
  */
 export interface VersionConfig {
-  /** 版本类型（基础版/进阶版/高级版） */
+  /** Version type (basic/advanced/pro) */
   version?: EditorVersion
-  /** 功能开关配置 */
+  /** Feature toggle configuration */
   features?: {
-    /** 基础版功能 */
+    /** Basic version features */
     basic?: boolean
-    /** 进阶版功能 */
+    /** Advanced version features */
     advanced?: boolean
-    /** AI功能 */
+    /** AI features */
     ai?: boolean
-    /** 协作编辑 */
+    /** Collaboration editing */
     collaboration?: boolean
-    /** 头部导航 */
+    /** Header navigation */
     headerNav?: boolean
-    /** 底部导航 */
+    /** Footer navigation */
     footerNav?: boolean
-    /** 预览模式 */
+    /** Preview mode */
     previewMode?: boolean
   }
 }
 
 /**
- * 编辑器 Props
+ * Editor Props
  */
 export interface TiptapProEditorProps {
-  /** 版本配置 */
+  /** Version configuration */
   version?: EditorVersion
-  /** 版本配置对象（与 version 二选一） */
+  /** Version config object (mutually exclusive with version) */
   versionConfig?: VersionConfig
-  /** 缩放条位置：底部固定或工具栏下方 */
+  /** Zoom bar placement: bottom fixed or below toolbar */
   zoomBarPlacement?: 'bottom' | 'belowToolbar'
-  /** 是否为只读模式 */
+  /** Whether readonly mode */
   readonly?: boolean
-  /** 是否为预览模式（无头部/底部导航，不可编辑，不可点击） */
+  /** Whether preview mode (no header/footer navigation, non-editable, non-clickable) */
   previewMode?: boolean
-  /** 文档ID(用于加载和保存以及协同房间) */
+  /** Document ID (used for loading, saving and the collaboration room) */
   documentId?: string
-  /** v-model 绑定内容 - HTML 字符串或 JSON 对象（传字符串时同步 HTML，传对象时同步 JSON）；优先于 initialContent 作为初始内容 */
+  /** v-model bound content - HTML string or JSON object (HTML synced when string, JSON when object); takes priority over initialContent as initial content */
   modelValue?: string | object
-  /** 初始内容 - 可以是 HTML 字符串或 JSON 对象（ProseMirror 格式） */
+  /** initial content - can be HTML string or JSON object (ProseMirror format) */
   initialContent?: string | object
-  /** 表格悬浮框显示模式：1=聚焦显示；2=单元格选中显示 */
+  /** Table bubble display mode: 1=focus display; 2=cell-selected display */
   tableMenuShowMode?: 1 | 2
-  /** 功能配置（兼容旧版） */
+  /** Feature config (backward-compatible) */
   features?: FeatureConfig
-  /** 语言设置 */
+  /** Language setting */
   locale?: string
 }
 
 /**
- * 协作用户信息
+ * Collaborator user info
  */
 export interface CollaboratorInfo {
   id: string | number
@@ -108,7 +108,7 @@ export interface CollaboratorInfo {
 }
 
 /**
- * 编辑器实例引用
+ * Editor instance reference
  */
 export interface EditorInstance {
   editor: Editor | null
@@ -119,7 +119,7 @@ export interface EditorInstance {
 }
 
 /**
- * 编辑器暴露的方法
+ * Editor exposed methods
  */
 export interface TiptapProEditorExpose {
   getEditor: () => Editor | null

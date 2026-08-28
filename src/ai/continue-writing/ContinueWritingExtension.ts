@@ -58,7 +58,7 @@ export const ContinueWritingExtension =
 
             if (!selectedText.trim()) {
               console.warn('[Continue Writing] No text selected');
-              // 显示用户友好的提示
+              // Show a user-friendly prompt
               notification.warning({
                 message: t('editor.pleaseSelectText'),
                 description: t('editor.continueWritingRequiresSelection'),
@@ -104,7 +104,7 @@ let continueWritingPopoverApp: App | null = null;
 let continueWritingContainer: HTMLElement | null = null;
 let currentEditor: Editor | null = null;
 let currentSelection: null | { from: number; to: number } = null;
-let originalSelectedRange: null | { from: number; to: number } = null; // 保存用户原始选中的文字范围
+let originalSelectedRange: null | { from: number; to: number } = null; // Saves the user's originally selected text range
 
 // Reactive refs for the popover
 const visibleRef = ref(false);
@@ -123,7 +123,7 @@ function performContinueWriting(
   insertPosition: number,
   userSelectedRange: { from: number; to: number },
 ) {
-  // 先清理所有现有的 AI 高亮，避免与其他 AI 功能冲突
+  // First clear all existing AI highlights to avoid conflicts with other AI features
   removeAiHighlight(editor);
 
   currentEditor = editor;
@@ -193,7 +193,7 @@ function performContinueWriting(
         // Update the suggestion in popover
         suggestedTextRef.value = accumulatedContent;
 
-        // Update the mark data (验证 selection 是否仍然有效)
+        // Update the mark data (validate whether the selection is still valid)
         if (currentSelection && currentEditor) {
           const { state } = currentEditor;
           const { doc } = state;
@@ -223,7 +223,7 @@ function performContinueWriting(
         // Stop streaming indicator
         isStreamingRef.value = false;
 
-        // Update the mark data (验证 selection 是否仍然有效)
+        // Update the mark data (validate whether the selection is still valid)
         if (currentSelection && currentEditor) {
           const { state } = currentEditor;
           const { doc } = state;
@@ -385,7 +385,7 @@ function handleAccept(): void {
   const { state } = currentEditor;
   const { doc } = state;
 
-  // 验证 selection 是否仍然有效
+  // Validate whether the selection is still valid
   const docSize = doc.content.size;
   if (!isValidSelection(currentSelection, docSize)) {
     console.warn('[Continue Writing] Invalid selection range, cannot accept');

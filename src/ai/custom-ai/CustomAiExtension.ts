@@ -54,7 +54,7 @@ export const CustomAiExtension = Extension.create<CustomAiOptions>({
           // Get selected text (may be empty)
           const selectedText = state.doc.textBetween(from, to, ' ');
 
-          // 要求必须选中文字才能使用自定义AI
+          // Custom AI requires text to be selected
           if (!selectedText.trim()) {
             notification.warning({
               message: t('editor.pleaseSelectText'),
@@ -262,7 +262,7 @@ function handleAccept(): void {
   const { state } = currentEditor;
   const { doc } = state;
 
-  // 验证 selection 是否仍然有效
+  // Validate whether the selection is still valid
   const docSize = doc.content.size;
   if (!isValidSelection(currentSelection, docSize)) {
     console.warn('[Custom AI] Invalid selection range, cannot accept');
@@ -349,7 +349,7 @@ function performCustomAi(
         // Update the suggestion in popover
         suggestedTextRef.value = accumulatedContent;
 
-        // Update the mark data (验证 selection 是否仍然有效)
+        // Update the mark data (validate whether the selection is still valid)
         if (currentSelection && currentEditor) {
           const { state } = currentEditor;
           const { doc } = state;
@@ -379,7 +379,7 @@ function performCustomAi(
         // Stop streaming indicator
         isStreamingRef.value = false;
 
-        // Update the mark data (验证 selection 是否仍然有效)
+        // Update the mark data (validate whether the selection is still valid)
         if (currentSelection && currentEditor) {
           const { state } = currentEditor;
           const { doc } = state;

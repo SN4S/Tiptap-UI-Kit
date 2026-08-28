@@ -1,9 +1,9 @@
 /**
- * Bubble Menu 样式
- * @description 悬浮气泡菜单（依赖 base.css）
+ * Bubble Menu Styles
+ * @description Floating bubble menu (depends on base.css)
  */
 
-/* 气泡菜单容器 */
+/* Bubble menu container */
 .bubble-menu {
   z-index: 1010;
   display: flex;
@@ -12,35 +12,35 @@
   border-radius: var(--tp-menu-radius, 8px);
   box-shadow: var(--tp-menu-shadow, 0 4px 12px rgb(0 0 0 / 15%));
 
-  /* 出现动画：轻量淡入 + 上移（keyframes 定义于 base.css） */
+  /* Entrance animation: light fade-in + move up (keyframes defined in base.css) */
   animation: tp-fade-in 0.12s ease both;
 }
 
-/* 暗黑模式 - 气泡菜单 */
+/* Dark mode - bubble menu */
 :where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *) .bubble-menu {
   background: #1f1f1f;
   box-shadow: 0 4px 12px rgb(0 0 0 / 40%);
   border: 1px solid #434343;
 }
 
-/* 气泡菜单按钮 */
+/* Bubble menu buttons */
 .bubble-btn {
   color: var(--tp-color-text, #333);
 }
 
-/* 暗黑模式 - 按钮 */
+/* Dark mode - buttons */
 :where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *) .bubble-btn {
   color: rgba(255, 255, 255, 0.85);
 }
 
-/* 标题按钮 */
+/* Heading buttons */
 .heading-btn {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
   font-weight: bold;
 }
 
-/* 颜色选择面板（使用公共样式） */
+/* Color selection panel (uses shared styles) */
 .color-panel {
   display: grid;
   grid-template-columns: repeat(8, 24px);
@@ -68,7 +68,7 @@
   box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
 }
 
-/* 响应式 */
+/* Responsive */
 @media (max-width: 768px) {
   .bubble-menu-content {
     gap: 2px;

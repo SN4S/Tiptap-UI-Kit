@@ -1,5 +1,5 @@
 /**
- * DeviceSwitcher - 设备视图切换组件
+ * DeviceSwitcher - Device view switcher component
  * @module tools/device-switcher
  */
 

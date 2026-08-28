@@ -13,8 +13,8 @@
 
 <script setup lang="ts">
 /**
- * ZoomBar - 缩放控制栏组件
- * @description 提供文档缩放、页数统计和字数统计功能
+ * ZoomBar - zoom control bar component
+ * @description Provides document zoom, page count, and character/word count features
  */
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { Button as AButton } from 'ant-design-vue'
@@ -50,7 +50,7 @@ const emit = defineEmits<{
 }>()
 
 /**
- * 放大缩放
+ * Zoom in
  */
 const onZoomIn = () => {
   if (props.zoomLevel < props.max) {
@@ -61,7 +61,7 @@ const onZoomIn = () => {
 }
 
 /**
- * 缩小缩放
+ * Zoom out
  */
 const onZoomOut = () => {
   if (props.zoomLevel > props.min) {
@@ -72,7 +72,7 @@ const onZoomOut = () => {
 }
 
 /**
- * 重置缩放
+ * Reset zoom
  */
 const onReset = () => {
   const v = 100
@@ -82,7 +82,7 @@ const onReset = () => {
 }
 
 /**
- * 计算样式类名
+ * Compute the style class names
  */
 const classes = computed(() =>
   ['zoom-controls', props.placement === 'bottom' ? 'zoom-controls--bottom' : null]
@@ -91,13 +91,13 @@ const classes = computed(() =>
 )
 
 /**
- * 字符数和字数统计（响应式）
+ * Character and word count statistics (reactive)
  */
 const characterCount = ref(0)
 const wordCount = ref(0)
 
 /**
- * 更新字数统计
+ * Update the word count statistics
  */
 const updateCounts = () => {
   if (!props.editor) {
@@ -122,31 +122,31 @@ const updateCounts = () => {
   }
 }
 
-// 防抖：避免每次按键都全文重算字数
+// Debounce: avoid recomputing the word count over the whole document on every keystroke
 const debouncedUpdateCounts = debounce(updateCounts, 200)
 
-// 监听编辑器内容变化（只监听 update：光标移动无需重算字数）
+// Watch editor content changes (only listen to update: cursor movement does not require recomputing the word count)
 watch(
   () => props.editor,
   (editor, oldEditor) => {
     if (oldEditor) {
-      // 编辑器切换/销毁时清理旧监听
+      // Clean up old listeners when the editor changes/gets destroyed
       oldEditor.off('update', debouncedUpdateCounts)
     }
     if (editor) {
-      // 初始化时立即更新一次
+      // Update once immediately on initialization
       updateCounts()
-      // 监听编辑器更新事件（防抖）
+      // Listen for editor update events (debounced)
       editor.on('update', debouncedUpdateCounts)
     } else {
-      // 编辑器销毁时归零
+      // Reset to zero when the editor is destroyed
       updateCounts()
     }
   },
   { immediate: true }
 )
 
-// 组件卸载时统一清理
+// Clean up uniformly when the component is unmounted
 onBeforeUnmount(() => {
   debouncedUpdateCounts.cancel()
   props.editor?.off('update', debouncedUpdateCounts)

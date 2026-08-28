@@ -7,7 +7,7 @@
     />
   </ToolbarGroup>
 
-  <!-- 模板选择模态框 -->
+  <!-- Template selection modal -->
   <a-modal
     v-model:open="templateModalOpen"
     :title="t('editor.insertTemplate')"
@@ -35,8 +35,8 @@
 
 <script setup lang="ts">
 /**
- * TemplateButton - 模板插入按钮
- * @description 支持从内置模板和自定义模板中选择并插入到编辑器
+ * TemplateButton - template insertion button
+ * @description Supports selecting from built-in and custom templates and inserting them into the editor
  */
 import { computed, ref } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
@@ -50,7 +50,7 @@ import type { TemplateItem } from './templates'
 // ===== Props =====
 interface Props {
   editor: Editor | null | undefined
-  /** 自定义模板列表（可选，会追加到内置模板后面） */
+  /** Custom template list (optional, appended after the built-in templates) */
   customTemplates?: TemplateItem[]
 }
 
@@ -61,17 +61,17 @@ const props = withDefaults(defineProps<Props>(), {
 const editor = computed(() => props.editor ?? null)
 const runCommand = createCommandRunner(editor)
 
-// ===== 状态 =====
+// ===== State =====
 const templateModalOpen = ref(false)
 
-// ===== 合并模板列表 =====
+// ===== Merged template list =====
 const allTemplates = computed(() => [
   ...builtinTemplates,
   ...props.customTemplates,
 ])
 
 /**
- * 插入模板内容到编辑器
+ * Insert the template content into the editor
  */
 function insertTemplate(tpl: TemplateItem) {
   runCommand((chain) => chain.insertContent(tpl.content))()

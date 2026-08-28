@@ -1,6 +1,6 @@
 /**
  * Word Theme Preset
- * 类似 Microsoft Word 的专业文档风格
+ * Professional document style similar to Microsoft Word
  */
 
 .theme-word {
@@ -37,7 +37,7 @@
   --tiptap-line-height: 1.5;
 }
 
-/* Word 风格 - 厚重工具栏 (sticky 定位) */
+/* Word Style - Heavy Toolbar (sticky positioning) */
 .theme-word .word-toolbar {
   position: sticky;
   top: 0;
@@ -47,14 +47,14 @@
   padding: 4px 8px;
 }
 
-/* Word 风格 - A4 纸张 */
+/* Word Style - A4 Paper */
 .theme-word .continuous-pages {
   max-width: 816px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   border-radius: 0;
 }
 
-/* Word 风格 - 专业标题 */
+/* Word Style - Professional Headings */
 .theme-word .ProseMirror h1 {
   font-size: 26pt;
   font-weight: bold;
@@ -79,13 +79,13 @@
   margin-bottom: 8px;
 }
 
-/* Word 风格 - 段落缩进 */
+/* Word Style - Paragraph Indentation */
 .theme-word .ProseMirror p {
   text-indent: 0;
   margin-bottom: 8pt;
 }
 
-/* Word 深色模式 */
+/* Word Dark Mode */
 .theme-word[data-theme="dark"] {
   --tiptap-bg: #1e1e1e;
   --tiptap-bg-secondary: #252525;

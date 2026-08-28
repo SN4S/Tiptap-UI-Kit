@@ -7,7 +7,7 @@
       :style="menuStyle"
       @mousedown.prevent
     >
-      <!-- 搜索结果 -->
+      <!-- Search results -->
       <div v-if="filteredGroups.length > 0" class="slash-command-list">
         <template v-for="group in filteredGroups" :key="group.title">
           <div class="slash-command-group-title">{{ group.title }}</div>
@@ -30,21 +30,21 @@
         </template>
       </div>
 
-      <!-- 无结果 -->
+      <!-- No results -->
       <div v-else class="slash-command-empty">
         {{ t('slashCommand.noResults') }}
       </div>
     </div>
 
-    <!-- 遮罩层 -->
+    <!-- Backdrop -->
     <div v-if="isVisible" class="slash-command-backdrop" @mousedown="hide" />
   </teleport>
 </template>
 
 <script setup lang="ts">
 /**
- * SlashCommandMenu - 斜杠命令菜单组件
- * @description 输入 / 时弹出的块类型选择菜单
+ * SlashCommandMenu - Slash command menu component
+ * @description Block type selection menu that appears when typing /
  */
 import { computed, ref, watch, nextTick, onMounted, onUnmounted, type Component } from 'vue'
 import type { Editor } from '@tiptap/core'
@@ -281,7 +281,7 @@ const menuStyle = computed(() => ({
 // ============================================================================
 
 /**
- * 计算某个 item 在 flatItems 中的索引
+ * Calculate the flat index of an item in flatItems
  */
 function isFlatIndex(group: SlashCommandGroup, itemIdx: number): number {
   let idx = 0
@@ -293,25 +293,25 @@ function isFlatIndex(group: SlashCommandGroup, itemIdx: number): number {
 }
 
 /**
- * 选中菜单项并执行对应操作
+ * Select menu item and execute corresponding action
  */
 function selectItem(item: SlashCommandItem) {
   const editor = props.editor
   if (!editor) return
 
-  // 先删除 / 及其后续查询文本
+  // First delete / and the following query text
   const pluginState = slashCommandKey.getState(editor.state) as SlashCommandState | undefined
   if (pluginState?.range) {
     editor.chain().focus().deleteRange(pluginState.range).run()
   }
 
-  // 执行命令
+  // Execute command
   item.action(editor)
   hide()
 }
 
 /**
- * 激活菜单
+ * Activate menu
  */
 function activate(state: SlashCommandState) {
   if (!state.decorationPosition) return
@@ -326,7 +326,7 @@ function activate(state: SlashCommandState) {
 }
 
 /**
- * 隐藏菜单
+ * Hide menu
  */
 function hide() {
   if (!isVisible.value) return
@@ -334,7 +334,7 @@ function hide() {
   query.value = ''
   selectedIndex.value = 0
 
-  // 通过 plugin meta 关闭
+  // Close via plugin meta
   const editor = props.editor
   if (editor) {
     const { tr } = editor.state
@@ -344,7 +344,7 @@ function hide() {
 }
 
 /**
- * 更新查询
+ * Update query
  */
 function updateQuery(newQuery: string) {
   query.value = newQuery
@@ -352,7 +352,7 @@ function updateQuery(newQuery: string) {
 }
 
 /**
- * 调整菜单位置，避免溢出
+ * Adjust menu position to avoid overflow
  */
 function adjustPosition() {
   const el = menuRef.value
@@ -365,14 +365,14 @@ function adjustPosition() {
 
   let { x, y } = position.value
 
-  // 右侧溢出
+  // Right overflow
   if (x + rect.width + margin > viewportWidth) {
     x = viewportWidth - rect.width - margin
   }
 
-  // 底部溢出 - 移到光标上方
+  // Bottom overflow - move above cursor
   if (y + rect.height + margin > viewportHeight) {
-    y = y - rect.height - 24 // 光标高度约 24px
+    y = y - rect.height - 24 // Cursor height is approximately 24px
   }
 
   position.value = { x: Math.max(margin, x), y: Math.max(margin, y) }
@@ -435,7 +435,7 @@ onUnmounted(() => {
   document.removeEventListener('keydown', handleKeyDown, true)
 })
 
-// 监听查询变化，重置选中项
+// Watch query changes, reset selected item
 watch(query, () => {
   selectedIndex.value = 0
 })

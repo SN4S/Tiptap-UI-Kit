@@ -56,7 +56,7 @@ export function getBaseUrl(provider: string, customUrl: string): string {
     anthropic: 'https://api.anthropic.com/v1',
     aliyun: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
     deepseek: 'https://api.deepseek.com/v1',
-    // Ollama 的 OpenAI 兼容端点（/api 是其私有协议，不兼容 /chat/completions）
+    // Ollama's OpenAI-compatible endpoint (/api is its private protocol, not compatible with /chat/completions)
     ollama: 'http://localhost:11434/v1',
   }
   return urls[provider] || urls.openai

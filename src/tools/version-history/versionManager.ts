@@ -1,6 +1,6 @@
 /**
  * Version Manager
- * @description 版本历史 localStorage 管理器
+ * @description Version history localStorage manager
  */
 
 import type { JSONContent } from '@tiptap/core'
@@ -8,21 +8,21 @@ import type { Version, VersionHistoryConfig, DiffChange } from './types'
 import { STORAGE_KEY_PREFIX, DEFAULT_VERSION_HISTORY_CONFIG } from './types'
 
 /**
- * 生成唯一 ID
+ * Generate unique ID
  */
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
 }
 
 /**
- * 获取存储键
+ * Get storage key
  */
 function getStorageKey(documentId: string): string {
   return `${STORAGE_KEY_PREFIX}-${documentId}`
 }
 
 /**
- * 安全的 localStorage 操作
+ * Safe localStorage operations
  */
 function safeGetItem(key: string): string | null {
   try {
@@ -42,7 +42,7 @@ function safeSetItem(key: string, value: string): boolean {
 }
 
 /**
- * 将 JSON 内容转换为纯文本（用于对比和字数统计）
+ * Convert JSON content to plain text (for diffing and word count)
  */
 export function jsonToPlainText(content: JSONContent): string {
   if (!content) return ''
@@ -67,10 +67,10 @@ export function jsonToPlainText(content: JSONContent): string {
 }
 
 /**
- * 统计字数
+ * Count words
  */
 export function countWords(text: string): number {
-  // 中文按字符计数，英文按单词计数
+  // Chinese characters counted individually, English words counted by word
   const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length
   const englishWords = text
     .replace(/[\u4e00-\u9fa5]/g, ' ')
@@ -80,14 +80,14 @@ export function countWords(text: string): number {
 }
 
 /**
- * 简单的文本差异对比
+ * Simple text diff comparison
  */
 export function computeDiff(oldText: string, newText: string): DiffChange[] {
   const oldLines = oldText.split('\n')
   const newLines = newText.split('\n')
   const changes: DiffChange[] = []
 
-  // 使用简单的 LCS 算法进行对比
+  // Use simple LCS algorithm for comparison
   const maxLen = Math.max(oldLines.length, newLines.length)
 
   let oldIdx = 0
@@ -98,33 +98,33 @@ export function computeDiff(oldText: string, newText: string): DiffChange[] {
     const newLine = newLines[newIdx]
 
     if (oldIdx >= oldLines.length) {
-      // 新增行
+      // Added line
       changes.push({ type: 'add', text: newLine, lineNumber: newIdx + 1 })
       newIdx++
     } else if (newIdx >= newLines.length) {
-      // 删除行
+      // Removed line
       changes.push({ type: 'remove', text: oldLine, lineNumber: oldIdx + 1 })
       oldIdx++
     } else if (oldLine === newLine) {
-      // 相同行
+      // Same line
       changes.push({ type: 'unchanged', text: newLine, lineNumber: newIdx + 1 })
       oldIdx++
       newIdx++
     } else {
-      // 找到下一个匹配点
+      // Find next matching point
       let foundInNew = newLines.slice(newIdx + 1).indexOf(oldLine)
       let foundInOld = oldLines.slice(oldIdx + 1).indexOf(newLine)
 
       if (foundInNew >= 0 && (foundInOld < 0 || foundInNew <= foundInOld)) {
-        // 新版本有插入
+        // New version has insertion
         changes.push({ type: 'add', text: newLine, lineNumber: newIdx + 1 })
         newIdx++
       } else if (foundInOld >= 0) {
-        // 旧版本有删除
+        // Old version has deletion
         changes.push({ type: 'remove', text: oldLine, lineNumber: oldIdx + 1 })
         oldIdx++
       } else {
-        // 修改
+        // Modified
         changes.push({ type: 'remove', text: oldLine, lineNumber: oldIdx + 1 })
         changes.push({ type: 'add', text: newLine, lineNumber: newIdx + 1 })
         oldIdx++
@@ -132,7 +132,7 @@ export function computeDiff(oldText: string, newText: string): DiffChange[] {
       }
     }
 
-    // 防止无限循环
+    // Prevent infinite loop
     if (oldIdx + newIdx > maxLen * 3) break
   }
 
@@ -140,7 +140,7 @@ export function computeDiff(oldText: string, newText: string): DiffChange[] {
 }
 
 /**
- * 版本管理器
+ * Version Manager
  */
 export class VersionManager {
   private documentId: string
@@ -156,7 +156,7 @@ export class VersionManager {
   }
 
   /**
-   * 获取所有版本
+   * Get all versions
    */
   getVersions(): Version[] {
     const data = safeGetItem(getStorageKey(this.documentId))
@@ -164,7 +164,7 @@ export class VersionManager {
 
     try {
       const versions = JSON.parse(data) as Version[]
-      // 按时间倒序排列
+      // Sort by time in descending order
       return versions.sort((a, b) => b.createdAt - a.createdAt)
     } catch {
       return []
@@ -172,7 +172,7 @@ export class VersionManager {
   }
 
   /**
-   * 获取单个版本
+   * Get a single version
    */
   getVersion(versionId: string): Version | null {
     const versions = this.getVersions()
@@ -180,7 +180,7 @@ export class VersionManager {
   }
 
   /**
-   * 保存新版本
+   * Save new version
    */
   saveVersion(content: JSONContent, name?: string, isAutoSave: boolean = false): Version {
     const versions = this.getVersions()
@@ -195,20 +195,20 @@ export class VersionManager {
       wordCount: countWords(plainText),
     }
 
-    // 添加到开头
+    // Add to beginning
     versions.unshift(newVersion)
 
-    // 限制版本数量
+    // Limit version count
     const trimmedVersions = versions.slice(0, this.config.maxVersions)
 
-    // 保存
+    // Save
     safeSetItem(getStorageKey(this.documentId), JSON.stringify(trimmedVersions))
 
     return newVersion
   }
 
   /**
-   * 删除版本
+   * Delete version
    */
   deleteVersion(versionId: string): boolean {
     const versions = this.getVersions()
@@ -223,7 +223,7 @@ export class VersionManager {
   }
 
   /**
-   * 重命名版本
+   * Rename version
    */
   renameVersion(versionId: string, name: string): boolean {
     const versions = this.getVersions()
@@ -237,7 +237,7 @@ export class VersionManager {
   }
 
   /**
-   * 对比两个版本
+   * Compare two versions
    */
   compareVersions(oldVersionId: string, newVersionId: string): DiffChange[] {
     const oldVersion = this.getVersion(oldVersionId)
@@ -252,7 +252,7 @@ export class VersionManager {
   }
 
   /**
-   * 清除所有版本
+   * Clear all versions
    */
   clearAllVersions(): void {
     try {
@@ -263,7 +263,7 @@ export class VersionManager {
   }
 
   /**
-   * 检查是否应该自动保存（内容发生变化）
+   * Check if auto-save should trigger (content has changed)
    */
   shouldAutoSave(content: JSONContent): boolean {
     const versions = this.getVersions()
@@ -273,13 +273,13 @@ export class VersionManager {
     const currentText = jsonToPlainText(content)
     const latestText = jsonToPlainText(latestVersion.content)
 
-    // 内容不同才保存
+    // Only save if content is different
     return currentText !== latestText
   }
 }
 
 /**
- * 创建版本管理器
+ * Create version manager
  */
 export function createVersionManager(config: VersionHistoryConfig): VersionManager {
   return new VersionManager(config)

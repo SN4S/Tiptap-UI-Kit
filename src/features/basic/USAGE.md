@@ -1,12 +1,12 @@
-# Basic 文件夹使用说明
+# Basic Folder Usage Guide
 
-## 📍 引用位置
+## 📍 Reference locations
 
-`basic` 文件夹主要在以下位置被引入使用：
+The `basic` folder is mainly imported and used in the following locations:
 
-### 1. 核心编辑器组件
+### 1. Core editor component
 
-**文件：** `core/TiptapProEditor.vue`
+**File:** `core/TiptapProEditor.vue`
 
 ```vue
 <template>
@@ -14,23 +14,23 @@
 </template>
 
 <script setup lang="ts">
-// 公共工具栏（已迁移）
+// Public toolbar (migrated)
 import { ToolbarNav, BASIC_TOOLBAR_CONFIG } from '../tools/header-nav'
 </script>
 ```
 
-### 2. 统一导出入口
+### 2. Unified export entry
 
-**文件：** `components/tiptapPro-tenant/index.ts`
+**File:** `components/tiptapPro-tenant/index.ts`
 
 ```typescript
-// 核心编辑器
+// Core editor
 export { default as TiptapProEditor } from './core/TiptapProEditor.vue'
 ```
 
-### 3. 实际使用位置
+### 3. Actual usage location
 
-**文件：** `views/tiptap-pro-tenant-demo/index.vue`
+**File:** `views/tiptap-pro-tenant-demo/index.vue`
 
 ```vue
 <template>
@@ -46,17 +46,17 @@ import { TiptapProEditor } from '#/components/tiptapPro-tenant'
 </script>
 ```
 
-## 🔗 引用链
+## 🔗 Reference chain
 
 ```
 views/tiptap-pro-tenant-demo/index.vue
-  ↓ 导入
+  ↓ imports
 components/tiptapPro-tenant/index.ts
-  ↓ 导出
+  ↓ exports
 core/TiptapProEditor.vue
-  ↓ 引入
+  ↓ imports
 tools/header-nav/ToolbarNav.vue
-  ↓ 使用
+  ↓ uses
 basic/text-format/TextFormatButtons.vue
 basic/heading/HeadingDropdown.vue
 basic/align/AlignDropdown.vue
@@ -64,10 +64,9 @@ basic/list/ListTools.vue
 basic/color/ColorPicker.vue
 ```
 
-## 📝 说明
+## 📝 Notes
 
-- `basic` 文件夹是**基础版功能模块**，包含各种功能组件（文本格式、标题、对齐、列表、颜色等）
-- 工具栏已迁移到 `tools/header-nav/ToolbarNav.vue`，支持可配置的工具显示
-- 用户通过使用 `TiptapProEditor` 组件来使用基础版功能
-- 可以通过 `versionConfig.features.headerNav` 配置来控制是否显示工具栏
-
+- The `basic` folder is the **basic edition feature module**, containing various feature components (text formatting, headings, alignment, lists, colors, etc.)
+- The toolbar has been migrated to `tools/header-nav/ToolbarNav.vue`, supporting configurable tool visibility
+- Users use the basic edition features through the `TiptapProEditor` component
+- Whether the toolbar is displayed can be controlled via the `versionConfig.features.headerNav` config

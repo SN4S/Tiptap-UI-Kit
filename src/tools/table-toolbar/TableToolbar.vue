@@ -7,9 +7,9 @@
     class="table-bubble-menu"
   >
     <div class="table-menu-content">
-      <!-- 第一行 -->
+      <!-- First row -->
       <div class="table-menu-row">
-        <!-- 行操作 -->
+        <!-- Row operations -->
         <div class="table-menu-group">
           <button
             v-for="item in rowTools"
@@ -23,7 +23,7 @@
           </button>
         </div>
 
-        <!-- 列操作 -->
+        <!-- Column operations -->
         <div class="table-menu-group">
           <button
             v-for="item in columnTools"
@@ -38,9 +38,9 @@
         </div>
       </div>
 
-      <!-- 第二行 -->
+      <!-- Second row -->
       <div class="table-menu-row">
-        <!-- 单元格操作 -->
+        <!-- Cell operations -->
         <div class="table-menu-group">
           <button
             v-for="item in cellTools"
@@ -54,7 +54,7 @@
           </button>
         </div>
 
-        <!-- 删除表格 -->
+        <!-- Delete table -->
         <div class="table-menu-group">
           <button
             class="table-menu-btn table-menu-btn--danger"
@@ -190,7 +190,7 @@ const cellTools = [
 ]
 
 const shouldShow = (bubbleProps: { editor: any; state: any; from: number; to: number }) => {
-  // 如果未启用，则不显示
+  // If not enabled, don't show
   if (!props.enabled) return false
 
   if (props.readonly) return false

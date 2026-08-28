@@ -1,32 +1,32 @@
 /**
  * Editor Commands Utilities
- * @description 编辑器命令执行工具函数
+ * @description Editor command execution utility functions
  */
 
 import type { Ref } from 'vue'
 import type { Editor } from '@tiptap/core'
 
 /**
- * 链式命令类型
+ * Chain command type
  */
 export type EditorChain = ReturnType<Editor['chain']>
 
 /**
- * 命令构建函数类型
+ * Command builder function type
  */
 export type CommandBuilder = (chain: EditorChain) => EditorChain
 
 /**
- * 创建命令执行器
- * @description 创建一个命令执行函数，自动处理 editor 实例检查和焦点管理
- * @param editor - 编辑器实例引用
- * @returns 命令执行函数
+ * Create a command runner
+ * @description Create a command execution function that automatically handles editor instance checking and focus management
+ * @param editor - editor instance reference
+ * @returns command execution function
  *
  * @example
  * ```typescript
  * const runCommand = createCommandRunner(editor)
  * const toggleBold = runCommand((chain) => chain.toggleBold())
- * toggleBold() // 执行粗体切换
+ * toggleBold() // execute bold toggle
  * ```
  */
 export function createCommandRunner(editor: Ref<Editor | null | undefined>) {
@@ -41,10 +41,10 @@ export function createCommandRunner(editor: Ref<Editor | null | undefined>) {
 }
 
 /**
- * 创建不带焦点的命令执行器
- * @description 与 createCommandRunner 类似，但不自动设置焦点
- * @param editor - 编辑器实例引用
- * @returns 命令执行函数
+ * Create a command runner without focus
+ * @description similar to createCommandRunner, but does not automatically set focus
+ * @param editor - editor instance reference
+ * @returns command execution function
  */
 export function createCommandRunnerWithoutFocus(editor: Ref<Editor | null | undefined>) {
   return (fn: CommandBuilder) => () => {
@@ -58,12 +58,12 @@ export function createCommandRunnerWithoutFocus(editor: Ref<Editor | null | unde
 }
 
 /**
- * 直接执行命令
- * @description 立即执行一个编辑器命令
- * @param editor - 编辑器实例引用
- * @param fn - 命令构建函数
- * @param withFocus - 是否自动聚焦，默认 true
- * @returns 命令是否执行成功
+ * Execute a command directly
+ * @description immediately execute an editor command
+ * @param editor - editor instance reference
+ * @param fn - command builder function
+ * @param withFocus - whether to auto focus, default true
+ * @returns whether the command executed successfully
  *
  * @example
  * ```typescript
@@ -86,12 +86,12 @@ export function executeCommand(
 }
 
 /**
- * 批量执行命令
- * @description 按顺序执行多个命令
- * @param editor - 编辑器实例引用
- * @param commands - 命令构建函数数组
- * @param withFocus - 是否自动聚焦，默认 true
- * @returns 所有命令是否都执行成功
+ * Execute commands in batch
+ * @description execute multiple commands in sequence
+ * @param editor - editor instance reference
+ * @param commands - array of command builder functions
+ * @param withFocus - whether to auto focus, default true
+ * @returns whether all commands executed successfully
  *
  * @example
  * ```typescript

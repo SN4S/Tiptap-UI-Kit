@@ -1,6 +1,6 @@
 /**
  * GitHub Theme Preset
- * 类似 GitHub 的简洁技术风格
+ * Clean technical style similar to GitHub
  */
 
 .theme-github {
@@ -37,14 +37,14 @@
   --tiptap-line-height: 1.5;
 }
 
-/* GitHub 风格 - 边框工具栏 */
+/* GitHub Style - Bordered Toolbar */
 .theme-github .word-toolbar {
   background: #f6f8fa !important;
   border-bottom: 1px solid #d0d7de !important;
   padding: 8px 16px;
 }
 
-/* GitHub 风格 - 全宽无阴影 */
+/* GitHub Style - Full Width No Shadow */
 .theme-github .continuous-pages {
   max-width: 980px;
   box-shadow: none;
@@ -52,7 +52,7 @@
   border-radius: 6px;
 }
 
-/* GitHub 风格 - Markdown 风格标题 */
+/* GitHub Style - Markdown Style Headings */
 .theme-github .ProseMirror h1 {
   font-size: 32px;
   font-weight: 600;
@@ -74,14 +74,14 @@
   font-weight: 600;
 }
 
-/* GitHub 风格 - 代码块 */
+/* GitHub Style - Code Block */
 .theme-github .ProseMirror pre {
   background: #f6f8fa !important;
   border: 1px solid #d0d7de;
   border-radius: 6px;
 }
 
-/* GitHub 深色模式 */
+/* GitHub Dark Mode */
 .theme-github[data-theme="dark"] {
   --tiptap-bg: #0d1117;
   --tiptap-bg-secondary: #161b22;

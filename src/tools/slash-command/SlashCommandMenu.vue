@@ -63,6 +63,8 @@ import {
   MinusOutlined,
   BulbOutlined,
   CaretRightOutlined,
+  PaperClipOutlined,
+  FileOutlined,
 } from '@ant-design/icons-vue'
 
 // ============================================================================
@@ -245,6 +247,33 @@ const defaultCommandGroups = computed<SlashCommandGroup[]>(() => [
         keywords: ['toggle', 'details', 'collapse', 'expand', 'toggle'],
         action: (editor: Editor) => {
           editor.chain().focus().setToggleItem().run()
+        },
+      },
+      {
+        id: 'fileAttachment',
+        title: t('slashCommand.fileAttachment') || 'File Attachment',
+        description: t('slashCommand.fileAttachmentDesc') || 'Attach a downloadable file block',
+        icon: PaperClipOutlined,
+        keywords: ['file', 'attachment', 'upload', 'pdf', 'doc', 'download'],
+        action: (editor: Editor) => {
+          const url = window.prompt('Enter file URL:')
+          if (url) {
+            const name = url.split('/').pop() || 'Document.pdf'
+            // @ts-ignore
+            editor.chain().focus().insertFileAttachment({ fileName: name, fileUrl: url }).run()
+          }
+        },
+      },
+      {
+        id: 'subpage',
+        title: t('slashCommand.subpage') || 'Subpage Link',
+        description: t('slashCommand.subpageDesc') || 'Link to another document or nested page',
+        icon: FileOutlined,
+        keywords: ['subpage', 'page', 'doc', 'link', 'nested'],
+        action: (editor: Editor) => {
+          const title = window.prompt('Enter Subpage Title:') || 'Untitled Subpage'
+          // @ts-ignore
+          editor.chain().focus().insertSubpage({ title }).run()
         },
       },
       {

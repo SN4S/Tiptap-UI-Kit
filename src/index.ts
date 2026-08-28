@@ -23,6 +23,8 @@ export * from './ai'
 // Extensions
 export * from './extensions/calloutExtension'
 export * from './extensions/toggleExtension'
+export * from './extensions/fileAttachmentExtension'
+export * from './extensions/subpageExtension'
 
 // Styles - users import separately:
 // import 'tiptap-ui-kit/style.css'

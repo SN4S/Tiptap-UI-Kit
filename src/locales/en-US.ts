@@ -423,6 +423,10 @@ export const enUS: TiptapLocale = {
     calloutDesc: 'Make text stand out with a colored container & icon',
     toggleItem: 'Toggle List',
     toggleItemDesc: 'Create a collapsible content block',
+    fileAttachment: 'File Attachment',
+    fileAttachmentDesc: 'Attach a downloadable file block',
+    subpage: 'Subpage Link',
+    subpageDesc: 'Link to another document or nested page',
   },
 
   aiSettings: {

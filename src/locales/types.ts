@@ -438,6 +438,10 @@ export interface TiptapLocale {
     calloutDesc?: string
     toggleItem?: string
     toggleItemDesc?: string
+    fileAttachment?: string
+    fileAttachmentDesc?: string
+    subpage?: string
+    subpageDesc?: string
   }
 
   // AI 设置

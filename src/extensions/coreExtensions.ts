@@ -34,6 +34,8 @@ import { FormatPainter } from '@/features/advanced/format-painter'
 import { MathExtension } from '@/extensions/math'
 import { CalloutExtension } from './calloutExtension'
 import { ToggleExtension, ToggleSummary, ToggleContent } from './toggleExtension'
+import { FileAttachmentExtension } from './fileAttachmentExtension'
+import { SubpageExtension } from './subpageExtension'
 import { t } from '@/locales'
 import {
   CustomAiExtension,
@@ -157,11 +159,13 @@ export function getExtensionsByVersion(
   extensions.push(ListShortcuts)
   extensions.push(CharacterCount)
 
-  // Notion extensions: Callout and Toggle blocks
+  // Notion extensions: Callout, Toggle, File attachment and Subpage blocks
   extensions.push(CalloutExtension)
   extensions.push(ToggleSummary)
   extensions.push(ToggleContent)
   extensions.push(ToggleExtension)
+  extensions.push(FileAttachmentExtension)
+  extensions.push(SubpageExtension)
 
   if (tier < 2) {
     return extensions

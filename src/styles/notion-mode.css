@@ -214,10 +214,27 @@
   color: inherit;
   text-decoration: none;
   font-weight: 500;
+  flex: 1;
 }
 
 .notion-file-attachment__name:hover {
   text-decoration: underline;
+}
+
+.notion-file-attachment__download {
+  margin-left: auto;
+  padding: 4px 12px;
+  border: 1px solid rgba(55, 53, 47, 0.2);
+  border-radius: 4px;
+  background-color: transparent;
+  color: inherit;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.notion-file-attachment__download:hover {
+  background-color: rgba(55, 53, 47, 0.08);
 }
 
 .notion-subpage__title {
@@ -267,4 +284,12 @@
 [data-theme="dark"] .tiptap-pro-editor.notion-mode .ProseMirror pre {
   background: #252525;
   color: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] .notion-file-attachment__download {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .notion-file-attachment__download:hover {
+  background-color: rgba(255, 255, 255, 0.12);
 }

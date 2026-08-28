@@ -20,6 +20,20 @@ declare module '@tiptap/core' {
   }
 }
 
+function fileAttachmentIcon(fileType?: string): string {
+  const t = (fileType || '').toLowerCase()
+  if (t.startsWith('image/')) return '🖼️'
+  if (t.startsWith('audio/')) return '🎵'
+  if (t.startsWith('video/')) return '🎬'
+  if (t.includes('pdf')) return '📕'
+  if (t.includes('msword') || t.includes('wordprocessingml') || t.includes('word')) return '📘'
+  if (t.includes('spreadsheetml') || t.includes('excel') || t.includes('sheet')) return '📗'
+  if (t.includes('presentationml') || t.includes('powerpoint') || t.includes('presentation')) return '📙'
+  if (/zip|rar|7z|gzip|x-archive|uncompressed-archive/.test(t)) return '📦'
+  if (t.includes('text/') || t.includes('json') || t.includes('xml') || t.includes('markdown')) return '📄'
+  return '📎'
+}
+
 export const FileAttachmentExtension = Node.create<FileAttachmentOptions>({
   name: 'fileAttachment',
 
@@ -78,16 +92,17 @@ export const FileAttachmentExtension = Node.create<FileAttachmentOptions>({
         class: 'notion-file-attachment',
         contenteditable: 'false',
       }),
-      ['span', { class: 'notion-file-attachment__icon' }, '📎'],
+      ['span', { class: 'notion-file-attachment__icon' }, fileAttachmentIcon(HTMLAttributes['data-filetype'])],
+      ['span', { class: 'notion-file-attachment__name' }, `${fileName}${fileSize}`],
       [
         'a',
         {
-          class: 'notion-file-attachment__name',
+          class: 'notion-file-attachment__download',
           href: fileUrl,
           target: '_blank',
           rel: 'noopener noreferrer',
         },
-        `${fileName}${fileSize}`,
+        'Завантажити',
       ],
     ]
   },

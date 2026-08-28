@@ -1,5 +1,5 @@
 <template>
-  <div class="tiptap-pro-editor word-mode" :class="{ 'is-preview-mode': isPreviewMode }">
+  <div class="tiptap-pro-editor" :class="{ 'notion-mode': isNotionMode, 'word-mode': !isNotionMode, 'is-preview-mode': isPreviewMode }">
     <!-- Toolbar (hidden in preview mode) -->
     <ToolbarNav
       v-if="editorInstance && !isPreviewMode"
@@ -58,6 +58,8 @@
       v-if="editorInstance && !isPreviewMode && (props.features?.slashCommand ?? false)"
       ref="slashCommandMenuRef"
       :editor="editorInstance"
+      :custom-slash-commands="props.customSlashCommands"
+      :transform-slash-commands="props.transformSlashCommands"
     />
 
     <!-- Feature: Drag handle menu (disabled in preview mode) -->
@@ -142,6 +144,7 @@ import { DragHandleWithMenuExtension } from '@/tools/drag-handle-menu'
 import '@/styles/variables.css'
 import '@/styles/base.css'
 import '@/styles/word-mode.css'
+import '@/styles/notion-mode.css'
 import '@/styles/toolbar.css'
 import '@/styles/image-toolbar.css'
 import '@/styles/floating-menu-toolbar.css'
@@ -165,6 +168,9 @@ const props = withDefaults(defineProps<TiptapProEditorProps>(), {
   // Users who want a smaller runtime should explicitly pass 'basic' / 'minimal'
   version: 'premium',
 })
+
+// ===== Notion & Layout Modes =====
+const isNotionMode = computed(() => props.mode === 'notion' || props.themePreset === 'notion')
 
 // ===== Preview Mode =====
 const isPreviewMode = computed(() => props.previewMode)

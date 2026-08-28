@@ -419,6 +419,10 @@ export const enUS: TiptapLocale = {
     imageUrlPrompt: 'Enter image URL',
     horizontalRule: 'Divider',
     horizontalRuleDesc: 'Insert a horizontal divider',
+    callout: 'Callout',
+    calloutDesc: 'Make text stand out with a colored container & icon',
+    toggleItem: 'Toggle List',
+    toggleItemDesc: 'Create a collapsible content block',
   },
 
   aiSettings: {

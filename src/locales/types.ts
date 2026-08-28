@@ -434,6 +434,10 @@ export interface TiptapLocale {
     imageUrlPrompt: string
     horizontalRule: string
     horizontalRuleDesc: string
+    callout?: string
+    calloutDesc?: string
+    toggleItem?: string
+    toggleItemDesc?: string
   }
 
   // AI 设置

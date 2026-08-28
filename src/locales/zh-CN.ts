@@ -419,6 +419,10 @@ export const zhCN: TiptapLocale = {
     imageUrlPrompt: '请输入图片链接',
     horizontalRule: '分割线',
     horizontalRuleDesc: '插入水平分割线',
+    callout: '高亮块 / Callout',
+    calloutDesc: '带有图标与背景色的突出内容块',
+    toggleItem: '折叠列表 / Toggle',
+    toggleItemDesc: '创建可折叠展开的内容块',
   },
 
   aiSettings: {

@@ -233,8 +233,20 @@ const sampleContent = `
   <li>🔲 <strong>Minimal</strong> - Just the essentials</li>
 </ul>
 <blockquote>
-  <p>💡 <strong>Tip:</strong> Configure AI in .env file to enable the AI button!</p>
+  <p>💡 <strong>Tip:</strong> Type <code>/</code> for slash commands or hover block edges for drag handle menus!</p>
 </blockquote>
+<div data-type="callout" data-icon="🚀" data-color="blue" class="notion-callout notion-callout--blue">
+  <span class="notion-callout__icon">🚀</span>
+  <div class="notion-callout__content">
+    <p><strong>Notion Block Support:</strong> Enjoy native callouts, toggle lists, code blocks, and slash commands!</p>
+  </div>
+</div>
+<details data-type="toggle" class="notion-toggle" open>
+  <summary class="notion-toggle__summary">Toggle List Section</summary>
+  <div class="notion-toggle__content">
+    <p>This is a collapsible toggle block supporting rich text formatting, lists, and inline media.</p>
+  </div>
+</details>
 <h2>AI Features</h2>
 <p>When configured, the AI button provides:</p>
 <ul>

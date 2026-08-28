@@ -19,7 +19,7 @@ import {
 } from '@ant-design/icons-vue'
 
 // Use shared helper functions
-import { selectNodeContent, cutBlock, copyBlock, deleteBlock } from '@/utils/clipboard'
+import { selectNodeContent, cutBlock, copyBlock, deleteBlock, duplicateBlock } from '@/utils/clipboard'
 
 // ============================================================================
 // Type definitions
@@ -165,6 +165,14 @@ export function createEditActions(
   t: (key: string) => string
 ) {
   return [
+    {
+      icon: CopyOutlined,
+      title: t('dragMenu.duplicate') || 'Duplicate',
+      action: () => {
+        duplicateBlock(editor, nodePos, nodeTo)
+        onClose()
+      },
+    },
     {
       icon: ScissorOutlined,
       title: t('editor.cut'),

@@ -32,6 +32,8 @@ import { ListShortcuts } from './listShortcuts'
 import { LineHeight } from './lineHeight'
 import { FormatPainter } from '@/features/advanced/format-painter'
 import { MathExtension } from '@/extensions/math'
+import { CalloutExtension } from './calloutExtension'
+import { ToggleExtension, ToggleSummary, ToggleContent } from './toggleExtension'
 import { t } from '@/locales'
 import {
   CustomAiExtension,
@@ -154,6 +156,12 @@ export function getExtensionsByVersion(
   // List shortcuts, character count (lightweight, included in all versions)
   extensions.push(ListShortcuts)
   extensions.push(CharacterCount)
+
+  // Notion extensions: Callout and Toggle blocks
+  extensions.push(CalloutExtension)
+  extensions.push(ToggleSummary)
+  extensions.push(ToggleContent)
+  extensions.push(ToggleExtension)
 
   if (tier < 2) {
     return extensions

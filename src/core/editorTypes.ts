@@ -5,6 +5,10 @@
 import type { JSONContent } from '@tiptap/core'
 import type { Editor } from '@tiptap/vue-3'
 
+import type { SlashCommandGroup, SlashCommandItem } from '../tools/slash-command'
+
+export type { SlashCommandGroup, SlashCommandItem }
+
 /**
  * Version type
  */
@@ -96,6 +100,14 @@ export interface TiptapProEditorProps {
   features?: FeatureConfig
   /** Language setting */
   locale?: string
+  /** Layout mode ('word' | 'notion') */
+  mode?: 'word' | 'notion'
+  /** Theme preset ('word' | 'notion' | 'github' | 'typora') */
+  themePreset?: string
+  /** Custom slash commands to extend or add to the slash command menu */
+  customSlashCommands?: Array<SlashCommandGroup | SlashCommandItem>
+  /** Function to filter, reorder, or transform slash command groups */
+  transformSlashCommands?: (groups: SlashCommandGroup[]) => SlashCommandGroup[]
 }
 
 /**

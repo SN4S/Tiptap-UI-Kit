@@ -20,5 +20,9 @@ export * from './adapters'
 // AI Module
 export * from './ai'
 
+// Extensions
+export * from './extensions/calloutExtension'
+export * from './extensions/toggleExtension'
+
 // Styles - users import separately:
 // import 'tiptap-ui-kit/style.css'

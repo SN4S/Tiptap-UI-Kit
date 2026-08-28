@@ -107,6 +107,20 @@ export function deleteBlock(editor: Editor, from: number, to: number): boolean {
 }
 
 /**
+ * Duplicate block content
+ */
+export function duplicateBlock(editor: Editor, from: number, to: number): boolean {
+  try {
+    const slice = editor.state.doc.slice(from, to)
+    editor.chain().insertContentAt(to, slice.content.toJSON()).run()
+    return true
+  } catch (error) {
+    console.error('[clipboard] Failed to duplicate block:', error)
+    return false
+  }
+}
+
+/**
  * Select block content
  */
 export function selectBlock(editor: Editor, from: number, to: number): boolean {

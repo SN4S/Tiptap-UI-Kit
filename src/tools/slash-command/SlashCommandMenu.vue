@@ -46,7 +46,7 @@
  * SlashCommandMenu - Slash command menu component
  * @description Block type selection menu that appears when typing /
  */
-import { computed, ref, watch, nextTick, onMounted, onUnmounted, type Component } from 'vue'
+import { computed, ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import type { Editor } from '@tiptap/core'
 import { t } from '@/locales'
 import { slashCommandKey, type SlashCommandState } from './SlashCommandExtension'
@@ -61,25 +61,19 @@ import {
   TableOutlined,
   PictureOutlined,
   MinusOutlined,
+  BulbOutlined,
+  CaretRightOutlined,
 } from '@ant-design/icons-vue'
 
 // ============================================================================
 // Types
-// ============================================================================
+import {
+  registeredGroups,
+  type SlashCommandItem,
+  type SlashCommandGroup,
+} from './slashCommandRegistry'
 
-interface SlashCommandItem {
-  id: string
-  title: string
-  description: string
-  icon: Component
-  keywords: string[]
-  action: (editor: Editor) => void
-}
-
-interface SlashCommandGroup {
-  title: string
-  items: SlashCommandItem[]
-}
+export type { SlashCommandItem, SlashCommandGroup }
 
 // ============================================================================
 // Props
@@ -87,6 +81,8 @@ interface SlashCommandGroup {
 
 const props = defineProps<{
   editor: Editor | null | undefined
+  customSlashCommands?: Array<SlashCommandGroup | SlashCommandItem>
+  transformSlashCommands?: (groups: SlashCommandGroup[]) => SlashCommandGroup[]
 }>()
 
 // ============================================================================
@@ -103,7 +99,7 @@ const menuRef = ref<HTMLElement | null>(null)
 // Menu Items
 // ============================================================================
 
-const commandGroups = computed<SlashCommandGroup[]>(() => [
+const defaultCommandGroups = computed<SlashCommandGroup[]>(() => [
   {
     title: t('slashCommand.basicBlocks'),
     items: [
@@ -232,6 +228,26 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
         },
       },
       {
+        id: 'callout',
+        title: t('slashCommand.callout') || 'Callout',
+        description: t('slashCommand.calloutDesc') || 'Colored callout box with icon',
+        icon: BulbOutlined,
+        keywords: ['callout', 'box', 'highlight', 'info', 'warning', 'notice', 'callout'],
+        action: (editor: Editor) => {
+          editor.chain().focus().setCallout({ icon: '💡', color: 'blue' }).run()
+        },
+      },
+      {
+        id: 'toggleItem',
+        title: t('slashCommand.toggleItem') || 'Toggle List',
+        description: t('slashCommand.toggleItemDesc') || 'Collapsible toggle list block',
+        icon: CaretRightOutlined,
+        keywords: ['toggle', 'details', 'collapse', 'expand', 'toggle'],
+        action: (editor: Editor) => {
+          editor.chain().focus().setToggleItem().run()
+        },
+      },
+      {
         id: 'horizontalRule',
         title: t('slashCommand.horizontalRule'),
         description: t('slashCommand.horizontalRuleDesc'),
@@ -244,6 +260,57 @@ const commandGroups = computed<SlashCommandGroup[]>(() => [
     ],
   },
 ])
+
+const commandGroups = computed<SlashCommandGroup[]>(() => {
+  const merged: SlashCommandGroup[] = defaultCommandGroups.value.map(g => ({
+    ...g,
+    items: [...g.items],
+  }))
+
+  // Merge registeredGroups from slashCommandRegistry
+  for (const regGroup of registeredGroups.value) {
+    const existingIdx = merged.findIndex(g => g.title === regGroup.title)
+    if (existingIdx >= 0) {
+      const existingItems = merged[existingIdx]!.items
+      const newItems = regGroup.items.filter(item => !existingItems.some(i => i.id === item.id))
+      existingItems.push(...newItems)
+    } else {
+      merged.push({ ...regGroup, items: [...regGroup.items] })
+    }
+  }
+
+  // Merge customSlashCommands passed via props
+  if (props.customSlashCommands) {
+    for (const entry of props.customSlashCommands) {
+      if ('items' in entry) {
+        const existingIdx = merged.findIndex(g => g.title === entry.title)
+        if (existingIdx >= 0) {
+          const existingItems = merged[existingIdx]!.items
+          const newItems = entry.items.filter(item => !existingItems.some(i => i.id === item.id))
+          existingItems.push(...newItems)
+        } else {
+          merged.push({ ...entry, items: [...entry.items] })
+        }
+      } else {
+        const customGroupTitle = 'Custom'
+        const existingIdx = merged.findIndex(g => g.title === customGroupTitle)
+        if (existingIdx >= 0) {
+          if (!merged[existingIdx]!.items.some(i => i.id === entry.id)) {
+            merged[existingIdx]!.items.push(entry)
+          }
+        } else {
+          merged.push({ title: customGroupTitle, items: [entry] })
+        }
+      }
+    }
+  }
+
+  if (props.transformSlashCommands) {
+    return props.transformSlashCommands(merged)
+  }
+
+  return merged
+})
 
 // ============================================================================
 // Computed

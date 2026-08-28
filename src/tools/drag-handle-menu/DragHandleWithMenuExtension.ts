@@ -9,7 +9,7 @@
  */
 
 import { Extension } from '@tiptap/core'
-import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { NodeSelection, Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
 import { Node as ProseMirrorNode } from '@tiptap/pm/model'
 import { h, render } from 'vue'
@@ -91,7 +91,8 @@ function shouldShowHandle(node: ProseMirrorNode, parent: ProseMirrorNode): boole
   }
 
   // Empty nodes do not display handle
-  if (node.content.size === 0) return false
+  // Atom blocks (subpage, fileAttachment) are always "empty" by design.
+  if (node.content.size === 0 && !node.isAtom) return false
 
   return true
 }
@@ -113,9 +114,10 @@ function createDragHandle(
 ): HTMLElement {
   const handle = document.createElement('div')
   handle.className = 'drag-handle'
+  handle.dataset.block = node.type.name
   handle.contentEditable = 'false'
-  // 6-dot element handles display and click only
-  handle.draggable = false
+  // The handle is draggable so the attached block can be moved around with it
+  handle.draggable = true
 
   // Uses Ant Design Vue icon: HolderOutlined
   // Render directly inside handle element
@@ -126,6 +128,26 @@ function createDragHandle(
   handle.addEventListener('mousedown', (e) => {
     e.stopPropagation()
     e.preventDefault()
+  })
+
+  // Native drag&drop of the attached block via the handle.
+  // Setting view.dragging lets ProseMirror's dragover/drop handlers
+  // move the whole node (with drop cursor) to the drop position.
+  handle.addEventListener('dragstart', (e) => {
+    e.stopPropagation()
+    const dragNode = view.state.doc.nodeAt(pos)
+    if (!dragNode || !e.dataTransfer) return
+
+    const nodeSel = NodeSelection.create(view.state.doc, pos)
+    view.dispatch(view.state.tr.setSelection(nodeSel).setMeta('uiEvent', 'drag'))
+
+    const slice = nodeSel.content()
+    const nodeDom = view.nodeDOM(pos) as HTMLElement | null
+    e.dataTransfer.effectAllowed = 'copyMove'
+    e.dataTransfer.setData('text/html', nodeDom ? nodeDom.outerHTML : '')
+    e.dataTransfer.setData('text/plain', slice.content.textBetween(0, slice.content.size, '\n', '\n'))
+
+    view.dragging = { slice, move: true, node: nodeSel }
   })
 
   // Click event handling
@@ -190,13 +212,17 @@ export const DragHandleWithMenuExtension = Extension.create<DragHandleWithMenuOp
                 return true
               }
 
+              // Atom-like blocks (subpage, fileAttachment) are rendered as leaf nodes
+              // without a content hole, so a widget cannot be placed inside them.
+              // Put the handle just before the node in that case.
+              const isAtomLike = node.isAtom || node.isLeaf
               // Insert handle inside block node (pos + 1) for CSS hover display
               decorations.push(
                 Decoration.widget(
-                  pos + 1,
+                  isAtomLike ? pos : pos + 1,
                   (view) => createDragHandle(node, pos, view, options.onHandleClick),
                   {
-                    side: -1,
+                    side: isAtomLike ? 1 : -1,
                     stopEvent: (e) => {
                       // Make ProseMirror ignore mousedown and click events on handle
                       // Ensure DOM events are captured by handle and child elements

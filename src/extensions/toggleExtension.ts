@@ -105,6 +105,31 @@ export const ToggleExtension = Node.create<ToggleOptions>({
   addKeyboardShortcuts() {
     return {
       'Mod-Shift-t': () => this.editor.commands.setToggleItem(),
+
+      // Enter at the very start of a toggle summary creates an empty paragraph above
+      // the toggle. Default Enter (splitBlock) does nothing here because the toggle
+      // item content is `toggleSummary toggleContent`, which cannot be split.
+      Enter: ({ editor }) => {
+        const { state } = editor
+        const { selection } = state
+        if (!selection.empty) return false
+
+        const { $from } = selection
+        if ($from.parent.type.name !== 'toggleSummary' || $from.parentOffset !== 0) return false
+
+        let toggleDepth = -1
+        for (let d = $from.depth; d > 0; d--) {
+          if ($from.node(d).type.name === 'toggleItem') {
+            toggleDepth = d
+            break
+          }
+        }
+        if (toggleDepth !== 1) return false
+
+        const insertPos = $from.before(1) === 1 ? 0 : $from.before(1)
+        if (!editor.commands.insertContentAt(insertPos, { type: 'paragraph' })) return false
+        return editor.commands.setTextSelection(insertPos + 1)
+      },
     }
   },
 })

@@ -42,6 +42,36 @@
   opacity: 1;
 }
 
+/* Toggle & atom blocks anchor their handle outside the node (inside the
+   summary row / as a preceding sibling of the node) — reveal them when
+   the summary row / the node itself is hovered. */
+.ProseMirror details[data-type='toggle'] > summary:hover .drag-handle,
+.ProseMirror .drag-handle[data-block='subpage']:has(+ div[data-type='subpage']:hover),
+.ProseMirror .drag-handle[data-block='fileAttachment']:has(+ div[data-type='file-attachment']:hover) {
+  opacity: 1;
+}
+
+/* Anchor these handles to the row they belong to instead of centering
+   against the whole block / editor root. The atom handles are siblings
+   of the node (still absolute), so only reset the default top/transform. */
+.ProseMirror details[data-type='toggle'] > summary {
+  position: relative;
+}
+
+.ProseMirror .drag-handle[data-block='subpage'],
+.ProseMirror .drag-handle[data-block='fileAttachment'] {
+  top: auto;
+  transform: none;
+}
+
+/* Single handle per toggle: hide the details-level and content-row
+   handles; the summary-row handle is the one revealed on summary hover.
+   `!important` beats the hover-reveal rules above. */
+.ProseMirror details[data-type='toggle'] > .drag-handle,
+.ProseMirror details[data-type='toggle'] .drag-handle[data-block='toggleContent'] {
+  opacity: 0 !important;
+}
+
 /* Hover effect on drag handle itself */
 .drag-handle:hover {
   background: rgba(0, 0, 0, 0.08);
@@ -74,7 +104,10 @@
 .ProseMirror pre,
 .ProseMirror li,
 .ProseMirror ol,
-.ProseMirror ul {
+.ProseMirror ul,
+.ProseMirror details[data-type='toggle'],
+.ProseMirror div[data-type='subpage'],
+.ProseMirror div[data-type='file-attachment'] {
   position: relative;
 }
 

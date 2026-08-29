@@ -126,3 +126,20 @@
   box-shadow: 0 3px 8px rgba(79, 195, 247, 0.5);
 }
 
+
+
+/* Readonly / non-editable states */
+.ProseMirror[contenteditable="false"] img {
+  cursor: default;
+  outline: none !important;
+}
+
+.ProseMirror[contenteditable="false"] img:hover {
+  outline: none !important;
+}
+
+.ProseMirror[contenteditable="false"] .resize-handle,
+.ProseMirror[contenteditable="false"] [data-resize-handle] {
+  display: none !important;
+  pointer-events: none !important;
+}

@@ -533,7 +533,7 @@ const initEditor = async () => {
 
     // Get extension configuration
     // History extension must be disabled in collaboration mode, because @tiptap/extension-collaboration has its own history management
-    const enableImageResize = props.versionConfig?.features?.advanced !== false
+    const enableImageResize = !props.readonly && !isPreviewMode.value && (props.versionConfig?.features?.advanced !== false)
     const extensions = getExtensionsByVersion(props.version, {
       enableImageResize,
       disableHistory: isCollaborationAvailable.value,
@@ -683,6 +683,16 @@ const watchAndReinit = (
     }
   )
 }
+
+watchAndReinit(
+  () => props.readonly,
+  (newVal, oldVal) => (newVal ?? false) !== (oldVal ?? false)
+)
+
+watchAndReinit(
+  () => isPreviewMode.value,
+  (newVal, oldVal) => (newVal ?? false) !== (oldVal ?? false)
+)
 
 watchAndReinit(
   () => props.features?.dragHandleMenu,

@@ -53,11 +53,31 @@
   box-sizing: border-box;
   position: relative;
   background: var(--table-cell-bg);
+  overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .ProseMirror th {
   font-weight: 600;
   background: var(--table-header-bg);
+}
+
+.ProseMirror td > *,
+.ProseMirror th > * {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.ProseMirror td code,
+.ProseMirror th code {
+  display: inline-block !important;
+  max-width: 100% !important;
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+  overflow-wrap: anywhere !important;
+  vertical-align: baseline !important;
 }
 
 .ProseMirror .selectedCell {

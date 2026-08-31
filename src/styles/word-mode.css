@@ -197,11 +197,15 @@
     padding: 6px 8px;
     position: relative;
     vertical-align: top;
+    overflow: hidden;
     word-break: break-word;
     overflow-wrap: anywhere;
 
     > * {
       margin-bottom: 0;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
   }
 
@@ -279,7 +283,7 @@
   background: #f5f5f5 !important;
   border: 1px solid #e0e0e0 !important;
   border-radius: 3px !important;
-  white-space: pre !important;
+  white-space: pre-wrap !important;
   word-break: break-word !important;
   vertical-align: baseline !important;
   font-weight: 400 !important;
@@ -323,7 +327,7 @@
   background: #f5f5f5 !important;
   border: 1px solid #e0e0e0 !important;
   border-radius: 3px !important;
-  white-space: pre !important;
+  white-space: pre-wrap !important;
   word-break: break-word !important;
   vertical-align: baseline !important;
   font-weight: 400 !important;
@@ -334,6 +338,19 @@
     background: #2a2a2a !important;
     border-color: #404040 !important;
   }
+}
+
+/* Fix inline code overflow inside table cells — override white-space: pre
+   which prevents wrapping and causes code to bleed into adjacent cells */
+.word-content-multi .ProseMirror td code.inline-code,
+.word-content-multi .ProseMirror td code:not(pre code),
+.word-content-multi .ProseMirror th code.inline-code,
+.word-content-multi .ProseMirror th code:not(pre code) {
+  display: inline-block !important;
+  max-width: 100% !important;
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+  overflow-wrap: anywhere !important;
 }
 
 /* Inline code styles inside links */
